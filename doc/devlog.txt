@@ -20,12 +20,22 @@ Our website will incorporate book search/book review functionality, and will eve
 
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-linK -- 2019-1-8 8:32 AM
---------------------------------------------------------------
-Added .gitignore
+
 ==============================================================
 
 angelaT -- 2019-01-08 1:05
 --------------------------------------------------------------
 Finish deliverables
+
+linK -- 2019-1-08 8:32 AM
+--------------------------------------------------------------
+Added .gitignore
+
+angelaT -- 2019-01-09 1:03
+--------------------------------------------------------------
+Revised design doc:
+- mentioned how quotes will be used
+- fixed component map (removed goodreads)
+- added TasteDive API
+
 ==============================================================

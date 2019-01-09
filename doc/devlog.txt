@@ -23,6 +23,12 @@ Our website will incorporate book search/book review functionality, and will eve
 
 ==============================================================
 
+aaronL -- 2019-01-09 11:01
+--------------------------------------------------------------
+- made flask app
+- created template for index page(login)
+==============================================================
+
 angelaT -- 2019-01-08 1:05
 --------------------------------------------------------------
 Finish deliverables

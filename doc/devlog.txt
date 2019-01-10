@@ -5,8 +5,8 @@ Aaron Li
 Max Millar
 pd 6
 ---------------------
-Bookindle
-Our website will incorporate book search/book review functionality, and will even have a recommended book section. The reviews will be provided from iDreamBooks and the New York Times. Each book will have a readable pdf depending on whether or not it is a public domain book. However, most non-public domain books still have a readable pdf with sections of the book. There will be a login functionality to allow for book/article saving, as well as the ability to post reviews.
+Classify
+Our website will be a combination of Google Classroom elements and JupiterEd. This is basically a student management site/homework assignment site for teachers, and a grade site/homework submission site for students. Teachers will be able to create classes which students can join, and assign homework that students have to hand in either through a typed plain-text response or a file upload. Teachers can view, change, and add grades and notes for every student, and students can see them. Students and teachers can also send/receive messages. 
 
  ______   ______   __   __   __       ______   _______
 /_____/\ /_____/\ /_/\ /_/\ /_/\     /_____/\ /______/\
@@ -22,20 +22,13 @@ Our website will incorporate book search/book review functionality, and will eve
 
 
 ==============================================================
-
-aaronL -- 2019-01-09 11:01
---------------------------------------------------------------
-- made flask app
-- created template for index page(login)
-==============================================================
-
 angelaT -- 2019-01-08 1:05
 --------------------------------------------------------------
-Finish deliverables
+- Finished deliverables
 
-linK -- 2019-1-08 8:32 AM
+kevinL -- 2019-1-08 8:32 AM
 --------------------------------------------------------------
-Added .gitignore
+- Added .gitignore
 
 angelaT -- 2019-01-09 1:03
 --------------------------------------------------------------
@@ -44,4 +37,13 @@ Revised design doc:
 - fixed component map (removed goodreads)
 - added TasteDive API
 
+aaronL -- 2019-01-09 11:01
+--------------------------------------------------------------
+- made flask app
+- created template for index page(login)
+
+angelaT -- 2019-01-10 2:03
+--------------------------------------------------------------
+- Revised design doc (new idea)
+- Worked on login/calendar
 ==============================================================

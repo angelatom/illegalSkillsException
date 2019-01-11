@@ -6,20 +6,9 @@ P#02 -- Final Project
 2019-01-09
 -->
 
+{% extends "base.html"%}
+{%block content%}
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <title>Make Class</title>
-  </head>
-  <body>
     <form action="/processmakeclass" method="POST">
         Enter class name:
         <input type="text" name="classname">
@@ -57,5 +46,5 @@ P#02 -- Final Project
         add.addEventListener('click', addWeight);
         remove.addEventListener('click', removeWeight);
         </script>
-  </body>
-</html>
+ 
+ {% endblock %}

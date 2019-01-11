@@ -1,0 +1,35 @@
+/* Color palette
+    #0B0C10 (dark [black])
+    #1F2833 (dark blue)
+    #C5C6C7 (light grey)
+    #66FCF1 (light aqua)
+    #45A29E (blue-greenish)
+*/
+#login{
+    margin: auto;
+    margin-top: 5%;
+    font-size: 200%;
+    display: block;
+    text-align: center;
+}
+a{
+    color: #C5C6C7;
+}
+
+#title{
+    font-size: 500%;
+    margin: auto;
+    color: #66FCF1;
+    text-align: center;
+}
+
+#subtitle{
+    text-align: center;
+    font-size: 250%;
+}
+
+body{
+    background-color: #0B0C10;
+    color: #C5C6C7;
+    padding: 3%;
+}

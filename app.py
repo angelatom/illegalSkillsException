@@ -9,10 +9,13 @@ P#02 -- Final Project
 import os
 import flask
 import requests
+import json
 
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
+
+from urllib import request, parse
 import sqlite3
 
 # This variable specifies the name of a file that contains the OAuth 2.0
@@ -25,6 +28,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 API_SERVICE_NAME = 'calendar'
 API_VERSION = 'v3'
 
+
 app = flask.Flask(__name__)
 # Note: A secret key is included in the sample so that it works.
 # If you use this code in your application, replace this with a truly secret
@@ -34,7 +38,8 @@ app.secret_key = os.urandom(32)
 
 @app.route('/')
 def index():
-    return ('<a href="/login"> Login with Google</a>')
+    return flask.render_template("login.html")
+    #return ('<a href="/login"> Login with Google</a>')
 
 
 @app.route('/login')
@@ -46,11 +51,17 @@ def test_api_request():
     credentials = google.oauth2.credentials.Credentials(
       **flask.session['credentials'])
 
+    
     calendar = googleapiclient.discovery.build(
       API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
     entry = calendar.calendars().get(calendarId='primary').execute()
-
+    '''
+    header={"Authorization": credentials.token}
+    response = requests.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary', headers = header)
+    print(response)
+    entry = response.json()
+   '''
     flask.session['userid'] = entry["etag"]
   # Save credentials back to session in case access token was refreshed.
   # ACTION ITEM: In a production app, you likely want to save these

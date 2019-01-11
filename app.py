@@ -13,6 +13,7 @@ import requests
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
+import sqlite3
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
@@ -50,12 +51,28 @@ def test_api_request():
 
     entry = calendar.calendars().get(calendarId='primary').execute()
 
+    flask.session['userid'] = entry["etag"]
   # Save credentials back to session in case access token was refreshed.
   # ACTION ITEM: In a production app, you likely want to save these
   #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
 
-    return flask.jsonify(entry)
+    with sqlite3.connect('classify.db') as db:
+        c = db.cursor()
+        try:
+            c.execute("SELECT name FROM users WHERE userid='" + flask.session['userid'] + "';")
+            name = c.fetchall()[0][0]
+            c.execute("SELECT classname FROM classes where userid='" + flask.session['userid'] + "';")
+            classnames = c.fetchall()
+            print(classnames)
+            c.execute("SELECT classid FROM classes where userid='" + flask.session['userid'] + "';")
+            classids = c.fetchall()
+        except:
+            c.execute("INSERT INTO users VALUES ('" + entry["etag"] + "', '" + entry["id"] + "', '" + entry["id"] + "');")
+            return flask.render_template("register.html")
+
+    #return flask.redirect("index.html")
+    return flask.render_template("index.html", name = name, classnames = classnames, classids = classids)
 
 
 @app.route('/authorize')
@@ -126,8 +143,50 @@ def revoke():
 def clear_credentials():
   if 'credentials' in flask.session:
     del flask.session['credentials']
+    del flask.session['userid']
   return ('Credentials have been cleared.<br><br>')
 
+@app.route('/regname', methods=["POST"])
+def regname():
+    name = flask.request.form['name']
+    with sqlite3.connect('classify.db') as db:
+        c = db.cursor()
+        c.execute("UPDATE users set name='" + name + "' WHERE userid='" + flask.session['userid'] + "';")
+    return flask.redirect('/login')
+
+@app.route('/makeclass')
+def makeClass():
+    return flask.render_template("makeclass.html")
+
+@app.route('/processmakeclass', methods=['POST'])
+def processMakeclass():
+    classname = flask.request.form['classname']
+    weightnames = flask.request.form.getlist('weightnames')
+    weightnums = flask.request.form.getlist('weightnums')
+    with sqlite3.connect('classify.db') as db:
+        c = db.cursor()
+        c.execute("SELECT classid FROM classes;")
+        fetch = c.fetchall()
+        try:
+            classid = fetch[len(fetch) - 1][0] + 1
+        except:
+            classid = 0
+        c.execute("INSERT INTO classes VALUES(" + str(classid) + ", '" + classname + "', '" + flask.session["userid"] + "');")
+        for x in range(len(weightnames)):
+            c.execute("INSERT INTO weights VALUES(" + str(classid) + ", '" + weightnames[x] + "', '" + weightnums[x] + "');")
+    return flask.redirect("/login")
+
+@app.route('/class/<classid>')
+def classpage(classid):
+    with sqlite3.connect('classify.db') as db:
+        c = db.cursor()
+        c.execute("SELECT * FROM classes where classid=" + classid + ";")
+        classinfo = c.fetchall()
+        c.execute("SELECT weightname FROM weights where classid=" + classid + ";")
+        weightnames = c.fetchall()
+        c.execute("SELECT weightvalue FROM weights where classid=" + classid + ";")
+        weightnums = c.fetchall()
+    return str(classinfo) + "<br>" + str(weightnames) + "<br>" + str(weightnums)
 
 def credentials_to_dict(credentials):
   return {'token': credentials.token,

@@ -1,0 +1,61 @@
+<!--
+IllegalSkillsException
+Aaron Li, Angela Tom, Kevin Lin, Max Millar
+Softdev1 pd6
+P#02 -- Final Project
+2019-01-09
+-->
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Make Class</title>
+  </head>
+  <body>
+    <form action="/processmakeclass" method="POST">
+        Enter class name:
+        <input type="text" name="classname">
+        Enter Weights:
+        <ul id="weightlist">
+          <li>
+            Weight Name:
+            <input type="text" name="weightnames">
+            Weight Percent:
+            <input type="text" name="weightnums">
+          </li>
+          </ul>
+          <input type="submit">
+      </form>
+      <button id="addweight">Add Weight</button>
+      <button id="removeweight">Remove Weight</button>
+      <script>
+        var addWeight = function(e){
+          var list = document.getElementById("weightlist");
+          var child = document.getElementsByTagName("li")[0];
+          var copy = child.cloneNode(true);
+          list.appendChild(copy);
+        };
+
+        var removeWeight = function(e){
+          var list = document.getElementById("weightlist");
+          console.log(list.childNodes.length)
+          if (list.childNodes.length > 3){
+            list.removeChild(list.lastChild);
+          };
+        };
+
+        var add = document.getElementById("addweight");
+        var remove = document.getElementById("removeweight");
+        add.addEventListener('click', addWeight);
+        remove.addEventListener('click', removeWeight);
+        </script>
+  </body>
+</html>

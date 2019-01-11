@@ -50,4 +50,10 @@ angelaT -- 2019-01-10 2:03
 angelaT -- 2019-01-10 10:36
 --------------------------------------------------------------
 - Login with google completed
+
+angelaT -- 2019-01-11 18:54
+--------------------------------------------------------------
+- Removed old google login with google libraries
+- Finished new login with better oauth library (can use same template for dropbox)
+
 ==============================================================

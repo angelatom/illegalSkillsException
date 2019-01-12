@@ -18,7 +18,7 @@ def createClass(className, userID, weights):
 def getClassInfo(classID):
     db,c = getDBCursor()
     #[className, userID, invite, [[weightName, weightValue]]]
-    output = [None, None, None, None, None]
+    output = [None, None, None, None]
     for i in c.execute("SELECT className, userID, invite FROM classes WHERE classID = ?", (classID,)):
         for j in range(3):
             output[j] = i[j]
@@ -28,6 +28,7 @@ def getClassInfo(classID):
             for k in range(2):
                 weightInfo[k] = j[k]
             weightList.append(weightInfo)
+        output[3] = weightList
     closeDB(db)
     return output #Will be a tuple of None if no class of the classID inputted is found
 
@@ -62,6 +63,23 @@ def updateName(userID, name):
     db,c = getDBCursor()
     c.execute("UPDATE users SET name = ? WHERE userID = ?", (name, userID,))
     closeDB(db)
+
+def acceptInvite(userID, inviteCode):
+    db,c = getDBCursor()
+    classID = None
+    for i in c.execute("SELECT classID, userID FROM classes WHERE invite = ?", (inviteCode,)): #Check if the invite code exists
+        classID = i[0]
+        if i[1] == userID:
+            return "User is the class instructor."
+    else:
+        closeDB(db)
+        return "Invite does not exist."
+    for i in c.execute("SELECT * FROM roster WHERE classID = ? AND userID = ?", (classID, userID,)): #Check if the user is already enrolled
+        closeDB(db)
+        return "User already enrolled."
+    c.execute("INSERT INTO roster VALUES (?,?)", (classID, userID,)) #Add user to the class roster
+    closeDB(db)
+    return "User enrolled."
 
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")

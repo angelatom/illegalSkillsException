@@ -10,12 +10,13 @@ P#02 -- Final Project
 {%block content%}
     <h1>Hello, {{name}}!</h1>
     <a href="/makeclass"> Make a Class </a>
+    <br>
     Classes:
     <ul>
     {% for x in range(classnames|length) %}
-    {% set url = "/class/" + classids[x][0]|string %}
+    {% set url = "/class/" + classids[x]|string %}
     <li>
-      <a href={{url}}> {{classnames[x][0]}} </a>
+      <a href={{url}}> {{classnames[x]}} </a>
       </li>
       {% endfor %}
       </ul>

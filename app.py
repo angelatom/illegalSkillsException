@@ -47,7 +47,8 @@ def login():
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
     entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    flask.session['userid'] = entry["id"]
+    print(entry)
+    flask.session['userid'] = entry["etag"]
 
     try:
 	    userInfo = db.getUserInfo(flask.session['userid'])
@@ -111,18 +112,14 @@ def processMakeclass():
 def classpage(classid):
     classInfo = db.getClassInfo(classid)
     return str(classInfo)
-'''
-def classpage(classid):
-    with sqlite3.connect('classify.db') as db:
-        c = db.cursor()
-        c.execute("SELECT * FROM classes where classid=" + classid + ";")
-        classinfo = c.fetchall()
-        c.execute("SELECT weightname FROM weights where classid=" + classid + ";")
-        weightnames = c.fetchall()
-        c.execute("SELECT weightvalue FROM weights where classid=" + classid + ";")
-        weightnums = c.fetchall()
-    return str(classinfo) + "<br>" + str(weightnames) + "<br>" + str(weightnums)
-'''
+
+@app.route('/invite/<inviteCode>')
+def acceptInvite(inviteCode):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	result = db.acceptInvite(flask.session['userid'], inviteCode)
+	return result
+
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'

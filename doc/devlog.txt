@@ -76,7 +76,8 @@ angelaT -- 2019-01-11 18:54
 - Finished new login with better oauth library (can use same template for dropbox)
 ==============================================================
 
-linK -- 2019-01-11 8:49 PM
+linK -- 2019-01-11 10:07 PM
 --------------------------------------------------------------
 - File restoration and bug fixes
+- Added invite acceptance system (Go to /invite/<inviteCode>)
 ==============================================================

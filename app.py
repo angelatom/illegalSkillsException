@@ -16,6 +16,8 @@ from requests_oauthlib import OAuth2Session
 from urllib import request, parse
 import sqlite3
 
+from util import dbtools as db
+
 app = flask.Flask(__name__)
 app.secret_key = os.urandom(32)
 
@@ -42,39 +44,34 @@ def index():
 def login():
     if "credentials" not in flask.session:
         return flask.redirect("authorize")
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"]) 
+    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-    entry = flask.jsonify(calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json())
-    return entry
-    #flask.session['userid'] = entry["id"] BROKE THIS
-    
+    entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    flask.session['userid'] = entry["id"]
 
-    with sqlite3.connect('classify.db') as db:
-        c = db.cursor()
-        try:
-            c.execute("SELECT name FROM users WHERE userid='" + flask.session['userid'] + "';")
-            name = c.fetchall()[0][0]
-            c.execute("SELECT classname FROM classes where userid='" + flask.session['userid'] + "';")
-            classnames = c.fetchall()
-            print(classnames)
-            c.execute("SELECT classid FROM classes where userid='" + flask.session['userid'] + "';")
-            classids = c.fetchall()
-        except:
-            c.execute("INSERT INTO users VALUES ('" + entry["etag"] + "', '" + entry["id"] + "', '" + entry["id"] + "');")
-            return flask.render_template("register.html")
+    try:
+	    userInfo = db.getUserInfo(flask.session['userid'])
+	    name = userInfo[0]
+	    classNamesT = [i[1] for i in userInfo[2]] #List of names for classes being taught
+	    classIDsT = [i[0] for i in userInfo[2]] #List of class IDs for classes being taught
+	    classNamesE = [i[1] for i in userInfo[1]] #List of names for enrolled classes
+	    classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
+    except:
+        db.registerUser(entry["etag"], entry["id"])
+        return flask.render_template("register.html")
 
     #return flask.redirect("index.html")
-    return flask.render_template("index.html", name = name, classnames = classnames, classids = classids)
+    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT)
 
 @app.route("/authorize")
 def auth():
-    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri) 
-    authorization_url, state = google.authorization_url(auth_base_url, 
+    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
+    authorization_url, state = google.authorization_url(auth_base_url,
     access_type="offline", include_granted_scopes="true")
     flask.session["state"] = state
     return flask.redirect(authorization_url)
 
-@app.route("/oauth2callback", methods=["GET"]) 
+@app.route("/oauth2callback", methods=["GET"])
 def callback():
     google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
     token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
@@ -91,9 +88,7 @@ def clear_credentials():
 @app.route('/regname', methods=["POST"])
 def regname():
     name = flask.request.form['name']
-    with sqlite3.connect('classify.db') as db:
-        c = db.cursor()
-        c.execute("UPDATE users set name='" + name + "' WHERE userid='" + flask.session['userid'] + "';")
+    db.updateName(flask.session['userid'], name)
     return flask.redirect('/login')
 
 @app.route('/makeclass')
@@ -105,20 +100,18 @@ def processMakeclass():
     classname = flask.request.form['classname']
     weightnames = flask.request.form.getlist('weightnames')
     weightnums = flask.request.form.getlist('weightnums')
-    with sqlite3.connect('classify.db') as db:
-        c = db.cursor()
-        c.execute("SELECT classid FROM classes;")
-        fetch = c.fetchall()
-        try:
-            classid = fetch[len(fetch) - 1][0] + 1
-        except:
-            classid = 0
-        c.execute("INSERT INTO classes VALUES(" + str(classid) + ", '" + classname + "', '" + flask.session["userid"] + "');")
-        for x in range(len(weightnames)):
-            c.execute("INSERT INTO weights VALUES(" + str(classid) + ", '" + weightnames[x] + "', '" + weightnums[x] + "');")
+    weightList = []
+    for i in range(len(weightnames)):
+        toAppend = [weightnames[i],weightnums[i]]
+        weightList.append(toAppend)
+    db.createClass(classname, flask.session["userid"], weightList)
     return flask.redirect("/login")
 
 @app.route('/class/<classid>')
+def classpage(classid):
+    classInfo = db.getClassInfo(classid)
+    return str(classInfo)
+'''
 def classpage(classid):
     with sqlite3.connect('classify.db') as db:
         c = db.cursor()
@@ -129,6 +122,7 @@ def classpage(classid):
         c.execute("SELECT weightvalue FROM weights where classid=" + classid + ";")
         weightnums = c.fetchall()
     return str(classinfo) + "<br>" + str(weightnames) + "<br>" + str(weightnums)
+'''
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'

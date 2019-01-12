@@ -21,7 +21,7 @@ from util import dbtools as db
 app = flask.Flask(__name__)
 app.secret_key = os.urandom(32)
 
-with open("client_secret.json") as f:
+with open("keys/client_secret.json") as f:
 	api_keys = json.load(f)
 
 client_id = api_keys["web"]["client_id"]
@@ -84,7 +84,8 @@ def clear_credentials():
     if 'credentials' in flask.session:
         del flask.session['credentials']
         del flask.session['userid']
-    return ('Credentials have been cleared.<br><br>')
+    # flash msg saying logout
+    return (flask.redirect("/"))
 
 @app.route('/regname', methods=["POST"])
 def regname():

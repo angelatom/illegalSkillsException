@@ -10,6 +10,7 @@
     background-color: white;
     padding-top: 0px;
     padding-bottom: 0px;
+    position: fixed;
 }
 
 /* .navbar li a, .navbar a {
@@ -32,9 +33,7 @@
     background-position: center center;
     min-height: 665px;
     margin: 0 auto;
-
-
-
+    background-attachment: fixed;
 }
 
 #mainNav {
@@ -75,10 +74,41 @@
 #navHome {
     color: #3b3b3b;
     font-family: Tahoma, Geneva, sans-serif;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 #navImg {
     max-width: 2.1rem;
     max-height: 2.1rem;
+}
+
+#navHeader1 {
+    color: white;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: 0px;
+    text-shadow: 2px 2px 8px #2f2f2f;
+    font-size: 5rem;
+}
+
+#navHeader2 {
+    color: white;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: 0px;
+    text-shadow: 2px 2px 8px #2f2f2f;
+}
+
+.loginBtn {
+    padding-left: 3em;
+    padding-right: 3em;
+    background-color: #7aaeeb;
+    border: 1px solid white;
+    color: white;
+}
+
+.loginBtn:hover {
+    background-color: white;
+    color: #7aaeeb;
+    border: 1px solid #7aaeeb;
+    transition: all 370ms linear;
 }

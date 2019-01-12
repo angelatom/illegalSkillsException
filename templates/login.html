@@ -19,10 +19,16 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
                     <li class="nav-item">
-                        <a id="other" class="nav-link pl-3 pr-3" href="/fact">Login</a>
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">Grades</a>
                     </li>
                     <li class="nav-item">
-                        <a id="create" class="nav-link" href="/meme">Create</a>
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">Homework</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="create" class="nav-link" href="/meme">Login</a>
                     </li>
                 </ul>
             </div>
@@ -31,8 +37,10 @@
     {% endblock %}
 
     {% block content %}
-    <div class="container-fluid">
-        <h1 id="title" class="mt-5">Classify</h1>
+    <div id="mainBody" class="container-fluid mt-1">
+    </div>
+    <div class="container">
+        <!-- <h1 id="title" class="mt-5">Classify</h1> -->
         <br>
         <p id = "subtitle">A teacher’s tool and a student’s blessing</p>
         <a href="/login">

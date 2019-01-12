@@ -13,16 +13,22 @@
         <div class="container-fluid" id="mainNav">
             <div class="navbar-header">
                 <a id="navHome" class="navbar-brand" href="/">
-                    <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Home
+                    <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
                     <li class="nav-item">
-                        <a id="other" class="nav-link pl-3 pr-3" href="/fact">Login</a>
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">Grades</a>
                     </li>
                     <li class="nav-item">
-                        <a id="create" class="nav-link" href="/meme">Create</a>
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">Homework</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="create" class="nav-link" href="/login">Login</a>
                     </li>
                 </ul>
             </div>
@@ -31,14 +37,37 @@
     {% endblock %}
 
     {% block content %}
-    <div class="container-fluid">
-        <h1 id="title" class="mt-5">Classify</h1>
+    <div id="mainBody" class="container-fluid mt-1">
+        <div class="row mt-5">
+            <div class="col-md-4 mt-5 ml-5">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-0 col-md-1 col-lg-1"></div>
+            <div class="col-md-4 mt-3 ml-5">
+                <h1 id="navHeader1">Classify</h1>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-sm-0 col-md-1 col-lg-1"></div>
+            <div class="col-md-4 mt-5 ml-5">
+                <h1 id="navHeader2">A teacher's tool and a student's blessing</h1>
+                <a href="/login">
+                    <button class="btn btn-primary btn-lg loginBtn mt-3" type="button">Login</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- <h1 id="title" class="mt-5">Classify</h1> -->
         <br>
         <p id = "subtitle">A teacher’s tool and a student’s blessing</p>
         <a href="/login">
             <button type="button" class="btn btn-danger" id="login">Login</button>
         </a>
     </div>
+    {% endblock %}
+    {% block footer%}
     {% endblock %}
 </body>
 </html>

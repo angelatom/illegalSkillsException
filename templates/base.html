@@ -12,6 +12,31 @@
 </head>
 <body>
     {% block navbar %}
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="containerNav">
+        <div class="container-fluid" id="mainNav">
+            <div class="navbar-header">
+                <a id="navHome" class="navbar-brand" href="/">
+                    <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Home
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">Grades</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">Homework</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-4 pr-4 other" href="/fact">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="create" class="nav-link pl-4 pr-4 other" href="/clear">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     {% endblock %}
 
     {% block content %}

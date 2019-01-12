@@ -112,3 +112,47 @@
     border: 1px solid #7aaeeb;
     transition: all 370ms linear;
 }
+
+#body {
+    font-family: Tahoma, Geneva, sans-serif;
+
+}
+
+.gradebook {
+    max-height: 75%;
+    max-width: 75%;
+    border-radius: 8px;
+}
+
+#homework {
+    background-image: url(homework.png);
+    background-size: cover;
+    min-height: 650px;
+    height: 80vh;
+    opacity: 0.9;
+    max-width: 100%;
+    background-attachment: fixed;
+    background-position: center center;
+}
+
+.mt-10 {
+    margin-top: 5rem;
+}
+
+.shadowe {
+    text-shadow: 2px 2px 8px #7aaeeb;
+    /* text-shadow: 2px 2px 8px white; */
+
+}
+
+.mainColor {
+    color: #7aaeeb;
+}
+
+#navButton {
+    color: black;
+}
+
+.book {
+    max-width: 70%;
+}

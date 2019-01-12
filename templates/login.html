@@ -11,63 +11,151 @@
     {% block navbar %}
     <nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="containerNav">
         <div class="container-fluid" id="mainNav">
-            <div class="navbar-header">
+            <a id="navHome" class="navbar-brand js-scroll-trigger" href="#page-top">
+                <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
+            </a>
+            <button id="navButton" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+            <!-- <div class="navbar-header">
                 <a id="navHome" class="navbar-brand" href="/">
                     <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
                 </a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+        </div> -->
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link pl-4 pr-4 other" href="#gbsection">Grades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pl-4 pr-4 other js-scroll-trigger" href="#homework">Homework</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pl-4 pr-4 other" href="/fact">About</a>
+                </li>
+                <li class="nav-item">
+                    <a id="create" class="nav-link" href="/login">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div id="mainBody" class="container-fluid mt-1">
+    <div class="row mt-5">
+        <div class="col-md-4 mt-5 ml-5">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-sm-0 col-md-1 col-lg-1"></div>
+        <div class="col-md-4 mt-3 ml-5">
+            <h1 id="navHeader1">Classify</h1>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-sm-0 col-md-1 col-lg-1"></div>
+        <div class="col-md-4 mt-5 ml-5">
+            <h1 id="navHeader2">A teacher's tool and a student's blessing</h1>
+            <a href="/login">
+                <button class="btn btn-primary btn-lg loginBtn mt-3" type="button">Login</button>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="gbsection">
+    <!-- gradebook section -->
+    <div class="row mt-5 ml-5 mr-5">
+        <div class="col-md-6">
+            <h3 class="mt-5 mainColor">Teachers, meet your new gradebook</h3>
+            <p class="mt-4 mb-5">Easily manage student grades by each assignment posted. No matter how many classes you teach, the process remains easy. Each grade will be automatically calculated into the average based on weights you set.</p>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="../static/gradebook.jpg" class="gradebook mt-5 mb-5" alt="Picture of gradebook">
+        </div>
+    </div>
+</div>
+
+<!-- homework section -->
+<div class="container-fluid bg-light" id="homework">
+    <div class="row ml-5 mt-5 mb-5">
+        <div class="col-md-1"></div>
+        <div class="col-md-6 mt-2">
+            <h3 class="mt-10 shadowe mainColor">Easily view your homework</h3>
+            <h3 class="mt-3 shadowe mainColor">Easily assign a homework</h3>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+    <div class="row ml-5 mt-10 mb-5">
+        <div class="col-sm-0 col-md-7"></div>
+        <div class="col-md-5 text-center">
+            <p class="mb-0 mt-10 shadowe">If you're a student in a class, your assignments will be</p>
+            <p class="mb-0 shadowe">nicely placed in chronological order. If you're a</p>
+            <p class="mb-0 shadowe">teacher posting homework, all it</p>
+            <p class="mt-0 mb-4 shadowe">takes is a button and a few clicks.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- about section -->
+<div class="container" id="about">
+    <div class="row mt-5 text-center">
+        <div class="col">
+            <h1 class="mt-2 mb-5 mainColor">There's more to discover</h1>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-4 mt-10 mb-5">
+            <p class="mt-2">&#9; Whether you need to email a teacher, create a class, or join a class, Classify's got you covered.
+            By integrating Google's secure authentication service, your information is only used to log in to our systems.</p>
+        </div>
+        <div class="col-md-4 mb-5 text-center">
+            <img src="../static/books.png" alt="stack of books" class="mr-2 ml-2 book">
+        </div>
+        <div class="col-md-4 mt-10 mb-5">
+            <p class="mt-2">With an intuitive and simple to use dashboard, you can see all your current classes as well as classes you're teaching.
+            Easy file upload and text submission means you'll be able to do your homework the way you want to.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block footer%}
+<!-- Footer -->
+<footer class="bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mt-3">
+                <ul class="list-inline quicklinks">
+                    <li class="list-inline-item">
+                        <p class="text-muted">
+                            made with <i class="fa fa-heart"></i> by illegalSkillsException team
+                        </p>
+                    </li>
+                </ul>
             </div>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav text-uppercase ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link pl-4 pr-4 other" href="/fact">Grades</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pl-4 pr-4 other" href="/fact">Homework</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pl-4 pr-4 other" href="/fact">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="create" class="nav-link" href="/login">Login</a>
+            <div class="col-md-4"></div>
+            <div class="col-md-4 mt-3">
+                <ul class="list-inline quicklinks">
+                    <li class="list-inline-item">
+                        <p class="text-muted">
+                            Copyright &copy; illegalSkillsException
+                        </p>
                     </li>
                 </ul>
             </div>
         </div>
-    </nav>
-    {% endblock %}
-
-    {% block content %}
-    <div id="mainBody" class="container-fluid mt-1">
-        <div class="row mt-5">
-            <div class="col-md-4 mt-5 ml-5">
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-sm-0 col-md-1 col-lg-1"></div>
-            <div class="col-md-4 mt-3 ml-5">
-                <h1 id="navHeader1">Classify</h1>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-sm-0 col-md-1 col-lg-1"></div>
-            <div class="col-md-4 mt-5 ml-5">
-                <h1 id="navHeader2">A teacher's tool and a student's blessing</h1>
-                <a href="/login">
-                    <button class="btn btn-primary btn-lg loginBtn mt-3" type="button">Login</button>
-                </a>
-            </div>
-        </div>
     </div>
-    <div class="container">
-        <!-- <h1 id="title" class="mt-5">Classify</h1> -->
-        <br>
-        <p id = "subtitle">A teacher’s tool and a student’s blessing</p>
-        <a href="/login">
-            <button type="button" class="btn btn-danger" id="login">Login</button>
-        </a>
-    </div>
-    {% endblock %}
-    {% block footer%}
-    {% endblock %}
+</footer>
+{% endblock %}
 </body>
 </html>

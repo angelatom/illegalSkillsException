@@ -12,8 +12,13 @@
     display: block;
     text-align: center;
 }
-a{
-    color: #C5C6C7;
+
+a {
+    color: black !important;
+}
+
+a:hover {
+    color: gray !important;
 }
 
 #title{
@@ -32,4 +37,14 @@ body{
     background-color: #0B0C10;
     color: #C5C6C7;
     padding: 3%;
+}
+
+.navbar {
+    background-color: white;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.navbar > li > a {
+    color: black;
 }

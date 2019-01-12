@@ -6,7 +6,7 @@ Max Millar
 pd 6
 ---------------------
 Classify
-Our website will be a combination of Google Classroom elements and JupiterEd. This is basically a student management site/homework assignment site for teachers, and a grade site/homework submission site for students. Teachers will be able to create classes which students can join, and assign homework that students have to hand in either through a typed plain-text response or a file upload. Teachers can view, change, and add grades and notes for every student, and students can see them. Students and teachers can also send/receive messages. 
+Our website will be a combination of Google Classroom elements and JupiterEd. This is basically a student management site/homework assignment site for teachers, and a grade site/homework submission site for students. Teachers will be able to create classes which students can join, and assign homework that students have to hand in either through a typed plain-text response or a file upload. Teachers can view, change, and add grades and notes for every student, and students can see them. Students and teachers can also send/receive messages.
 
  ______   ______   __   __   __       ______   _______
 /_____/\ /_____/\ /_/\ /_/\ /_/\     /_____/\ /______/\
@@ -21,7 +21,11 @@ Our website will be a combination of Google Classroom elements and JupiterEd. Th
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 
+aaronL -- 2019-01-11 21:24
+--------------------------------------------------------------
+* fixed base and login template and some css
 ==============================================================
+
 angelaT -- 2019-01-08 1:05
 --------------------------------------------------------------
 - Finished deliverables
@@ -50,4 +54,29 @@ angelaT -- 2019-01-10 2:03
 angelaT -- 2019-01-10 10:36
 --------------------------------------------------------------
 - Login with google completed
+
+linK -- 2019-01-11 6:34 PM
+--------------------------------------------------------------
+- Made functions to interact with the database
+  - createClass(className, userID, weights)
+  - getClassInfo(classID)
+    - Returns a list [className, userID, invite, [[weightName, weightValue]]]
+  - getUserInfo(userID)
+    - Returns a list [name, enrolledClasses, teachingClasses]
+      - enrolledClasses and teachingClasses are lists of lists [classID, className]
+  - registerUser(userID, email)
+  - updateName(userID, name)
+- Deleted DB stuff in app.py
+- Added roster table and invite code generation for classes
+==============================================================
+
+angelaT -- 2019-01-11 18:54
+--------------------------------------------------------------
+- Removed old google login with google libraries
+- Finished new login with better oauth library (can use same template for dropbox)
+==============================================================
+
+linK -- 2019-01-11 8:49 PM
+--------------------------------------------------------------
+- File restoration and bug fixes
 ==============================================================

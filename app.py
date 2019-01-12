@@ -11,30 +11,28 @@ import flask
 import requests
 import json
 
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
+from requests_oauthlib import OAuth2Session
 
 from urllib import request, parse
 import sqlite3
 
-# This variable specifies the name of a file that contains the OAuth 2.0
-# information for this application, including its client_id and client_secret.
-CLIENT_SECRETS_FILE = "client_secret.json"
-
-# This OAuth 2.0 access scope allows for full read/write access to the
-# authenticated user's account and requires requests to use an SSL connection.
-SCOPES = ['https://www.googleapis.com/auth/calendar']
-API_SERVICE_NAME = 'calendar'
-API_VERSION = 'v3'
-
+from util import dbtools as db
 
 app = flask.Flask(__name__)
-# Note: A secret key is included in the sample so that it works.
-# If you use this code in your application, replace this with a truly secret
-# key. See http://flask.pocoo.org/docs/0.12/quickstart/#sessions.
 app.secret_key = os.urandom(32)
 
+with open("client_secret.json") as f:
+	api_keys = json.load(f)
+
+client_id = api_keys["web"]["client_id"]
+client_secret = api_keys["web"]["client_secret"]
+redirect_uri = "http://localhost:5000/oauth2callback"
+auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
+token_url = "https://www.googleapis.com/oauth2/v4/token"
+refresh_url = token_url
+scope = [
+    'https://www.googleapis.com/auth/calendar'
+]
 
 @app.route('/')
 def index():
@@ -43,6 +41,7 @@ def index():
 
 
 @app.route('/login')
+<<<<<<< HEAD
 def test_api_request():
     if 'credentials' not in flask.session:
         return flask.redirect('authorize')
@@ -149,6 +148,44 @@ def revoke():
     else:
         return('An error occurred.')
 
+=======
+def login():
+    if "credentials" not in flask.session:
+        return flask.redirect("authorize")
+    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
+    entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    flask.session['userid'] = entry["id"]
+
+    try:
+	    userInfo = db.getUserInfo(flask.session['userid'])
+	    name = userInfo[0]
+	    classNamesT = [i[1] for i in userInfo[2]] #List of names for classes being taught
+	    classIDsT = [i[0] for i in userInfo[2]] #List of class IDs for classes being taught
+	    classNamesE = [i[1] for i in userInfo[1]] #List of names for enrolled classes
+	    classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
+    except:
+        db.registerUser(entry["etag"], entry["id"])
+        return flask.render_template("register.html")
+
+    #return flask.redirect("index.html")
+    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT)
+
+@app.route("/authorize")
+def auth():
+    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
+    authorization_url, state = google.authorization_url(auth_base_url,
+    access_type="offline", include_granted_scopes="true")
+    flask.session["state"] = state
+    return flask.redirect(authorization_url)
+
+@app.route("/oauth2callback", methods=["GET"])
+def callback():
+    google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
+    token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
+    flask.session["credentials"] = token
+    return flask.redirect("/login")
+>>>>>>> e7914d1c14475592d6be5aa61b761898b0dd1b26
 
 @app.route('/clear')
 def clear_credentials():
@@ -160,9 +197,7 @@ def clear_credentials():
 @app.route('/regname', methods=["POST"])
 def regname():
     name = flask.request.form['name']
-    with sqlite3.connect('classify.db') as db:
-        c = db.cursor()
-        c.execute("UPDATE users set name='" + name + "' WHERE userid='" + flask.session['userid'] + "';")
+    db.updateName(flask.session['userid'], name)
     return flask.redirect('/login')
 
 @app.route('/makeclass')
@@ -174,20 +209,18 @@ def processMakeclass():
     classname = flask.request.form['classname']
     weightnames = flask.request.form.getlist('weightnames')
     weightnums = flask.request.form.getlist('weightnums')
-    with sqlite3.connect('classify.db') as db:
-        c = db.cursor()
-        c.execute("SELECT classid FROM classes;")
-        fetch = c.fetchall()
-        try:
-            classid = fetch[len(fetch) - 1][0] + 1
-        except:
-            classid = 0
-        c.execute("INSERT INTO classes VALUES(" + str(classid) + ", '" + classname + "', '" + flask.session["userid"] + "');")
-        for x in range(len(weightnames)):
-            c.execute("INSERT INTO weights VALUES(" + str(classid) + ", '" + weightnames[x] + "', '" + weightnums[x] + "');")
+    weightList = []
+    for i in range(len(weightnames)):
+        toAppend = [weightnames[i],weightnums[i]]
+        weightList.append(toAppend)
+    db.createClass(classname, flask.session["userid"], weightList)
     return flask.redirect("/login")
 
 @app.route('/class/<classid>')
+def classpage(classid):
+    classInfo = db.getClassInfo(classid)
+    return str(classInfo)
+'''
 def classpage(classid):
     with sqlite3.connect('classify.db') as db:
         c = db.cursor()
@@ -198,6 +231,7 @@ def classpage(classid):
         c.execute("SELECT weightvalue FROM weights where classid=" + classid + ";")
         weightnums = c.fetchall()
     return str(classinfo) + "<br>" + str(weightnames) + "<br>" + str(weightnums)
+<<<<<<< HEAD
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
@@ -217,4 +251,10 @@ if __name__ == '__main__':
 # Specify a hostname and port that are set as a valid redirect URI
 # for your API project in the Google API Console.
 if __name__ == "__main__":
+=======
+'''
+
+if __name__ == '__main__':
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+>>>>>>> e7914d1c14475592d6be5aa61b761898b0dd1b26
     app.run(debug = True)

@@ -1,37 +1,44 @@
-{% extends "base.html"%}
-{% block navbar %}
-<nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="mainNav">
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}
+    Classify | Landing
+    {% endblock %}
+</head>
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="containerNav">
+        <div class="container-fluid" id="mainNav">
+            <div class="navbar-header">
+                <a id="navHome" class="navbar-brand" href="/">
+                    <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Home
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ml-auto">
+                    <li class="nav-item">
+                        <a id="other" class="nav-link pl-3 pr-3" href="/fact">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="create" class="nav-link" href="/meme">Create</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% block content %}
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Home</a>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav text-uppercase ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/catpic">Cat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/dogpic">Dog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/quote">Quote</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/fact">Fact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/meme">Meme</a>
-                </li>
-            </ul>
-        </div>
+        <h1 id="title" class="mt-5">Classify</h1>
+        <br>
+        <p id = "subtitle">A teacher’s tool and a student’s blessing</p>
+        <a href="/login">
+            <button type="button" class="btn btn-danger" id="login">Login</button>
+        </a>
     </div>
-</nav>
-{% endblock %}
-{%block content%}
-<h1 id = "title"> Classify</h1>
-<br>
-<p id = "subtitle">A teacher’s tool and a student’s blessing</p>
-<a href="/login">
-    <button type="button" class="btn btn-danger" id="login">Login</button>
-</a>
-{%endblock%}
+    {% endblock %}
+</body>
+</html>

@@ -32,6 +32,14 @@ def getClassInfo(classID):
     closeDB(db)
     return output #Will be a tuple of None if no class of the classID inputted is found
 
+def getUserName(userID):
+    db,c = getDBCursor()
+    name = None
+    for i in c.execute("SELECT name FROM users WHERE userID = ?", (userID,)):
+        name = i[0]
+    closeDB(db)
+    return name
+
 def getUserInfo(userID):
     db,c = getDBCursor()
     enrolledClasses = []

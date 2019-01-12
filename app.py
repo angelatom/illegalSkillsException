@@ -111,7 +111,7 @@ def processMakeclass():
 @app.route('/class/<classid>')
 def classpage(classid):
     classInfo = db.getClassInfo(classid)
-    return str(classInfo)
+    return flask.render_template("class.html", className = classInfo[0], teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2], weights = classInfo[3])
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):

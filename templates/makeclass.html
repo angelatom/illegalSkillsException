@@ -28,7 +28,7 @@ P#02 -- Final Project
       <script>
         var addWeight = function(e){
           var list = document.getElementById("weightlist");
-          var child = document.getElementsByTagName("li")[0];
+          var child = list.getElementsByTagName("li")[0];
           var copy = child.cloneNode(true);
           list.appendChild(copy);
         };
@@ -46,5 +46,5 @@ P#02 -- Final Project
         add.addEventListener('click', addWeight);
         remove.addEventListener('click', removeWeight);
         </script>
- 
+
  {% endblock %}

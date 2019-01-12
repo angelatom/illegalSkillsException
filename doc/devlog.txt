@@ -20,23 +20,13 @@ Our website will be a combination of Google Classroom elements and JupiterEd. Th
 
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-aaronL -- 2019-01-11 23:06
---------------------------------------------------------------
-* added responsive navbar and half done with login page
-* added transitions and animations for login page
-* added logo
-==============================================================
-
-aaronL -- 2019-01-11 21:24
---------------------------------------------------------------
-* fixed base and login template and some css
 ==============================================================
 
 angelaT -- 2019-01-08 1:05
 --------------------------------------------------------------
 - Finished deliverables
 
-kevinL -- 2019-1-08 8:32 AM
+kevinL -- 2019-1-08 8:32 
 --------------------------------------------------------------
 - Added .gitignore
 
@@ -61,7 +51,11 @@ angelaT -- 2019-01-10 10:36
 --------------------------------------------------------------
 - Login with google completed
 
-linK -- 2019-01-11 6:34 PM
+maxM -- 2019-01-10 11:00
+--------------------------------------------------------------
+- Basic register and class creation functionality
+
+kevinL -- 2019-01-11 18:34
 --------------------------------------------------------------
 - Made functions to interact with the database
   - createClass(className, userID, weights)
@@ -74,15 +68,17 @@ linK -- 2019-01-11 6:34 PM
   - updateName(userID, name)
 - Deleted DB stuff in app.py
 - Added roster table and invite code generation for classes
-==============================================================
 
 angelaT -- 2019-01-11 18:54
 --------------------------------------------------------------
 - Removed old google login with google libraries
 - Finished new login with better oauth library (can use same template for dropbox)
-==============================================================
 
-linK -- 2019-01-11 10:48 PM
+aaronL -- 2019-01-11 21:24
+--------------------------------------------------------------
+- fixed base and login template and some css
+
+kevinL -- 2019-01-11 22:48
 --------------------------------------------------------------
 - File restoration and bug fixes
 - Added invite acceptance system (Go to /invite/<inviteCode>)
@@ -90,9 +86,8 @@ linK -- 2019-01-11 10:48 PM
 - Added changeGrades(classID, gradeList, assignment, maxGrade)
   - Used to add/update a list of grades
     - gradeList should be a list consisting of lists [userID, grade]
-==============================================================
 
-linK -- 2019-01-12 1:39 PM
+kevinL -- 2019-01-12 13:39
 --------------------------------------------------------------
 - Added getUserName(userID)
 - Created class page

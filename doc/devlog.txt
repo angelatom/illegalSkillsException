@@ -23,7 +23,8 @@ Our website will be a combination of Google Classroom elements and JupiterEd. Th
 aaronL -- 2019-01-11 23:06
 --------------------------------------------------------------
 * added responsive navbar and half done with login page
-* added transitions and animations for login page 
+* added transitions and animations for login page
+* added logo
 ==============================================================
 
 aaronL -- 2019-01-11 21:24

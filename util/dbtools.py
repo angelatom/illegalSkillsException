@@ -71,6 +71,7 @@ def acceptInvite(userID, inviteCode):
         classID = i[0]
         if i[1] == userID:
             return "User is the class instructor."
+        break
     else:
         closeDB(db)
         return "Invite does not exist."

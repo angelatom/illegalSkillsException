@@ -12,7 +12,7 @@ def createTable():
     c.execute("CREATE TABLE IF NOT EXISTS roster(classID INTEGER, userID TEXT)")
     c.execute("CREATE TABLE IF NOT EXISTS grades(classID INTEGER, userID TEXT, assignment TEXT, grade INTEGER, maxGrade INTEGER, weight TEXT)")
     c.execute("CREATE TABLE IF NOT EXISTS posts(postID INTEGER PRIMARY KEY, classID INTEGER, submission DATETIME, duedate DATETIME, postBody TEXT, submittable INTEGER)")
-    c.execute("CREATE TABLE IF NOT EXISTS files(postID INTEGER PRIMARY KEY, filename TEXT, userID TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS files(postID INTEGER, filename TEXT, userID TEXT)")
 
 createTable()
 

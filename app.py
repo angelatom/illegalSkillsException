@@ -33,6 +33,9 @@ refresh_url = token_url
 scope = [
     'https://www.googleapis.com/auth/calendar'
 ]
+UPLOAD_FOLDER = '/data/studentUploads/'
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -169,6 +172,25 @@ def submitGrades():
 		return "User is not the teacher of this class."
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3])
 	return "Grade update successful."
+
+@app.route('/submitFile', methods = ["POST"])
+def submitFile():
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	classID = db.getClassID(flask.request.form['postID'])
+	if isEnrolled(flask.session['userid'], classID):
+		if 'file' not in flask.request.files:
+			return "No file submitted."
+		file = flask.request.files['file']
+		if file.filename == '':
+			return "No file submitted."
+		if file:
+			filename = db.addFile(flask.request.form['postID'], flask.session['userid'])
+			filename += '.txt' #Makes all files have a .txt extension
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			return "File submission successful."
+	else:
+		return "User is not enrolled in this class."
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'

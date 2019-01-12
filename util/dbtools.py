@@ -136,6 +136,36 @@ def getAssignmentGrades(classID, assignment):
     closeDB(db)
     return maxGrade,output
 
+def getClassID(postID):
+    db,c = getDBCursor()
+    output = None
+    for i in c.execute("SELECT classID FROM posts WHERE postID = ? LIMIT 1", (postID,)):
+        output = i[0]
+    closeDB(db)
+    return output
+
+def isEnrolled(userID, classID):
+    db,c = getDBCursor()
+    output = False
+    for i in c.execute('SELECT * FROM roster WHERE classID = ? AND userID = ?', (classID, userID,)):
+        output = True
+    closeDB(db)
+    return output
+
+def addFile(postID, userID):
+    db,c = getDBCursor()
+    filename = None
+    for i in c.execute('SELECT filename FROM files WHERE postID = ? AND userID = ?', (postID, userID,)): #Check if file already exists
+        filename = i[0]
+    if filename == None: #Generate new file name if it doesn't exist
+        numFiles = 0
+        for i in c.execute("SELECT count(*) FROM files"):
+            numFiles = i[0]
+        filename = str(numFiles) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
+    c.execute('INSERT INTO files VALUES (?,?,?)', (postID, filename, userID))
+    closeDB(db)
+    return filename
+
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")
     cursor = db.cursor()

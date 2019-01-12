@@ -1,0 +1,21 @@
+{% extends "base.html"%}
+{% block content %}
+    <h1>{{className}}</h1>
+    Assignment: {{assignment}}
+    <form action = "/submitGrades" method = "POST">
+      <input type="hidden" name="assignment" value="{{assignment}}">
+      <input type="hidden" name="classID" value="{{classID}}">
+      Max Grade: <input type = "text" name = "maxGrade" value = "{{maxGrade}}"><br>
+      {% for i in roster %}
+        {{getName(i)}}:
+        <input type="hidden" name="studentID" value="{{i}}">
+        {% if i in gradeDict %}
+          <input type = "text" name = "grade" value = "{{gradeDict[i]}}">
+        {% else %}
+          <input type = "text" name = "grade">
+        {% endif %}
+        <br>
+      {% endfor %}
+      <input type = "submit">
+    </form>
+{% endblock %}

@@ -97,3 +97,9 @@ linK -- 2019-01-12 1:39 PM
 - Added getUserName(userID)
 - Created class page
 ==============================================================
+
+linK -- 2019-01-12 3:47 PM
+--------------------------------------------------------------
+- Added gradebook and associated DB functions
+- Changed userID to use our own generated UUIDs
+==============================================================

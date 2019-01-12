@@ -1,0 +1,22 @@
+{% extends "base.html"%}
+{%block content%}
+    <h1>{{className}}</h1>
+    Taught by {{teacherName}}<br>
+    Invite Code: {{inviteCode}}<br>
+    Weights:<br>
+    <ul>
+      {% for i in weights %}
+      <li>
+        {{i[0]}} : {{i[1]}}
+      </li>
+      {% endfor %}
+    </ul>
+    Roster:<br>
+    <ul>
+      {% for i in classRoster %}
+      <li>
+        {{getName(i)}}
+      </li>
+      {% endfor %}
+    </ul>
+{% endblock %}

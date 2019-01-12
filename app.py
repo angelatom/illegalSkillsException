@@ -48,18 +48,20 @@ def login():
     #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
     entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     print(entry)
-    flask.session['userid'] = entry["etag"]
 
-    try:
-	    userInfo = db.getUserInfo(flask.session['userid'])
-	    name = userInfo[0]
-	    classNamesT = [i[1] for i in userInfo[2]] #List of names for classes being taught
-	    classIDsT = [i[0] for i in userInfo[2]] #List of class IDs for classes being taught
-	    classNamesE = [i[1] for i in userInfo[1]] #List of names for enrolled classes
-	    classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
-    except:
-        db.registerUser(entry["etag"], entry["id"])
+    userID = db.getUserID(entry["id"])
+
+    if userID == None: #User is not registered
+        flask.session['userid'] = db.registerUser(entry["id"])
         return flask.render_template("register.html")
+    else:
+        flask.session['userid'] = userID
+        userInfo = db.getUserInfo(flask.session['userid'])
+        name = userInfo[0]
+        classNamesT = [i[1] for i in userInfo[2]] #List of names for classes being taught
+        classIDsT = [i[0] for i in userInfo[2]] #List of class IDs for classes being taught
+        classNamesE = [i[1] for i in userInfo[1]] #List of names for enrolled classes
+        classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
 
     #return flask.redirect("index.html")
     return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT)
@@ -111,7 +113,10 @@ def processMakeclass():
 @app.route('/class/<classid>')
 def classpage(classid):
     classInfo = db.getClassInfo(classid)
-    return flask.render_template("class.html", className = classInfo[0], teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2], weights = classInfo[3])
+    classRoster = db.getRoster(classid)
+    return flask.render_template("class.html", className = classInfo[0],
+		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
+		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName)
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):
@@ -120,6 +125,49 @@ def acceptInvite(inviteCode):
 	result = db.acceptInvite(flask.session['userid'], inviteCode)
 	return result
 
+@app.route('/gradebook/<classid>/<assignment>')
+def gradebook(classid, assignment):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	classInfo = db.getClassInfo(classid)
+	if flask.session['userid'] != classInfo[1]:
+		return "User is not the teacher of this class."
+	classRoster = db.getRoster(classid)
+	maxGrade,gradeDict = db.getAssignmentGrades(classid, assignment)
+	return flask.render_template("gradebook.html", className = classInfo[0],
+		assignment = assignment, roster = classRoster, gradeDict = gradeDict,
+		getName = db.getUserName, classID = classid, maxGrade = maxGrade)
+
+@app.route('/submitGrades', methods = ["POST"])
+def submitGrades():
+	inputs = [None, None, None, None]
+	for i in flask.request.form:
+		print(i)
+	try:
+		inputs[0] = flask.request.form['classID']
+		studentIDs = flask.request.form.getlist('studentID')
+		studentGrades = flask.request.form.getlist('grade')
+		gradesList = []
+		for i in range(len(studentIDs)):
+			toAppend = [None, None] #[userID, grade]
+			try:
+				toAppend[1] = int(studentGrades[i])
+			except:
+				continue
+			toAppend[0] = studentIDs[0]
+			gradesList.append(toAppend)
+		inputs[1] = gradesList
+		inputs[2] = flask.request.form['assignment']
+		inputs[3] = int(flask.request.form['maxGrade'])
+	except:
+		return "Invalid input(s)."
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	classInfo = db.getClassInfo(inputs[0])
+	if flask.session['userid'] != classInfo[1]:
+		return "User is not the teacher of this class."
+	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3])
+	return "Grade update successful."
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'

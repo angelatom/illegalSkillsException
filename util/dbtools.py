@@ -61,11 +61,25 @@ def getUserInfo(userID):
     closeDB(db)
     return (name, enrolledClasses, teachingClasses)
 
-def registerUser(userID, email):
+def registerUser(email):
     db,c = getDBCursor()
+    #Generate UUID
+    numUsers = 0
+    for i in c.execute("SELECT count(*) FROM users"):
+        numUsers = i[0]
+    userID = str(numUsers) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
     #Default name is the user's email
     c.execute("INSERT INTO users VALUES (?,?,?)", (userID, email, email))
     closeDB(db)
+    return userID
+
+def getUserID(email):
+    db,c = getDBCursor()
+    output = None
+    for i in c.execute("SELECT userID FROM users WHERE email = ?", (email,)):
+        output = i[0]
+    closeDB(db)
+    return output
 
 def updateName(userID, name):
     db,c = getDBCursor()
@@ -90,6 +104,14 @@ def acceptInvite(userID, inviteCode):
     closeDB(db)
     return "User enrolled."
 
+def getRoster(classID):
+    db,c = getDBCursor()
+    output = []
+    for i in c.execute("SELECT userID FROM roster WHERE classID = ?", (classID,)):
+        output.append(i[0])
+    closeDB(db)
+    return output
+
 def changeGrades(classID, gradeList, assignment, maxGrade):
     #gradeList [[userID, grade]]
     db,c = getDBCursor()
@@ -102,6 +124,17 @@ def changeGrades(classID, gradeList, assignment, maxGrade):
             #Otherwise create rows for grades
             c.execute("INSERT INTO grades VALUES (?,?,?,?,?)", (classID, i[0], assignment, i[1], maxGrade,))
     closeDB(db)
+
+def getAssignmentGrades(classID, assignment):
+    db,c = getDBCursor()
+    output = {}
+    maxGrade = ""
+    for i in c.execute("SELECT maxGrade FROM grades WHERE classID = ? AND assignment = ? LIMIT 1", (classID, assignment,)):
+        maxGrade = str(i[0])
+    for i in c.execute("SELECT userID, grade FROM grades WHERE classID = ? AND assignment = ?", (classID, assignment,)):
+        output[i[0]] = i[1] #output[userID] = gradeForUserID
+    closeDB(db)
+    return maxGrade,output
 
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")

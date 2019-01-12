@@ -21,7 +21,7 @@ from util import dbtools as db
 app = flask.Flask(__name__)
 app.secret_key = os.urandom(32)
 
-with open("client_secret.json") as f:
+with open("keys/client_secret.json") as f:
 	api_keys = json.load(f)
 
 client_id = api_keys["web"]["client_id"]
@@ -84,7 +84,8 @@ def clear_credentials():
     if 'credentials' in flask.session:
         del flask.session['credentials']
         del flask.session['userid']
-    return ('Credentials have been cleared.<br><br>')
+    # flash msg saying logout
+    return (flask.redirect("/"))
 
 @app.route('/regname', methods=["POST"])
 def regname():
@@ -111,7 +112,7 @@ def processMakeclass():
 @app.route('/class/<classid>')
 def classpage(classid):
     classInfo = db.getClassInfo(classid)
-    return str(classInfo)
+    return flask.render_template("class.html", className = classInfo[0], teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2], weights = classInfo[3])
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):

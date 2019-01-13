@@ -46,6 +46,13 @@ P#02 -- Final Project
             </div>
         </div>
 
+        {% for i in range(teachings|length//4) %}
+            <!-- Row stuff -->
+            {% for j in teachings[i * 4:i * 4 + 4] %}
+                {{j}} <!-- Item stuff -->
+            {% endfor %}
+        {% endfor %}
+
         {% set teach = teachings %}
         {% set var = teach[0][1] %}
 

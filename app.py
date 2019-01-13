@@ -13,6 +13,8 @@ import json
 
 from requests_oauthlib import OAuth2Session
 
+from oauthlib.oauth2 import TokenExpiredError
+
 from urllib import request, parse
 import sqlite3
 
@@ -47,11 +49,16 @@ def index():
 def login():
     if "credentials" not in flask.session:
         return flask.redirect("authorize")
+    try:
+        calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+        #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
+        entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    #print(entry)
+    except TokenExpiredError as e:
+        token = client.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+        token_saver(token)
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-    entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    print(entry)
-
+    entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
     userID = db.getUserID(entry["id"])
     email = entry["id"]
     if userID == None: #User is not registered
@@ -59,18 +66,15 @@ def login():
         return flask.render_template("register.html")
     else:
         flask.session['userid'] = userID
-        enrolled = db.getUserInfo(flask.session['userid'])[1]
-        teaching = db.getUserInfo(flask.session['userid'])[2]
         userInfo = db.getUserInfo(flask.session['userid'])
         name = userInfo[0]
         classNamesT = [i[1] for i in userInfo[2]] #List of names for classes being taught
         classIDsT = [i[0] for i in userInfo[2]] #List of class IDs for classes being taught
         classNamesE = [i[1] for i in userInfo[1]] #List of names for enrolled classes
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
-
+    #name = calendar.get("")
     #return flask.redirect("index.html")
-    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT,
-                                teachings = teaching, enrolleds = enrolled, email=email)
+    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT, email=email)
 
 @app.route("/authorize")
 def auth():

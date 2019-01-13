@@ -14,7 +14,7 @@
 }
 
 /* .navbar li a, .navbar a {
-    color: black;
+color: black;
 } */
 
 .navbar-nav .nav-link {
@@ -156,4 +156,33 @@
 
 .book {
     max-width: 70%;
+}
+
+.card-img-caption {
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+.card-img-caption .card-img-top {
+    z-index: 0;
+    opacity: 0.8;
+}
+
+.card-img-caption .card-text {
+    text-align: center;
+    width: 50%;
+    margin: 15% 0;
+    position: absolute;
+    z-index: 1;
+}
+
+#caption-text {
+    font-size: 20px;
+    text-shadow: 1px 1px 8px gray;
+}
+
+#caption-text2 {
+    font-size: 20px;
+    /* text-shadow: 1px 1px 8px gray; */
+    color: white;
 }

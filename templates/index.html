@@ -8,21 +8,138 @@ P#02 -- Final Project
 
 {% extends "base.html"%}
 {%block content%}
-  <br>
-  <br>
-  <br>
-    <h1>Hello, {{name}}!</h1>
-    <a href="/makeclass"> Make a Class </a>
-    <br>
-    <a href="/enterinvite"> Join a Class </a>
-    <br>
-    Classes:
-    <ul>
+
+<div class="container-fluid">
+    <!-- tabs -->
+    <ul class="nav nav-pills justify-content-center mt-10" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="enrolled-tab" data-toggle="tab" href="#enrolled" role="tab" aria-controls="enrolled" aria-selected="true">Enrolled</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="teaching-tab" data-toggle="tab" href="#teaching" role="tab" aria-controls="teaching" aria-selected="false">Teaching</a>
+        </li>
+    </ul>
+
+    <!-- tab content -->
+    <div class="tab-content" id="myTabContent">
+
+        <!-- enrolled tab -->
+        <div class="tab-pane fade show active" id="enrolled" role="tabpanel" aria-labelledby="enrolled-tab">
+            <div class="row mt-5 ml-4">
+                <div class="col mt-4">
+                    <h1>Your enrolled classes</h1>
+                </div>
+            </div>
+
+            <div class="row mt-3 ml-3 mr-3">
+                <div class="card" style="width: 20rem;">
+                    <div class="card-img-caption">
+                        <p id="caption-text" class="card-text">Physics</p>
+                        <img class="card-img-top" src="../static/card_background.jpg" alt="Card image cap">
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Period 1. Mr. Lorem</h5>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% set teach = teachings %}
+        {% set var = teach[0][1] %}
+
+        {% if teach|length % 4 == 0 %}
+            {% set rows = (teach|length / 4)|int %}
+            {% set iterations = teach|length|int %}
+        {% elif teach|length < 4 %}
+            {% set rows = 1 %}
+            {% set iterations = teach|length|int %}
+        {% elif teach|length % 4 != 0 %}
+            {% set rows = ((teach|length / 4)|round(0, 'floor')|int) + 1 %}
+            {% set iterations = 4 %}
+        {% elif teach|length == 0 %}
+            {% set iterations = -1 %}
+        {% endif %}
+
+        {% set current = teach|length %}
+        {% set inc = -1 %}
+        <div class="tab-pane fade" id="teaching" role="tabpanel" aria-labelledby="teaching-tab">
+            <div class="row mt-5 ml-4">
+                <div class="col mt-4">
+                    <h1>Teaching {{ teach|length % 3 }}</h1>
+                </div>
+            </div>
+        {% if iterations == -1 %}
+            <p class="ml-5 mr-5" style="color: red;">You have no classes! Go make a class!</p>
+        {% else %}
+        {% for i in range(rows) %}
+            <div class="row mt-3 ml-3 mr-3">
+                {% set inc = inc + 1 %}
+                {% if current > 4 %}
+                    {% set current = current - 4 %}
+                    {% set iterations = 4 %}
+                {% else %}
+                    {% set iterations = current %}
+                {% endif %}
+
+                {% for z in range(iterations) %}
+                <div class="col-md-3">
+                    <div class="card mr-2 ml-2" style="width: 20rem;">
+                        <div class="card-img-caption">
+                            <p id="caption-text2" class="card-text">{{ teach[inc][1] }}</p>
+                            <img class="card-img-top" src="../static/card_background2.jpeg" alt="Card image cap">
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">iterations: {{ iterations }} current: {{ current}}</h5>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor%}
+        </div>
+        {% endif %}
+        <!-- teaching tab -->
+        <!-- <div class="tab-pane fade" id="teaching" role="tabpanel" aria-labelledby="teaching-tab">
+            <div class="row mt-5 ml-4">
+                <div class="col mt-4">
+                    <h1>Teaching</h1>
+                </div>
+            </div>
+            <div class="row mt-3 ml-3 mr-3">
+                <div class="card" style="width: 20rem;">
+                    <div class="card-img-caption">
+                        <p id="caption-text2" class="card-text">rows: {{ rows }}</p>
+                        <img class="card-img-top" src="../static/card_background2.jpeg" alt="Card image cap">
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Period 1</h5>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+
+<a href="/makeclass"> Make a Class </a>
+<br>
+<a href="/enterinvite"> Join a Class </a>
+<br>
+Classes:
+<ul>
     {% for x in range(classnames|length) %}
     {% set url = "/class/" + classids[x]|string %}
     <li>
-      <a href={{url}}> {{classnames[x]}} </a>
-      </li>
-      {% endfor %}
-      </ul>
+        <a href={{url}}> {{classnames[x]}} </a>
+    </li>
+    {% endfor %}
+</ul>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
 {%endblock%}

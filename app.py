@@ -59,6 +59,8 @@ def login():
         return flask.render_template("register.html")
     else:
         flask.session['userid'] = userID
+        enrolled = db.getUserInfo(flask.session['userid'])[1]
+        teaching = db.getUserInfo(flask.session['userid'])[2]
         userInfo = db.getUserInfo(flask.session['userid'])
         name = userInfo[0]
         classNamesT = [i[1] for i in userInfo[2]] #List of names for classes being taught
@@ -67,7 +69,8 @@ def login():
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
 
     #return flask.redirect("index.html")
-    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT)
+    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT,
+                                teachings = teaching, enrolleds = enrolled)
 
 @app.route("/authorize")
 def auth():

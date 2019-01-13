@@ -187,13 +187,12 @@ color: black;
     color: white;
 }
 
-#navImg2 {
+#dropMenu {
+    height: 50px;
+    width: 60px;
     border-radius: 18px;
     max-height: 80%;
     max-width: 90%;
     position: center 90px;
-}
-
-.navHead {
-    position: center center;
+    padding: 0px;
 }

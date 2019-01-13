@@ -1,26 +1,28 @@
 {% extends "base.html"%}
+
 {%block content%}
-  <br>
-  <br>
-  <br>
+<div class="container-fluid">
+    <br>
+    <br>
+    <br>
     <h1>{{className}}</h1>
     Taught by {{teacherName}}<br>
     Invite Code: {{inviteCode}}<br>
     Weights:<br>
     <ul>
-      {% for i in weights %}
-      <li>
-        {{i[0]}} : {{i[1]}}
-      </li>
-      {% endfor %}
+        {% for i in weights %}
+        <li>
+            {{i[0]}} : {{i[1]}}
+        </li>
+        {% endfor %}
     </ul>
     Roster:<br>
     <ul>
-      {% for i in classRoster %}
-      <li>
-        {{getName(i)}}
-      </li>
-      {% endfor %}
+        {% for i in classRoster %}
+        <li>
+            {{getName(i)}}
+        </li>
+        {% endfor %}
     </ul>
     {% if isTeacher %}
     {% set url = "/makepost/" + classID|string %}
@@ -28,12 +30,15 @@
     {% endif %}
     Posts:<br>
     <ul>
-    {% for i in posts %}
-    <li>
-      {{i[4]}} <br>
-      Posted: {{i[2]}} <br>
-      Due: {{i[3]}} <br>
-      </li>
-    {% endfor %}
+        {% for i in posts %}
+        <li>
+            {{i[4]}} <br>
+            Posted: {{i[2]}} <br>
+            Due: {{i[3]}} <br>
+        </li>
+        {% endfor %}
     </ul>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
 {% endblock %}

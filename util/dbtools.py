@@ -254,9 +254,9 @@ def makePost(classID, dueDate, postBody, submittable):
     '''
 
     db,c = getDBCursor()
-    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable) VALUES(?,?,?,?,?)", (-1, dueDate, postBody, submittable)) #Inserts row into posts table
+    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable) VALUES(?,?,?,?)", (-1, dueDate, postBody, submittable)) #Inserts row into posts table
     postID = -1
-    for i in c.execute("SELECT ROWID FROM posts WHERE classID = ? AND LIMIT 1", (-1,)): #Takes current postID
+    for i in c.execute("SELECT ROWID FROM posts WHERE classID = ? LIMIT 1", (-1,)): #Takes current postID
         postID = i[0]
     c.execute("UPDATE posts SET submission = CURRENT_TIMESTAMP, classID = ? WHERE postID = ?", (classID, postID,)) #Adds the submission to the row
     closeDB(db)

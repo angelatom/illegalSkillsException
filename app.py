@@ -75,7 +75,8 @@ def login():
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
     #name = calendar.get("")
     #return flask.redirect("index.html")
-    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT, email=email)
+    return flask.render_template("index.html", name = name, classnames = classNamesT,
+		classids = classIDsT, email=email, enrollds = userInfo[1], teachings = userInfo[2])
 
 @app.route("/authorize")
 def auth():

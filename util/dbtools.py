@@ -3,6 +3,10 @@ import sqlite3, string, random
 #These functions are meant to be ran from app.py, do not try to use them here.
 
 def createClass(className, userID, weights):
+
+    '''This function creates a class using the specified weights and teacher.
+    '''
+
     db,c = getDBCursor()
     c.execute("INSERT INTO classes (className, userID, invite) VALUES(?,?,?)", (className, userID, None,)) #Inserts row into classes table
     classID = -1
@@ -16,6 +20,12 @@ def createClass(className, userID, weights):
     closeDB(db)
 
 def getClassInfo(classID):
+
+    '''This function returns the name, teacher, invite code, and weights of a
+       class as a list, with weights as another list of lists of length 2, with
+       the first value as the name of the weight and the second as the value.
+    '''
+
     db,c = getDBCursor()
     #[className, userID, invite, [[weightName, weightValue]]]
     output = [None, None, None, None]
@@ -33,6 +43,10 @@ def getClassInfo(classID):
     return output #Will be a tuple of None if no class of the classID inputted is found
 
 def getUserName(userID):
+
+    '''This function returns the name of a user.
+    '''
+
     db,c = getDBCursor()
     name = None
     for i in c.execute("SELECT name FROM users WHERE userID = ?", (userID,)):
@@ -41,6 +55,12 @@ def getUserName(userID):
     return name
 
 def getUserInfo(userID):
+
+    '''This function returns the name, enrolled classes, and classes that a user
+       teaches. Classes are returned as a list of lists of length 2, with the
+       first value as the class ID and the second the name of the class.
+    '''
+
     db,c = getDBCursor()
     enrolledClasses = []
     teachingClasses = []
@@ -62,6 +82,10 @@ def getUserInfo(userID):
     return (name, enrolledClasses, teachingClasses)
 
 def registerUser(email):
+
+    '''This function registers a user and returns a unique user ID.
+    '''
+
     db,c = getDBCursor()
     #Generate UUID
     numUsers = 0
@@ -74,6 +98,11 @@ def registerUser(email):
     return userID
 
 def getUserID(email):
+
+    '''This function returns the userID of a user with the given email. Returns
+       None if the user does not exist.
+    '''
+
     db,c = getDBCursor()
     output = None
     for i in c.execute("SELECT userID FROM users WHERE email = ?", (email,)):
@@ -82,11 +111,22 @@ def getUserID(email):
     return output
 
 def updateName(userID, name):
+
+    '''This function sets the name of a user.
+    '''
+
     db,c = getDBCursor()
     c.execute("UPDATE users SET name = ? WHERE userID = ?", (name, userID,))
     closeDB(db)
 
 def acceptInvite(userID, inviteCode):
+
+    '''This function adds a user to the roster of a class if the invite code
+       exists. Returns a string regarding the status of the invite acceptance.
+
+    PREREQ: userID exists
+    '''
+
     db,c = getDBCursor()
     classID = None
     for i in c.execute("SELECT classID, userID FROM classes WHERE invite = ?", (inviteCode,)): #Check if the invite code exists
@@ -105,6 +145,10 @@ def acceptInvite(userID, inviteCode):
     return "User enrolled."
 
 def getRoster(classID):
+
+    '''This function returns a list of the users enrolled in a class.
+    '''
+
     db,c = getDBCursor()
     output = []
     for i in c.execute("SELECT userID FROM roster WHERE classID = ?", (classID,)):
@@ -113,6 +157,11 @@ def getRoster(classID):
     return output
 
 def changeGrades(classID, gradeList, assignment, maxGrade):
+
+    '''This function updates the grades of the given assignment for a class.
+       gradeList should be a list with each element [userID, grade].
+    '''
+
     #gradeList [[userID, grade]]
     db,c = getDBCursor()
     for i in gradeList:
@@ -126,6 +175,11 @@ def changeGrades(classID, gradeList, assignment, maxGrade):
     closeDB(db)
 
 def getAssignmentGrades(classID, assignment):
+
+    '''This function returns the max grade and current grades of students for
+       an assignment.
+    '''
+
     db,c = getDBCursor()
     output = {}
     maxGrade = ""
@@ -137,6 +191,10 @@ def getAssignmentGrades(classID, assignment):
     return maxGrade,output
 
 def getClassID(postID):
+
+    '''This function returns the classID associated with a postID.
+    '''
+
     db,c = getDBCursor()
     output = None
     for i in c.execute("SELECT classID FROM posts WHERE postID = ? LIMIT 1", (postID,)):
@@ -145,6 +203,11 @@ def getClassID(postID):
     return output
 
 def isEnrolled(userID, classID):
+
+    '''This function returns a boolean based on if the given user is enrolled in
+       the given class.
+    '''
+
     db,c = getDBCursor()
     output = False
     for i in c.execute('SELECT * FROM roster WHERE classID = ? AND userID = ?', (classID, userID,)):
@@ -153,6 +216,12 @@ def isEnrolled(userID, classID):
     return output
 
 def addFile(postID, userID):
+
+    '''This function registers a file given by a user from a post. If the user
+       has already submitted a file to this post, the function will return the
+       old file name, otherwise, it will generate and return a new name.
+    '''
+
     db,c = getDBCursor()
     filename = None
     for i in c.execute('SELECT filename FROM files WHERE postID = ? AND userID = ?', (postID, userID,)): #Check if file already exists
@@ -165,6 +234,7 @@ def addFile(postID, userID):
     c.execute('INSERT INTO files VALUES (?,?,?)', (postID, filename, userID))
     closeDB(db)
     return filename
+
 
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")

@@ -132,7 +132,8 @@ def classpage(classid):
     return flask.render_template("class.html", className = classInfo[0],
 		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
 		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName,
-		isTeacher = isTeacher, classID = classid, posts = posts[::-1])
+		isTeacher = isTeacher, classID = classid, posts = posts[::-1],
+		getPostFiles = db.getPostFiles)
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):
@@ -224,6 +225,17 @@ def processMakePost(classID):
 	due = duedate + " " + duetime
 	db.makePost(classID, due, postbody, submittable)
 	return flask.redirect('/class/' + classID)
+
+@app.route('/viewFile/<filename>', methods=['GET'])
+def viewFile(filename):
+	fileExists = db.fileExists(filename)
+	if fileExists:
+		file = open("./data/studentUploads/" + filename + ".txt","r")
+		output = file.read()
+		file.close()
+		return flask.render_template('viewfile.html', fileContent = output)
+	else:
+		return "File does not exist."
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'

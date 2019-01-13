@@ -275,6 +275,35 @@ def getPosts(classID):
     closeDB(db)
     return output
 
+def fileExists(filename):
+
+    '''This function returns True if the file is in the database, and False
+       otherwise.
+    '''
+
+    db,c = getDBCursor()
+    output = False
+    for i in c.execute("SELECT * FROM files WHERE fileName = ?", (filename,)):
+        output = True
+    closeDB(db)
+    return output
+
+def getPostFiles(postID):
+
+    '''This function returns a list of lists containing student upload
+       information on a specific post.
+    '''
+
+    db,c = getDBCursor()
+    output = []
+    for i in c.execute("SELECT filename, userID, submission FROM files WHERE postID = ?", (postID,)):
+        toAppend = [None,None,None] #[filename, userID, timestamp]
+        for j in range(3):
+            toAppend[j] = i[j]
+        output.append(toAppend)
+    closeDB(db)
+    return output
+
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")
     cursor = db.cursor()

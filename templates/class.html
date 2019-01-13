@@ -41,6 +41,28 @@
               <input type="file" name="file">
               <input type="submit" value="Upload">
             </form>
+            {% elif i[5] == 1 %}
+            <button onclick="show{{i[0]}}()">View Submissions</button>
+            <div id="{{i[0]}}">
+              {% set uploads = getPostFiles(i[0]) %}
+              {% if uploads|length == 0 %}
+                No submissions yet.
+              {% else %}
+                {% for i in uploads %}
+                  {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <script>
+              function show{{i[0]}}() {
+                var x = document.getElementById("{{i[0]}}");
+                if (x.style.display === "none") {
+                  x.style.display = "block";
+                } else {
+                  x.style.display = "none";
+                }
+              }
+            </script>
             {% endif %}
         </li>
         {% endfor %}

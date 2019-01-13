@@ -254,11 +254,11 @@ def makePost(classID, dueDate, postBody, submittable):
     '''
 
     db,c = getDBCursor()
-    postID = 0
-    for i in c.execute("SELECT classID FROM posts ORDER BY classID DESC LIMIT 1"): #Takes current postID
+    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable) VALUES(?,?,?,?,?)", (-1, dueDate, postBody, submittable)) #Inserts row into posts table
+    postID = -1
+    for i in c.execute("SELECT ROWID FROM posts WHERE classID = ? AND LIMIT 1", (-1,)): #Takes current postID
         postID = i[0]
-    c.execute("INSERT INTO posts (postID, classID, duedate, postBody, submittable) VALUES(?,?,?,?,?)", (postID, classID, dueDate, postBody, submittable)) #Inserts row into posts table
-    c.execute("UPDATE posts SET submission = CURRENT_TIMESTAMP WHERE postID = ?", (postID,)) #Adds the submission to the row
+    c.execute("UPDATE posts SET submission = CURRENT_TIMESTAMP, classID = ? WHERE postID = ?", (classID, postID,)) #Adds the submission to the row
     closeDB(db)
 
 def getPosts(classID):
@@ -267,7 +267,7 @@ def getPosts(classID):
     '''
 
     db,c = getDBCursor()
-    c.execute("SELECT * FROM posts WHERE classID = ?", (classID,))
+    c.execute("SELECT * FROM posts WHERE classID = ? ORDER BY submission", (classID,))
     output = c.fetchall()
     closeDB(db)
     return output

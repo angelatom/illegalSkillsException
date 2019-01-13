@@ -106,6 +106,7 @@ def registerUser(email):
     for i in c.execute("SELECT ROWID FROM users WHERE userID = ?", ('TEMP',)):
         numUsers = i[0]
     userID = str(numUsers) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
+    c.execute("UPDATE users SET userID = ? WHERE userID = ?", (userID,'TEMP',))
     closeDB(db)
     return userID
 
@@ -239,11 +240,13 @@ def addFile(postID, userID):
     for i in c.execute('SELECT filename FROM files WHERE postID = ? AND userID = ?', (postID, userID,)): #Check if file already exists
         filename = i[0]
     if filename == None: #Generate new file name if it doesn't exist
-        numFiles = 0
-        for i in c.execute("SELECT count(*) FROM files"):
-            numFiles = i[0]
+        c.execute('INSERT INTO files (postID, filename, userID) VALUES (?,?,?)', (postID, 'TEMP', userID))
+        rowID = 0
+        for i in c.execute("SELECT ROWID FROM files WHERE filename = ?", ('TEMP',)):
+            rowID = i[0]
         filename = str(numFiles) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
-    c.execute('INSERT INTO files VALUES (?,?,?)', (postID, filename, userID))
+        c.execute("UPDATE files SET filename = ? WHERE filename = ?", (filename,'TEMP',))
+    c.execute("UPDATE files SET submission = CURRENT_TIMESTAMP WHERE filename = ?", (filename,)) #Updates submission timestamp
     closeDB(db)
     return filename
 

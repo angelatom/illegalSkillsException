@@ -8,9 +8,9 @@ def createClass(className, userID, weights):
     '''
 
     db,c = getDBCursor()
-    c.execute("INSERT INTO classes (className, userID, invite) VALUES(?,?,?)", (className, userID, None,)) #Inserts row into classes table
+    c.execute("INSERT INTO classes (className, userID, invite) VALUES(?,?,?)", (className, userID, 'TEMP',)) #Inserts row into classes table
     classID = -1
-    for i in c.execute("SELECT classID FROM classes ORDER BY classID DESC LIMIT 1"): #Takes current classID
+    for i in c.execute("SELECT classID FROM classes WHERE invite = ? LIMIT 1", ('TEMP',)): #Takes current classID
         classID = i[0]
     #Create an invite code by combining the classID and a random string of length six
     invite = str(classID) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
@@ -87,13 +87,13 @@ def registerUser(email):
     '''
 
     db,c = getDBCursor()
+    #Default name is the user's email
+    c.execute("INSERT INTO users VALUES (?,?,?)", ('TEMP', email, email))
     #Generate UUID
-    numUsers = 0
-    for i in c.execute("SELECT count(*) FROM users"):
+    rowID = -1
+    for i in c.execute("SELECT ROWID FROM users WHERE userID = ?", ('TEMP',)):
         numUsers = i[0]
     userID = str(numUsers) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
-    #Default name is the user's email
-    c.execute("INSERT INTO users VALUES (?,?,?)", (userID, email, email))
     closeDB(db)
     return userID
 

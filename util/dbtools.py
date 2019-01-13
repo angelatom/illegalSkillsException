@@ -244,7 +244,7 @@ def addFile(postID, userID):
         rowID = 0
         for i in c.execute("SELECT ROWID FROM files WHERE filename = ?", ('TEMP',)):
             rowID = i[0]
-        filename = str(numFiles) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
+        filename = str(rowID) + ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6))
         c.execute("UPDATE files SET filename = ? WHERE filename = ?", (filename,'TEMP',))
     c.execute("UPDATE files SET submission = CURRENT_TIMESTAMP WHERE filename = ?", (filename,)) #Updates submission timestamp
     closeDB(db)

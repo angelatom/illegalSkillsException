@@ -35,6 +35,13 @@
             {{i[4]}} <br>
             Posted: {{i[2]}} <br>
             Due: {{i[3]}} <br>
+            {% if i[5] == 1 and not isTeacher %}
+            <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
+              <input type="hidden" name="postID" value="{{i[0]}}">
+              <input type="file" name="file">
+              <input type="submit" value="Upload">
+            </form>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

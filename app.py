@@ -36,7 +36,7 @@ refresh_url = token_url
 scope = [
     'https://www.googleapis.com/auth/calendar'
 ]
-UPLOAD_FOLDER = '/data/studentUploads/'
+UPLOAD_FOLDER = './data/studentUploads/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -190,7 +190,7 @@ def submitFile():
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	classID = db.getClassID(flask.request.form['postID'])
-	if isEnrolled(flask.session['userid'], classID):
+	if db.isEnrolled(flask.session['userid'], classID):
 		if 'file' not in flask.request.files:
 			return "No file submitted."
 		file = flask.request.files['file']

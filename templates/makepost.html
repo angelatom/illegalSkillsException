@@ -1,0 +1,16 @@
+{% extends "base.html"%}
+{% block content %}
+    <br>
+    <br>
+    <br>
+    {% set url = "/processmakepost/" + classID|string %}
+    <form action={{url}} method="POST">
+        Enter Post:
+        <input type="text" name="postbody">
+        Enter Due Date:
+        <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
+        <input type="time" name="duetime">
+        <input type="checkbox" name="submittable"> File Submission <br>
+          <input type="submit">
+      </form>
+ {% endblock %}

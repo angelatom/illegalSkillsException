@@ -42,6 +42,18 @@ def getClassInfo(classID):
     closeDB(db)
     return output #Will be a tuple of None if no class of the classID inputted is found
 
+def getTeacher(classID):
+
+    '''This function returns the userID of the teacher based on the classID
+    '''
+
+    db,c = getDBCursor()
+    output = None
+    for i in c.execute("SELECT userID FROM classes WHERE classID = ?", (classID,)):
+        output = i[0]
+    closeDB(db)
+    return output
+
 def getUserName(userID):
 
     '''This function returns the name of a user.
@@ -235,6 +247,30 @@ def addFile(postID, userID):
     closeDB(db)
     return filename
 
+def makePost(classID, dueDate, postBody, submittable):
+
+    '''This function creates a post based on teacher input. It creates the
+       postID and submissionDate.
+    '''
+
+    db,c = getDBCursor()
+    postID = 0
+    for i in c.execute("SELECT classID FROM posts ORDER BY classID DESC LIMIT 1"): #Takes current postID
+        postID = i[0]
+    c.execute("INSERT INTO posts (postID, classID, duedate, postBody, submittable) VALUES(?,?,?,?,?)", (postID, classID, dueDate, postBody, submittable)) #Inserts row into posts table
+    c.execute("UPDATE posts SET submission = CURRENT_TIMESTAMP WHERE postID = ?", (postID,)) #Adds the submission to the row
+    closeDB(db)
+
+def getPosts(classID):
+
+    '''This function returns all of the posts when given a classID.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("SELECT * FROM posts WHERE classID = ?", (classID,))
+    output = c.fetchall()
+    closeDB(db)
+    return output
 
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")

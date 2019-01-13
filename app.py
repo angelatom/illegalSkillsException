@@ -10,6 +10,7 @@ import os
 import flask
 import requests
 import json
+import datetime
 
 from requests_oauthlib import OAuth2Session
 
@@ -55,8 +56,8 @@ def login():
         entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     #print(entry)
     except TokenExpiredError as e:
-        token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-        flask.session["credentials"] = token
+        token = client.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+        token_saver(token)
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
     userID = db.getUserID(entry["id"])
@@ -125,9 +126,12 @@ def processMakeclass():
 def classpage(classid):
     classInfo = db.getClassInfo(classid)
     classRoster = db.getRoster(classid)
+    isTeacher = (db.getTeacher(classid) == flask.session["userid"])
+    posts = db.getPosts(classid)
     return flask.render_template("class.html", className = classInfo[0],
 		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
-		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName)
+		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName,
+		isTeacher = isTeacher, classID = classid, posts = posts[::-1])
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):
@@ -198,6 +202,27 @@ def submitFile():
 			return "File submission successful."
 	else:
 		return "User is not enrolled in this class."
+
+@app.route('/makepost/<classID>')
+def makePost(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	date = str(datetime.date.today())
+	return flask.render_template("makepost.html", date=date, classID=classID)
+
+@app.route('/processmakepost/<classID>', methods=['POST'])
+def processMakePost(classID):
+	postbody = flask.request.form['postbody']
+	duedate = flask.request.form['duedate']
+	duetime = flask.request.form['duetime']
+	submittable = flask.request.form.get('submittable')
+	if submittable == None:
+		submittable = 0
+	else:
+		submittable = 1
+	due = duedate + " " + duetime
+	db.makePost(classID, due, postbody, submittable)
+	return flask.redirect('/class/' + classID)
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'

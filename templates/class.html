@@ -22,4 +22,18 @@
       </li>
       {% endfor %}
     </ul>
+    {% if isTeacher %}
+    {% set url = "/makepost/" + classID|string %}
+    <a href={{url}}> Make a Post </a>
+    {% endif %}
+    Posts:<br>
+    <ul>
+    {% for i in posts %}
+    <li>
+      {{i[4]}} <br>
+      Posted: {{i[2]}} <br>
+      Due: {{i[3]}} <br>
+      </li>
+    {% endfor %}
+    </ul>
 {% endblock %}

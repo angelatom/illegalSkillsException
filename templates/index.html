@@ -34,25 +34,27 @@ P#02 -- Final Project
             </div>
 
             {% if enroll|length == 0 %}
-                <p class="mt-2 mr-5 ml-5 mb-5" style="color: red;">You aren't enrolled in any classes. Go enroll in one!</p>
+            <p class="mt-2 mr-5 ml-5 mb-5" style="color: red;">You aren't enrolled in any classes. Go enroll in one!</p>
             {% else %}
             {% for i in range((enroll|length // 4) + 1) %}
             <!-- Row stuff -->
             <div class="row mt-3 ml-3 mr-3">
                 {% for j in enrolleds[i * 4: i * 4 + 4] %}
-                    <div class="col-md-3">
-                        <div class="card mr-2 ml-2" style="width: 20rem;">
+                <div class="col-md-3">
+                    <div class="card mr-2 ml-2" style="width: 20rem;">
+                        <a href="/class/{{j[0]}}">
                             <div class="card-img-caption">
                                 <p id="caption-text2" class="card-text">{{ j[1] }}</p>
                                 <img class="card-img-top" src="../static/card_background2.jpeg" alt="Card image cap">
                             </div>
+                        </a>
 
-                            <div class="card-body">
-                                <h5 class="card-title">Course Description</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Course Description</h5>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
                         </div>
                     </div>
+                </div>
                 {% endfor %}
 
             </div>
@@ -71,25 +73,27 @@ P#02 -- Final Project
             </div>
 
             {% if teach|length == 0 %}
-                <p class="mt-2 mr-5 ml-5 mb-5" style="color: red;">You aren't teaching any classes!</p>
+            <p class="mt-2 mr-5 ml-5 mb-5" style="color: red;">You aren't teaching any classes!</p>
             {% else %}
             {% for i in range((teach|length // 4) + 1) %}
             <!-- Row stuff -->
             <div class="row mt-3 ml-3 mr-3">
                 {% for j in teachings[i * 4: i * 4 + 4] %}
-                    <div class="col-md-3">
-                        <div class="card mr-2 ml-2" style="width: 20rem;">
+                <div class="col-md-3">
+                    <div class="card mr-2 ml-2" style="width: 20rem;">
+                        <a href="/class/{{ j[0] }}">
                             <div class="card-img-caption">
                                 <p id="caption-text2" class="card-text">{{ j[1] }}</p>
                                 <img class="card-img-top" src="../static/card_background2.jpeg" alt="Card image cap">
                             </div>
+                        </a>
 
-                            <div class="card-body">
-                                <h5 class="card-title">Course Description</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Course Description</h5>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
                         </div>
                     </div>
+                </div>
                 {% endfor %}
 
             </div>
@@ -100,8 +104,7 @@ P#02 -- Final Project
     </div>
 </div>
 
-<script src="https://www.avatarapi.com/js.aspx?email={{email}}&size=128">
-</script>
+
 <br>
 <a href="/makeclass"> Make a Class </a>
 <br>

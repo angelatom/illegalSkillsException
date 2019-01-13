@@ -53,7 +53,7 @@ def login():
     print(entry)
 
     userID = db.getUserID(entry["id"])
-
+    email = entry["id"]
     if userID == None: #User is not registered
         flask.session['userid'] = db.registerUser(entry["id"])
         return flask.render_template("register.html")
@@ -67,7 +67,7 @@ def login():
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
 
     #return flask.redirect("index.html")
-    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT)
+    return flask.render_template("index.html", name = name, classnames = classNamesT, classids = classIDsT, email=email)
 
 @app.route("/authorize")
 def auth():

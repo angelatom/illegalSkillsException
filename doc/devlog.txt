@@ -171,4 +171,8 @@ angelaT -- 2019-01-13 22:23
 - Updated readme
 - Commented + minor fixes to app.py
 - Fixed requirements.txt
+
+angelaT -- 2019-01-14 1:11
+--------------------------------------------------------------
+- Fixed refresh tokens
 ==============================================================

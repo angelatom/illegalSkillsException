@@ -40,6 +40,16 @@ scope = [
     'https://www.googleapis.com/auth/calendar'
 ]
 
+# for refresh token
+extra = {
+    'client_id': client_id,
+    'client_secret': client_secret,
+	}
+
+# save token in session
+def token_saver(token):
+	flask.session["credentials"] = token
+
 # for student uploads
 UPLOAD_FOLDER = './data/studentUploads/'
 
@@ -48,8 +58,31 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # login page 
 @app.route('/')
 def index():
-    return flask.render_template("login.html")
+	'''
+	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
+    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    #print(entry)
+	token=flask.session["credentials"]
+	print(token)
+	token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+    #flask.session["credentials"] = token # store new token
+	print(token)
+	'''
+	return flask.render_template("login.html")
+	'''
+	# TESTING STUFF
+	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
+    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    #print(entry)
+	token = flask.session["credentials"]
+	print(token)
+	token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+    #flask.session["credentials"] = token # store new token
+	print(token)
     #return ('<a href="/login"> Login with Google</a>')
+	'''
 
 # logged in page
 @app.route('/login')
@@ -57,6 +90,26 @@ def login():
     if "credentials" not in flask.session:
         return flask.redirect("authorize") # redirect if acess token is not there
     '''
+    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
+    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    #print(entry)
+    token=flask.session["credentials"]
+    print(token)
+    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+    #flask.session["credentials"] = token # store new token
+    print(token)
+	
+    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
+    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    #print(entry)
+    token = flask.session["credentials"]
+    print(token)
+    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+    #flask.session["credentials"] = token # store new token
+    print(token)
+    
     token = flask.session["credentials"]
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     print(token)
@@ -64,17 +117,21 @@ def login():
     print(token)
 	'''
 	# try, except block for refresh tokens in case of expired token error
-    try:
-        calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    calendar = OAuth2Session(client_id, token=flask.session["credentials"], auto_refresh_url=refresh_url,
+        auto_refresh_kwargs=extra, token_updater=token_saver)
         #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-        entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     #print(entry)
+    '''
     except TokenExpiredError as e:
 		# refresh token
-        token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+		calendar = OAuth2Session(client_id, token=flask.session["credentials"], auto_refresh_url=refresh_url,
+     auto_refresh_kwargs=extra, token_updater=token_saver)
+        #token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
         flask.session["credentials"] = token # store new token
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
+    '''
     userID = db.getUserID(entry["id"])
     email = entry["id"]
     if userID == None: #User is not registered

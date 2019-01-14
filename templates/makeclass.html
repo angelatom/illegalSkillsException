@@ -9,45 +9,47 @@ P#02 -- Final Project
 {% extends "base.html"%}
 {% block content %}
 
-    <br>
-    <br>
-    <br>
-    <form action="/processmakeclass" method="POST">
-        Enter class name:
-        <input type="text" name="classname">
-        Enter Weights:
-        <ul id="weightlist">
-          <li>
+<br>
+<br>
+<br>
+<form action="/processmakeclass" method="POST">
+    Enter class name:
+    <input type="text" name="classname">
+    Enter Weights:
+    <ul id="weightlist">
+        <li>
             Weight Name:
             <input type="text" name="weightnames">
             Weight Percent:
             <input type="text" name="weightnums">
-          </li>
-          </ul>
-          <input type="submit">
-      </form>
-      <button id="addweight">Add Weight</button>
-      <button id="removeweight">Remove Weight</button>
-      <script>
-        var addWeight = function(e){
-          var list = document.getElementById("weightlist");
-          var child = list.getElementsByTagName("li")[0];
-          var copy = child.cloneNode(true);
-          list.appendChild(copy);
-        };
+        </li>
+    </ul>
+    <input type="submit">
+</form>
+<button id="addweight">Add Weight</button>
+<button id="removeweight">Remove Weight</button>
+<script>
+    var addWeight = function(e){
+        var list = document.getElementById("weightlist");
+        var child = list.getElementsByTagName("li")[0];
+        var copy = child.cloneNode(true);
+        list.appendChild(copy);
+    };
 
-        var removeWeight = function(e){
-          var list = document.getElementById("weightlist");
-          console.log(list.childNodes.length)
-          if (list.childNodes.length > 3){
+    var removeWeight = function(e){
+        var list = document.getElementById("weightlist");
+        console.log(list.childNodes.length)
+        if (list.childNodes.length > 3){
             list.removeChild(list.lastChild);
-          };
         };
+    };
 
-        var add = document.getElementById("addweight");
-        var remove = document.getElementById("removeweight");
-        add.addEventListener('click', addWeight);
-        remove.addEventListener('click', removeWeight);
-        </script>
+    var add = document.getElementById("addweight");
+    var remove = document.getElementById("removeweight");
+    add.addEventListener('click', addWeight);
+    remove.addEventListener('click', removeWeight);
+</script>
 
- {% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

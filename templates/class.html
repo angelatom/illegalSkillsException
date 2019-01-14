@@ -1,73 +1,107 @@
 {% extends "base.html"%}
 
 {%block content%}
-<div class="container-fluid">
-    <br>
-    <br>
-    <br>
-    <h1>{{className}}</h1>
-    Taught by {{teacherName}}<br>
-    Invite Code: {{inviteCode}}<br>
-    Weights:<br>
-    <ul>
-        {% for i in weights %}
-        <li>
-            {{i[0]}} : {{i[1]}}
-        </li>
-        {% endfor %}
-    </ul>
-    Roster:<br>
-    <ul>
-        {% for i in classRoster %}
-        <li>
-            {{getName(i)}}
-        </li>
-        {% endfor %}
-    </ul>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col mt-4 class-head">
+            <h2 id="navHeader3" class="mt-4 ml-5"><b>{{ className }}</b></h2>
+        </div>
+    </div>
     {% if isTeacher %}
-    {% set url = "/makepost/" + classID|string %}
-    <a href={{url}}> Make a Post </a>
-    {% endif %}
-    Posts:<br>
-    <ul>
-        {% for i in posts %}
-        <li>
-            {{i[4]}} <br>
-            Posted: {{i[2]}} <br>
-            Due: {{i[3]}} <br>
-            {% if i[5] == 1 and not isTeacher %}
-            <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
-              <input type="hidden" name="postID" value="{{i[0]}}">
-              <input type="file" name="file">
-              <input type="submit" value="Upload">
-            </form>
-            {% elif i[5] == 1 %}
-            <button onclick="show{{i[0]}}()">View Submissions</button>
-            <div id="{{i[0]}}">
-              {% set uploads = getPostFiles(i[0]) %}
-              {% if uploads|length == 0 %}
-                No submissions yet.
-              {% else %}
-                {% for i in uploads %}
-                  {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
-                {% endfor %}
-              {% endif %}
+    {% for i in posts %}
+    <div class="row mt-4">
+        <div class="col pl-0 pr-0">
+            <div class="card cardOut">
+                <div class="card-header pt-1 pb-1 pl-2">
+                    <div class="row">
+                        <div class="col-sm-1 pr-0 text-center">
+                            <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['userid'] }}" alt="">
+                        </div>
+                        <div class="col-sm-9 pl-0">
+                            <p class="mb-0 fam">You</p>
+                            <p class="mb-0 text-secondary">{{ i[2] }}</p>
+                        </div>
+                        <div class="col-sm-2 pr-0">
+                            <button class="btn btn-primary classBtns">Grades</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Description</h5>
+                    <p class="card-text"> tempora iusto. Sed itaque accusantium nulla repudiandae voluptas et.</p>
+                </div>
             </div>
-            <script>
-              function show{{i[0]}}() {
+        </div>
+    </div>
+    {% endfor %}
+    {% endif%}
+</div>
+<br>
+<br>
+<br>
+<h1>{{className}}</h1>
+Taught by {{teacherName}}<br>
+Invite Code: {{inviteCode}}<br>
+Weights:<br>
+<ul>
+    {% for i in weights %}
+    <li>
+        {{i[0]}} : {{i[1]}}
+    </li>
+    {% endfor %}
+</ul>
+Roster:<br>
+<ul>
+    {% for i in classRoster %}
+    <li>
+        {{getName(i)}}
+    </li>
+    {% endfor %}
+</ul>
+{% if isTeacher %}
+{% set url = "/makepost/" + classID|string %}
+<a href={{url}}> Make a Post </a>
+{% endif %}
+Posts:<br>
+<ul>
+    {% for i in posts %}
+    <li>
+        {{i[4]}} <br>
+        Posted: {{i[2]}} <br>
+        Due: {{i[3]}} <br>
+        {% if i[5] == 1 and not isTeacher %}
+        <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
+            <input type="hidden" name="postID" value="{{i[0]}}">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+        {% elif i[5] == 1 %}
+        <button onclick="show{{i[0]}}()">View Submissions</button>
+        <div id="{{i[0]}}">
+            {% set uploads = getPostFiles(i[0]) %}
+            {% if uploads|length == 0 %}
+            No submissions yet.
+            {% else %}
+            {% for i in uploads %}
+            {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <script>
+            function show{{i[0]}}() {
                 var x = document.getElementById("{{i[0]}}");
                 if (x.style.display === "none") {
-                  x.style.display = "block";
+                    x.style.display = "block";
                 } else {
-                  x.style.display = "none";
+                    x.style.display = "none";
                 }
-              }
-            </script>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+            }
+        </script>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
 {% endblock %}

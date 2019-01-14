@@ -116,11 +116,12 @@ def processMakeclass():
     classname = flask.request.form['classname']
     weightnames = flask.request.form.getlist('weightnames')
     weightnums = flask.request.form.getlist('weightnums')
+    desc = flask.request.form['desc']
     weightList = []
     for i in range(len(weightnames)):
         toAppend = [weightnames[i],weightnums[i]]
         weightList.append(toAppend)
-    db.createClass(classname, flask.session["userid"], weightList)
+    db.createClass(classname, flask.session["userid"], weightList, desc)
     return flask.redirect("/login")
 
 @app.route('/class/<classid>')
@@ -133,7 +134,7 @@ def classpage(classid):
 		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
 		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName,
 		isTeacher = isTeacher, classID = classid, posts = posts[::-1],
-		getPostFiles = db.getPostFiles)
+		getPostFiles = db.getPostFiles, desc = classInfo[3])
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):

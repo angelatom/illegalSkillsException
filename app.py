@@ -56,8 +56,8 @@ def login():
         entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     #print(entry)
     except TokenExpiredError as e:
-        token = client.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-        token_saver(token)
+        token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+        flask.session["credentials"]=token
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
     userID = db.getUserID(entry["id"])
@@ -98,7 +98,7 @@ def clear_credentials():
     if 'credentials' in flask.session:
         del flask.session['credentials']
         del flask.session['userid']
-    # flash msg saying logout
+    flask.flash("Logout successful!")
     return (flask.redirect("/"))
 
 @app.route('/regname', methods=["POST"])

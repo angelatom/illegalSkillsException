@@ -18,6 +18,12 @@ P#02 -- Final Project
         <li class="nav-item">
             <a class="nav-link" id="teaching-tab" data-toggle="tab" href="#teaching" role="tab" aria-controls="teaching" aria-selected="false">Teaching</a>
         </li>
+        <li class="nav-item">
+            <a href="#make" role="tab" data-toggle="tab" id="make-tab" aria-controls="make" aria-selected="false" class="nav-link">Make Class</a>
+        </li>
+        <li class="nav-item">
+            <a href="#join" role="tab" data-toggle="tab" id="join-tab" aria-controls="join" aria-selected="false" class="nav-link">Join Class</a>
+        </li>
     </ul>
 
     <!-- tab content -->
@@ -101,24 +107,48 @@ P#02 -- Final Project
             {% endif %}
         </div>
 
+        <!-- make tab -->
+        <div class="tab-pane fade" id="make" role="tabpanel" aria-labelledby="make-tab">
+            <form action="/processmakeclass" method="POST">
+                Enter class name:
+                <input type="text" name="classname">
+                Enter Weights:
+                <ul id="weightlist">
+                    <li>
+                        Weight Name:
+                        <input type="text" name="weightnames">
+                        Weight Percent:
+                        <input type="text" name="weightnums">
+                    </li>
+                </ul>
+                <input type="submit">
+            </form>
+            <button id="addweight">Add Weight</button>
+            <button id="removeweight">Remove Weight</button>
+        </div>
+
+        <!-- join tab -->
+        <div class="tab-pane fade" id="join" role="tabpanel" aria-labelledby="join-tab">
+            <div class="row mt-5 text-center">
+                <div class="col">
+                    <h1>Enter a join code!</h1>
+                </div>
+            </div>
+            <form class="text-center mt-1" action="/invite">
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col text-center">
+                        <input type="text" class="form-control" placeholder="Code">
+                        <button type="submit" class="btn btn-primary mb-2 mt-3">Submit</button>
+                    </div>
+                    <div class="col-md-5"></div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-
-<br>
-<a href="/makeclass"> Make a Class </a>
-<br>
-<a href="/enterinvite"> Join a Class </a>
-<br>
-Classes:
-<ul>
-    {% for x in range(classnames|length) %}
-    {% set url = "/class/" + classids[x]|string %}
-    <li>
-        <a href={{url}}> {{classnames[x]}} </a>
-    </li>
-    {% endfor %}
-</ul>
+<script src="../static/index.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
 {%endblock%}

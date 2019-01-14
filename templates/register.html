@@ -8,12 +8,17 @@ P#02 -- Final Project
 
 {% extends "base.html"%}
 {%block content%}
-<br>
-<br>
-<br>
-    <form action="/regname" method="POST">
-        Enter your name:
-        <input type="text" name="name">
-      </form>
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 text-center">
+        <h2 class="mt-4">Hello there. Please enter your name below</h2>
+        <form action="/regname" method="POST">
+            <input type="text" name="name" placeholder="name" required>
+            <br>
+            <button class="btn btn-primary mt-3">Submit</button>
+        </form>
+    </div>
+    <div class="col-md-4"></div>
+</div>
 
 {%endblock%}

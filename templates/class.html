@@ -28,8 +28,39 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Description</h5>
-                    <p class="card-text"> tempora iusto. Sed itaque accusantium nulla repudiandae voluptas et.</p>
+                    <p class="card-text">
+                      {{i[4]}}<br>
+                      Due: {{i[3]}}
+                      {% if i[5] == 1 and not isTeacher %}
+                      <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
+                          <input type="hidden" name="postID" value="{{i[0]}}">
+                          <input type="file" name="file">
+                          <input type="submit" value="Upload">
+                      </form>
+                      {% elif i[5] == 1 %}<br>
+                      <button onclick="show{{i[0]}}()">View Submissions</button>
+                      <div id="{{i[0]}}" style="display:none;">
+                          {% set uploads = getPostFiles(i[0]) %}
+                          {% if uploads|length == 0 %}
+                          No submissions yet.
+                          {% else %}
+                          {% for i in uploads %}
+                          {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
+                          {% endfor %}
+                          {% endif %}
+                      </div>
+                      <script>
+                          function show{{i[0]}}() {
+                              var x = document.getElementById("{{i[0]}}");
+                              if (x.style.display === "none") {
+                                  x.style.display = "block";
+                              } else {
+                                  x.style.display = "none";
+                              }
+                          }
+                      </script>
+                      {% endif %}
+                    </p>
                 </div>
             </div>
         </div>

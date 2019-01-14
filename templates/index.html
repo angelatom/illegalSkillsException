@@ -72,7 +72,7 @@ P#02 -- Final Project
 
                         <div class="card-body">
                             <h5 class="card-title">Course Description</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
+                            <p class="card-text">{{j[2]}}</p>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@ P#02 -- Final Project
 
                         <div class="card-body">
                             <h5 class="card-title">Course Description</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium quibusdam sed, voluptatem recusandae ad magni repudiandae eum cumque provident ex.</p>
+                            <p class="card-text">{{j[2]}}</p>
                         </div>
                     </div>
                 </div>
@@ -136,6 +136,7 @@ P#02 -- Final Project
                         <input type="text" name="weightnums">
                     </li>
                 </ul>
+                <textarea rows="4" cols="50" name="desc">Description</textarea>
                 <input type="submit">
             </form>
             <button id="addweight">Add Weight</button>
@@ -149,11 +150,11 @@ P#02 -- Final Project
                     <h1>Enter a join code!</h1>
                 </div>
             </div>
-            <form class="text-center mt-1" action="/invite">
+            <form class="text-center mt-1" action="/invite" method="POST">
                 <div class="row">
                     <div class="col-md-5"></div>
                     <div class="col text-center">
-                        <input type="text" class="form-control" placeholder="Code">
+                        <input type="text" class="form-control" name="inviteCode" placeholder="Code">
                         <button type="submit" class="btn btn-primary mb-2 mt-3">Submit</button>
                     </div>
                     <div class="col-md-5"></div>

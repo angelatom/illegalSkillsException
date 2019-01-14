@@ -6,7 +6,7 @@
     {% set url = "/processmakepost/" + classID|string %}
     <form action={{url}} method="POST">
         Enter Post:
-        <input type="text" name="postbody">
+        <textarea rows="4" cols="50" name="postbody"></textarea><br>
         Enter Due Date:
         <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
         <input type="time" name="duetime">

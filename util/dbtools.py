@@ -2,13 +2,13 @@ import sqlite3, string, random
 
 #These functions are meant to be ran from app.py, do not try to use them here.
 
-def createClass(className, userID, weights):
+def createClass(className, userID, weights, desc):
 
     '''This function creates a class using the specified weights and teacher.
     '''
 
     db,c = getDBCursor()
-    c.execute("INSERT INTO classes (className, userID, invite) VALUES(?,?,?)", (className, userID, 'TEMP',)) #Inserts row into classes table
+    c.execute("INSERT INTO classes (className, userID, invite, desc) VALUES(?,?,?,?)", (className, userID, 'TEMP', desc,)) #Inserts row into classes table
     classID = -1
     for i in c.execute("SELECT classID FROM classes WHERE invite = ? LIMIT 1", ('TEMP',)): #Takes current classID
         classID = i[0]
@@ -27,11 +27,12 @@ def getClassInfo(classID):
     '''
 
     db,c = getDBCursor()
-    #[className, userID, invite, [[weightName, weightValue]]]
-    output = [None, None, None, None]
-    for i in c.execute("SELECT className, userID, invite FROM classes WHERE classID = ?", (classID,)):
+    #[className, userID, invite, [[weightName, weightValue]], desc]
+    output = [None, None, None, None, None]
+    for i in c.execute("SELECT className, userID, invite, desc FROM classes WHERE classID = ?", (classID,)):
         for j in range(3):
             output[j] = i[j]
+        output[4] = i[3]
         weightList = []
         for j in c.execute("SELECT weightName, weightValue FROM weights WHERE classID = ?", (classID,)):
             weightInfo = [None, None] #[weightName, weightValue]
@@ -40,7 +41,7 @@ def getClassInfo(classID):
             weightList.append(weightInfo)
         output[3] = weightList
     closeDB(db)
-    return output #Will be a tuple of None if no class of the classID inputted is found
+    return output #Will be a list of None if no class of the classID inputted is found
 
 def getTeacher(classID):
 
@@ -69,8 +70,9 @@ def getUserName(userID):
 def getUserInfo(userID):
 
     '''This function returns the name, enrolled classes, and classes that a user
-       teaches. Classes are returned as a list of lists of length 2, with the
-       first value as the class ID and the second the name of the class.
+       teaches. Classes are returned as a list of lists of length 3, with the
+       first value as the class ID, the second the name of the class, and the
+       third its description.
     '''
 
     db,c = getDBCursor()
@@ -79,16 +81,17 @@ def getUserInfo(userID):
     name = None
     for i in c.execute("SELECT name FROM users WHERE userID = ?", (userID,)):
         name = i[0]
-    for i in c.execute("SELECT classID, className FROM classes WHERE userID = ?", (userID,)):
-        someClass = [None, None] #[classID, className]
-        for j in range(2):
+    for i in c.execute("SELECT classID, className, desc FROM classes WHERE userID = ?", (userID,)):
+        someClass = [None, None, None] #[classID, className, desc]
+        for j in range(3):
             someClass[j] = i[j]
         teachingClasses.append(someClass)
     for i in c.execute("SELECT classID FROM roster WHERE userID = ?", (userID,)):
-        someClass = [None, None] #[classID, className]
+        someClass = [None, None, None] #[classID, className, desc]
         someClass[0] = i[0]
-        for j in c.execute("SELECT className FROM classes WHERE classID = ?", (i[0],)):
+        for j in c.execute("SELECT className, desc FROM classes WHERE classID = ?", (i[0],)):
             someClass[1] = j[0]
+            someClass[2] = j[1]
         enrolledClasses.append(someClass)
     closeDB(db)
     return (name, enrolledClasses, teachingClasses)

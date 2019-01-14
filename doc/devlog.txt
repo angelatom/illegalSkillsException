@@ -160,4 +160,15 @@ aaronL -- 2019-01-13 20:16
 --------------------------------------------------------------
 - did posts feed for each class
 - flash msgs
+
+linK -- 2019-01-13 9:55 PM
+--------------------------------------------------------------
+- Linked invite submission from profile
+- Added class descriptions
+
+angelaT -- 2019-01-13 22:23
+--------------------------------------------------------------
+- Updated readme
+- Commented + minor fixes to app.py
+- Fixed requirements.txt
 ==============================================================

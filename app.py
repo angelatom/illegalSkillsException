@@ -140,7 +140,17 @@ def acceptInvite(inviteCode):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	result = db.acceptInvite(flask.session['userid'], inviteCode)
-	return result
+	flask.flash(result)
+	return flask.redirect('/login')
+
+@app.route('/invite', methods=["POST"])
+def invite():
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	result = db.acceptInvite(flask.session['userid'], flask.request.form['inviteCode'])
+	flask.flash(result)
+	return flask.redirect(flask.request.referrer)
+
 
 @app.route('/gradebook/<classid>/<assignment>')
 def gradebook(classid, assignment):

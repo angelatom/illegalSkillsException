@@ -13,7 +13,7 @@ $ python3 -m venv virtual_env_name
 ```
 3. Activate the virtual environment by typing ```$ . virtual_env_name/bin/activate``` in the terminal
 4. Clone this repository. To clone this repo, open a terminal session and navigate to the directory you want for this repository to located in. Then clone using SSH by typing ```(venv)$ git@github.com:angelatom/illegalSkillsException.git```.
-5. Navigate to the Smapify repository by typing ```$ cd illegalSkillsException/``` in the terminal.
+5. Navigate to the repository by typing ```$ cd illegalSkillsException/``` in the terminal.
 6. Make sure you have all the dependencies installed in your virtual environment.
 7. Procure API keys and place them into the keys folder.
 8. Run the python file by typing ```(venv)$ python app.py``` in the terminal.
@@ -30,3 +30,8 @@ $ python3 -m venv virtual_env_name
 ## Dependencies:
 * Flask==1.0.2
 * Jinja2==2.10
+* requests-oauthlib==1.1.0
+
+## API:
+* Google calendar
+* favQ

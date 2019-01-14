@@ -12,8 +12,9 @@ import requests
 import json
 import datetime
 
+# for oauth
 from requests_oauthlib import OAuth2Session
-
+# for using refresh tokens when there is a token expired error
 from oauthlib.oauth2 import TokenExpiredError
 
 from urllib import request, parse
@@ -24,9 +25,11 @@ from util import dbtools as db
 app = flask.Flask(__name__)
 app.secret_key = os.urandom(32)
 
-with open("keys/client_secret.json") as f:
-	api_keys = json.load(f)
+# client secret key
+with open("keys/client_secret.json") as key:
+	api_keys = json.load(key)
 
+# necessary info (given by google api for auth)
 client_id = api_keys["web"]["client_id"]
 client_secret = api_keys["web"]["client_secret"]
 redirect_uri = "http://localhost:5000/oauth2callback"
@@ -36,28 +39,40 @@ refresh_url = token_url
 scope = [
     'https://www.googleapis.com/auth/calendar'
 ]
+
+# for student uploads
 UPLOAD_FOLDER = './data/studentUploads/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# login page 
 @app.route('/')
 def index():
     return flask.render_template("login.html")
     #return ('<a href="/login"> Login with Google</a>')
 
-
+# logged in page
 @app.route('/login')
 def login():
     if "credentials" not in flask.session:
-        return flask.redirect("authorize")
+        return flask.redirect("authorize") # redirect if acess token is not there
+    '''
+    token = flask.session["credentials"]
+    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    print(token)
+    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
+    print(token)
+	'''
+	# try, except block for refresh tokens in case of expired token error
     try:
         calendar = OAuth2Session(client_id, token=flask.session["credentials"])
         #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
         entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     #print(entry)
     except TokenExpiredError as e:
+		# refresh token
         token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-        flask.session["credentials"]=token
+        flask.session["credentials"] = token # store new token
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
     userID = db.getUserID(entry["id"])
@@ -78,35 +93,41 @@ def login():
     return flask.render_template("index.html", name = name, classnames = classNamesT,
 		classids = classIDsT, email=email, enrolleds = userInfo[1], teachings = userInfo[2])
 
+# authorize (send user to auth url with necessary params)
 @app.route("/authorize")
 def auth():
-    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
+    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri) 
     authorization_url, state = google.authorization_url(auth_base_url,
-    access_type="offline", include_granted_scopes="true")
-    flask.session["state"] = state
-    return flask.redirect(authorization_url)
+    access_type="offline", include_granted_scopes="true") #offline for refresh token, granted scopes to show the user what we have access to
+    flask.session["state"] = state # state validates response to ensure that request/response originated in same browser
+    return flask.redirect(authorization_url) #OAuth provider authorizes user and sends back user to callback URL with auth code and state
 
+# callback url (exchange auth code for access token)
 @app.route("/oauth2callback", methods=["GET"])
 def callback():
     google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
     token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
-    flask.session["credentials"] = token
+    # fetch token
+    flask.session["credentials"] = token # store token
     return flask.redirect("/login")
 
+# logout
 @app.route('/clear')
 def clear_credentials():
     if 'credentials' in flask.session:
-        del flask.session['credentials']
-        del flask.session['userid']
+        del flask.session['credentials'] # remove token 
+        del flask.session['userid'] # remove userid
     flask.flash("Logout successful!")
     return (flask.redirect("/"))
 
+# register
 @app.route('/regname', methods=["POST"])
 def regname():
     name = flask.request.form['name']
     db.updateName(flask.session['userid'], name)
     return flask.redirect('/login')
 
+# make a class 
 @app.route('/makeclass')
 def makeClass():
     return flask.render_template("makeclass.html")
@@ -249,5 +270,5 @@ def viewFile(filename):
 		return "File does not exist."
 
 if __name__ == '__main__':
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls
     app.run(debug = True)

@@ -110,7 +110,7 @@ def login():
     token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
     print(token)
 	'''
-    try: 
+    try:
     	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     	entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
 	# for refresh token
@@ -250,7 +250,8 @@ def gradebook(classid, assignment):
 	maxGrade,gradeDict = db.getAssignmentGrades(classid, assignment)
 	return flask.render_template("gradebook.html", className = classInfo[0],
 		assignment = assignment, roster = classRoster, gradeDict = gradeDict,
-		getName = db.getUserName, classID = classid, maxGrade = maxGrade)
+		getName = db.getUserName, classID = classid, maxGrade = maxGrade,
+		weights = classInfo[3])
 
 # =( how do these grades work?
 @app.route('/submitGrades', methods = ["POST"])
@@ -262,6 +263,7 @@ def submitGrades():
 		inputs[0] = flask.request.form['classID']
 		studentIDs = flask.request.form.getlist('studentID')
 		studentGrades = flask.request.form.getlist('grade')
+		inputs[4] = flask.request.form['weight']
 		gradesList = []
 		for i in range(len(studentIDs)):
 			toAppend = [None, None] #[userID, grade]

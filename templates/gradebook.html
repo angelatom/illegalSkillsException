@@ -9,6 +9,11 @@
                 <input type="text" name="assignment" value="{{assignment}}">
                 <input type="text" name="classID" value="{{classID}}">
                 Max Grade: <input type = "text" name = "maxGrade" value = "{{maxGrade}}"><br>
+                <select name="weight">
+                  {% for i in weights %}
+                    <option value={{i[0]}}>{{i[0]}}</option>
+                  {% endfor %}
+                </select>
                 {% for i in roster %}
                 {{getName(i)}}:
                 <input type="hidden" name="studentID" value="{{i}}">

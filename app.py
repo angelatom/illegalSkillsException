@@ -55,7 +55,7 @@ UPLOAD_FOLDER = './data/studentUploads/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# login page 
+# login page
 @app.route('/')
 def index():
 	'''
@@ -99,7 +99,7 @@ def login():
     token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
     #flask.session["credentials"] = token # store new token
     print(token)
-	
+
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
     #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
@@ -109,7 +109,7 @@ def login():
     token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
     #flask.session["credentials"] = token # store new token
     print(token)
-    
+
     token = flask.session["credentials"]
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     print(token)
@@ -153,7 +153,7 @@ def login():
 # authorize (send user to auth url with necessary params)
 @app.route("/authorize")
 def auth():
-    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri) 
+    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
     authorization_url, state = google.authorization_url(auth_base_url,
     access_type="offline", include_granted_scopes="true") #offline for refresh token, granted scopes to show the user what we have access to
     flask.session["state"] = state # state validates response to ensure that request/response originated in same browser
@@ -172,7 +172,7 @@ def callback():
 @app.route('/clear')
 def clear_credentials():
     if 'credentials' in flask.session:
-        del flask.session['credentials'] # remove token 
+        del flask.session['credentials'] # remove token
         del flask.session['userid'] # remove userid
     flask.flash("Logout successful!")
     return (flask.redirect("/"))
@@ -184,7 +184,7 @@ def regname():
     db.updateName(flask.session['userid'], name)
     return flask.redirect('/login')
 
-# make a class 
+# make a class
 @app.route('/makeclass')
 def makeClass():
     return flask.render_template("makeclass.html")
@@ -247,7 +247,7 @@ def gradebook(classid, assignment):
 # =( how do these grades work?
 @app.route('/submitGrades', methods = ["POST"])
 def submitGrades():
-	inputs = [None, None, None, None]
+	inputs = [None, None, None, None, None]
 	for i in flask.request.form:
 		print(i)
 	try:
@@ -273,7 +273,7 @@ def submitGrades():
 	classInfo = db.getClassInfo(inputs[0])
 	if flask.session['userid'] != classInfo[1]:
 		return "User is not the teacher of this class."
-	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3])
+	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
 	return "Grade update successful."
 
 
@@ -324,7 +324,7 @@ def processMakePost(classID):
 def viewFile(filename):
 	fileExists = db.fileExists(filename)
 	if fileExists:
-		file = open("./data/studentUploads/" + filename + ".txt","r") 
+		file = open("./data/studentUploads/" + filename + ".txt","r")
 		output = file.read()
 		file.close()
 		return flask.render_template('viewfile.html', fileContent = output)

@@ -172,7 +172,7 @@ def getRoster(classID):
     closeDB(db)
     return output
 
-def changeGrades(classID, gradeList, assignment, maxGrade):
+def changeGrades(classID, gradeList, assignment, maxGrade, weight):
 
     '''This function updates the grades of the given assignment for a class.
        gradeList should be a list with each element [userID, grade].
@@ -187,7 +187,7 @@ def changeGrades(classID, gradeList, assignment, maxGrade):
             break
         else:
             #Otherwise create rows for grades
-            c.execute("INSERT INTO grades VALUES (?,?,?,?,?)", (classID, i[0], assignment, i[1], maxGrade,))
+            c.execute("INSERT INTO grades VALUES (?,?,?,?,?,?)", (classID, i[0], assignment, i[1], maxGrade, weight,))
     closeDB(db)
 
 def getAssignmentGrades(classID, assignment):

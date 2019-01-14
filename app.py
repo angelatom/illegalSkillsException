@@ -244,6 +244,7 @@ def gradebook(classid, assignment):
 		assignment = assignment, roster = classRoster, gradeDict = gradeDict,
 		getName = db.getUserName, classID = classid, maxGrade = maxGrade)
 
+# =( how do these grades work?
 @app.route('/submitGrades', methods = ["POST"])
 def submitGrades():
 	inputs = [None, None, None, None]
@@ -275,6 +276,8 @@ def submitGrades():
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3])
 	return "Grade update successful."
 
+
+# fix the return to an html page
 @app.route('/submitFile', methods = ["POST"])
 def submitFile():
 	if 'userid' not in flask.session:
@@ -315,11 +318,13 @@ def processMakePost(classID):
 	db.makePost(classID, due, postbody, submittable)
 	return flask.redirect('/class/' + classID)
 
+# This file must be a txt file
+# we need to fix this.. png causes many many errors
 @app.route('/viewFile/<filename>', methods=['GET'])
 def viewFile(filename):
 	fileExists = db.fileExists(filename)
 	if fileExists:
-		file = open("./data/studentUploads/" + filename + ".txt","r")
+		file = open("./data/studentUploads/" + filename + ".txt","r") 
 		output = file.read()
 		file.close()
 		return flask.render_template('viewfile.html', fileContent = output)

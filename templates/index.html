@@ -10,6 +10,21 @@ P#02 -- Final Project
 {%block content%}
 
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="col-md-4"></div>
+    </div>
     <!-- tabs -->
     <ul class="nav nav-pills justify-content-center mt-10" id="myTab" role="tablist">
         <li class="nav-item">

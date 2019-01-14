@@ -25,7 +25,7 @@ $ python3 -m venv virtual_env_name
 * Debugger PIN: 248-748-502
 ```
 
-10. Open a web browser and navigate to the link http://127.0.0.1:5000/.
+10. Open a web browser and navigate to the link http://localhost:5000/.
 
 ## Dependencies:
 * Flask==1.0.2

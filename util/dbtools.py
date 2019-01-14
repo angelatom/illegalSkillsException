@@ -307,6 +307,42 @@ def getPostFiles(postID):
     closeDB(db)
     return output
 
+def deletePost(postID):
+
+    '''This function deletes a post when given the postID.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("DELETE FROM posts WHERE postID = ?", (postID,))
+    closeDB(db)
+
+def deleteClass(classID):
+
+    '''This function deletes a class when given the classID.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("DELETE FROM classes WHERE classID = ?", (classID,))
+    closeDB(db)
+
+def editPost(postID, postBody):
+
+    '''This function edits an existing post.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("UPDATE posts SET postBody = ? WHERE postID = ?", (postBody, postID,))
+    closeDB(db)
+
+def editClass(classID, className, desc):
+
+    '''This function edits an existing class.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("UPDATE classes SET className = ?, desc = ? WHERE classID = ?", (className, desc, classID,))
+    closeDB(db)
+
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")
     cursor = db.cursor()

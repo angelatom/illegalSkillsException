@@ -30,7 +30,11 @@
                 <div class="card-body">
                     <p class="card-text">
                       {{i[4]}}<br>
-                      Due: {{i[3]}}
+                      Due: {{i[3]}} <br>
+                      {% if isTeacher %}
+                      {% set url = "/deletepost/" + i[0]|string %}
+                      <a href={{url}}> Delete Post </a>
+                      {% endif %}
                       {% if i[5] == 1 and not isTeacher %}
                       <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
                           <input type="hidden" name="postID" value="{{i[0]}}">
@@ -92,7 +96,9 @@ Roster:<br>
 </ul>
 {% if isTeacher %}
 {% set url = "/makepost/" + classID|string %}
-<a href={{url}}> Make a Post </a>
+<a href={{url}}> Make a Post </a> <br>
+{% set url = "/deleteclass/" + classID|string %}
+<a href={{url}}> Delete this Class </a> <br>
 {% endif %}
 Posts:<br>
 <ul>

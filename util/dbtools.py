@@ -343,6 +343,19 @@ def editClass(classID, className, desc):
     c.execute("UPDATE classes SET className = ?, desc = ? WHERE classID = ?", (className, desc, classID,))
     closeDB(db)
 
+def isTeacher(userID, classID):
+
+    '''This function returns a boolean based on if the given user is teacher of
+       the given class.
+    '''
+
+    db,c = getDBCursor()
+    output = False
+    for i in c.execute('SELECT * FROM classes WHERE classID = ? AND userID = ?', (classID, userID,)):
+        output = True
+    closeDB(db)
+    return output
+
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")
     cursor = db.cursor()

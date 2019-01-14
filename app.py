@@ -244,7 +244,7 @@ def gradebook(classid, assignment):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	classInfo = db.getClassInfo(classid)
-	if flask.session['userid'] != classInfo[1]:
+	if not db.isTeacher(flask.session['userid'], classid):
 		return "User is not the teacher of this class."
 	classRoster = db.getRoster(classid)
 	maxGrade,gradeDict = db.getAssignmentGrades(classid, assignment)
@@ -280,8 +280,7 @@ def submitGrades():
 		return "Invalid input(s)."
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
-	classInfo = db.getClassInfo(inputs[0])
-	if flask.session['userid'] != classInfo[1]:
+	if not db.isTeacher(flask.session['userid'],inputs[0]):
 		return "User is not the teacher of this class."
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
 	return "Grade update successful."
@@ -311,11 +310,17 @@ def submitFile():
 def makePost(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
 	date = str(datetime.date.today())
 	return flask.render_template("makepost.html", date=date, classID=classID)
 
 @app.route('/processmakepost/<classID>', methods=['POST'])
 def processMakePost(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
 	postbody = flask.request.form['postbody']
 	duedate = flask.request.form['duedate']
 	duetime = flask.request.form['duetime']
@@ -340,6 +345,25 @@ def viewFile(filename):
 		return flask.render_template('viewfile.html', fileContent = output)
 	else:
 		return "File does not exist."
+
+@app.route('/deleteclass/<classID>')
+def deleteClass(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
+	db.deleteClass(classID)
+	return flask.redirect('/class/' + str(classID))
+
+@app.route('/deletepost/<postID>')
+def deletePost(postID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	classID = db.getClassID(postID)
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
+	db.deletePost(postID)
+	return flask.redirect('/class/' + str(classID))
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls

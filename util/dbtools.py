@@ -86,7 +86,9 @@ def getUserInfo(userID):
         for j in range(3):
             someClass[j] = i[j]
         teachingClasses.append(someClass)
-    for i in c.execute("SELECT classID FROM roster WHERE userID = ?", (userID,)):
+    c.execute("SELECT classID FROM roster WHERE userID = ?", (userID,))
+    ids = c.fetchall()
+    for i in ids:
         someClass = [None, None, None] #[classID, className, desc]
         someClass[0] = i[0]
         for j in c.execute("SELECT className, desc FROM classes WHERE classID = ?", (i[0],)):

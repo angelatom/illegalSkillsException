@@ -49,6 +49,8 @@ UPLOAD_FOLDER = './data/studentUploads/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
+
 # login page
 @app.route('/')
 def index():
@@ -75,7 +77,7 @@ def login():
     entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     #print(entry)
     userID = db.getUserID(entry["id"])
-    email = entry["id"]
+    flask.session["email"] = entry["id"] # add email
     if userID == None: #User is not registered
         flask.session['userid'] = db.registerUser(entry["id"])
         return flask.render_template("register.html")
@@ -90,7 +92,7 @@ def login():
     #name = calendar.get("")
     #return flask.redirect("index.html")
     return flask.render_template("index.html", name = name, classnames = classNamesT,
-		classids = classIDsT, email=email, enrolleds = userInfo[1], teachings = userInfo[2])
+		classids = classIDsT, enrolleds = userInfo[1], teachings = userInfo[2])
 
 # authorize (send user to auth url with necessary params)
 @app.route("/authorize")

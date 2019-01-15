@@ -206,4 +206,8 @@ aaronL -- 2019-01-14 20:16
 - updated base and gradebook/register
 - changed ui tab for make class in index.html
 - added tabs for class.html
+
+angelaT -- 2019-01-14 22:35
+--------------------------------------------------------------
+- Retrieved email to have same avatars every time
 ==============================================================

@@ -319,11 +319,11 @@ def calculateAverage(userID, classID):
     outputDict = {}
     for i in c.execute("SELECT grade, maxGrade, weight FROM grades WHERE userID = ? AND classID = ?", (userID, classID,)):
         #Temporary storage of sums of grades and max grades for each weight
-        if i[2] not in output:
-            output[i[2]] = [i[0],i[1]]
+        if i[2] not in outputDict:
+            outputDict[i[2]] = [i[0],i[1]]
         else:
             for j in range(2):
-                output[i[2]][j] += i[j]
+                outputDict[i[2]][j] += i[j]
     if len(outputDict) == 0: #Exit early if grades do not exist
         closeDB(db)
         return 0,{}

@@ -303,6 +303,17 @@ def deletePost(postID):
 	db.deletePost(postID)
 	return flask.redirect('/class/' + str(classID))
 
+@app.route('/usergrades/<classID>/<userID>')
+def userGrades(classID, userID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if flask.session['userid'] != userID:
+		if not db.isTeacher(flask.session['userid'], classID):
+			return flask.redirect('/class/' + str(classID))
+	avg,weightavgs = db.calculateAverage(userID, classID)
+	name  = db.getUserName(userID)
+	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name)
+
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls
     app.run(debug = True)

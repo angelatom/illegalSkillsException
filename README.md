@@ -17,7 +17,6 @@ Our website is a combination of Google Classroom elements and JupiterEd. This is
 7. In the root of the directory, run ```$ pip install -r requirements.txt```
 8. To obtain API keys, look below for the instructions.
 9. Now you are ready to run the flask app. Run the command ```$ python app.py.``` (Make sure your virtual enviornment is actvated)
-Launch the root route (http://localhost:5000/) in your browser.
 10. This should appear in the terminal after running the python file.   
 ```
 * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
@@ -25,7 +24,6 @@ Launch the root route (http://localhost:5000/) in your browser.
 * Debugger is active!
 * Debugger PIN: 248-748-502
 ```
-
 11. Open a web browser and navigate to the link http://localhost:5000/.
 
 ## Dependencies:

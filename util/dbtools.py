@@ -309,6 +309,38 @@ def getPostFiles(postID):
     closeDB(db)
     return output
 
+def calculateAverage(userID, classID):
+
+    '''This function calculates the final average and sub averages for a student
+       in a class. Returns 0 and an empty dictionary if grades don't exist.
+    '''
+
+    db,c = getDBCursor()
+    outputDict = {}
+    for i in c.execute("SELECT grade, maxGrade, weight FROM grades WHERE userID = ? AND classID = ?", (userID, classID,)):
+        #Temporary storage of sums of grades and max grades for each weight
+        if i[2] not in output:
+            output[i[2]] = [i[0],i[1]]
+        else:
+            for j in range(2):
+                output[i[2]][j] += i[j]
+    if len(outputDict) == 0: #Exit early if grades do not exist
+        closeDB(db)
+        return 0,{}
+    for i in outputDict:
+        outputDict[i] = 100 * outputDict[i][0] / outputDict[i][1]
+    totalWeight = 0
+    totalScore = 0
+    for i in outputDict:
+        for j in c.execute("SELECT weightValue FROM weights WHERE classID = ? LIMIT 1", (classID,)):
+            totalScore += outputDict[i] * j[0]
+            totalWeight += j[0]
+    weightedAvg = round(totalScore / totalWeight,2) #Truncate to two decimals
+    for i in outputDict:
+        outputDict[i] = round(outputDict[i],2) #Truncate to two decimals for each sub grade
+    closeDB(db)
+    return weightedAvg, outputDict
+
 def deletePost(postID):
 
     '''This function deletes a post when given the postID.

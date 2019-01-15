@@ -224,4 +224,9 @@ aaronL -- 2019-01-15 3:30
 --------------------------------------------------------------
 - finished rosters and added invite Code
 - added clipboard.js to copy paste invite code
+
+linK -- 2019-01-15 3:33
+--------------------------------------------------------------
+- Added calculateAverage(userID, classID)
+  - Returns (avg, dict averages per weight)
 ==============================================================

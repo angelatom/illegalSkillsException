@@ -224,4 +224,9 @@ aaronL -- 2019-01-15 3:30
 --------------------------------------------------------------
 - finished rosters and added invite Code
 - added clipboard.js to copy paste invite code
+
+aaronL -- 2019-01-15 12:34
+--------------------------------------------------------------
+- fixed weights so u can only add numbers, going to change list
+  bullets.
 ==============================================================

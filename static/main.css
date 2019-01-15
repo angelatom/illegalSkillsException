@@ -289,3 +289,36 @@ color: black;
 #fill {
     width: 100%;
 }
+
+.btmBorder {
+    border-bottom: 1px solid #7aaeeb;
+}
+
+.round-Img {
+    border-radius: 2rem;
+    /* width: 100%; */
+    /* height: 100%; */
+}
+
+.mt-special {
+    margin-top: 1.2rem;
+}
+
+.special-margin {
+    margin-left: auto;
+}
+
+.fit {
+    min-width: 56px;
+    min-height: 56px;
+    width: auto;
+    display: inline;
+}
+
+.text-mine {
+    color: #0658b6;
+}
+
+.btmBorder2 {
+    border-bottom: 1px solid #c9c9c9;
+}

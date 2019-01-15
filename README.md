@@ -8,7 +8,7 @@ Our website is a combination of Google Classroom elements and JupiterEd. This is
 ## Instructions to Run:
 1. Go to root repository and click "Clone or Download"
 2. Copy the ssh/https link and run ```$ git clone <link>```
-3. Have the latest version of Python installed, which is currently Python 3.7.1. If not, download it here.
+3. Have the latest version of Python installed, which is currently Python 3.7.1.
 4. Install virtualenv by running ```$ pip install virtualenv```
 5. Make a venv by running ```$ python3 -m venv VENV_NAME```
 * Activate it by running ```$ . ~/path_to_venv/VENV_NAME/bin/activate```

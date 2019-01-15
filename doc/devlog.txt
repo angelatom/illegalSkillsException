@@ -225,7 +225,7 @@ aaronL -- 2019-01-15 3:30
 - finished rosters and added invite Code
 - added clipboard.js to copy paste invite code
 
-linK -- 2019-01-15 3:33
+linK -- 2019-01-15 3:33 PM
 --------------------------------------------------------------
 - Added calculateAverage(userID, classID)
   - Returns (avg, dict averages per weight)
@@ -234,4 +234,8 @@ aaronL -- 2019-01-15 12:34
 --------------------------------------------------------------
 - fixed weights so u can only add numbers, going to change list
   bullets.
+
+linK -- 2019-01-15 2:48
+--------------------------------------------------------------
+- View Submissions fixed
 ==============================================================

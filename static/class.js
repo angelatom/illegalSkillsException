@@ -17,3 +17,12 @@ clipboard.on('error', function(e) {
     setTooltip(e.trigger, 'Failed!');
     hideTooltip(e.trigger);
 });
+
+var toggleDisplay = function(id) {
+  var elm = document.getElementById(id);
+  if (elm.style.display === "none") {
+    elm.style.display = "block";
+  } else {
+    elm.style.display = "none";
+  }
+};

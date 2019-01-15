@@ -119,7 +119,7 @@
                             <input type="submit" value="Upload">
                         </form>
                         {% elif i[5] == 1 %}<br>
-                        <button onclick="show{{i[0]}}()">View Submissions</button>
+                        <button onclick="show({{i[0]}})">View Submissions</button>
                         <div id="{{i[0]}}" style="display:none;">
                             {% set uploads = getPostFiles(i[0]) %}
                             {% if uploads|length == 0 %}

@@ -135,7 +135,15 @@
                     </div>
                 </div>
                 {% endfor %}
-                {% endif%}
+                {% else %}
+                {% if posts|length == 0 %}
+                <div class="row mt-4">
+                    <div class="col mt-3 mr-4 ml-4">
+                        <p style="color: red;">Your teacher hasn't posted anything yet.</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
             </div>
             <!-- roster panel -->
             <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">

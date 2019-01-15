@@ -325,6 +325,7 @@ def deleteClass(classID):
 
     db,c = getDBCursor()
     c.execute("DELETE FROM classes WHERE classID = ?", (classID,))
+    c.execute("DELETE FROM roster WHERE classID=?", (classID,))
     closeDB(db)
 
 def editPost(postID, postBody):

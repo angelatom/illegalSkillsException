@@ -33,5 +33,7 @@ $ python3 -m venv virtual_env_name
 * requests-oauthlib==1.1.0
 
 ## API:
-* Google calendar
-* favQ
+* Google calendar - Used to create events on the calendar based on teacher assignments
+https://console.developers.google.com/
+* favQ - Used for random quotes on the site
+https://favqs.com/api

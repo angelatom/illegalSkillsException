@@ -172,7 +172,7 @@ def getRoster(classID):
     closeDB(db)
     return output
 
-def changeGrades(classID, gradeList, assignment, maxGrade):
+def changeGrades(classID, gradeList, assignment, maxGrade, weight):
 
     '''This function updates the grades of the given assignment for a class.
        gradeList should be a list with each element [userID, grade].
@@ -183,11 +183,11 @@ def changeGrades(classID, gradeList, assignment, maxGrade):
     for i in gradeList:
         for j in c.execute("SELECT userID FROM grades WHERE classID = ? AND userID = ? AND assignment = ?", (classID, i[0], assignment,)):
             #Grade already exists, so modify
-            c.execute("UPDATE grades SET grade = ? WHERE classID = ? AND userID = ? AND assignment = ?", (grade, classID, i[0], assignment,))
+            c.execute("UPDATE grades SET grade = ?, maxGrade = ? WHERE classID = ? AND userID = ? AND assignment = ?", (grade, maxGrade, classID, i[0], assignment,))
             break
         else:
             #Otherwise create rows for grades
-            c.execute("INSERT INTO grades VALUES (?,?,?,?,?)", (classID, i[0], assignment, i[1], maxGrade,))
+            c.execute("INSERT INTO grades VALUES (?,?,?,?,?,?)", (classID, i[0], assignment, i[1], maxGrade, weight,))
     closeDB(db)
 
 def getAssignmentGrades(classID, assignment):
@@ -304,6 +304,55 @@ def getPostFiles(postID):
         for j in range(3):
             toAppend[j] = i[j]
         output.append(toAppend)
+    closeDB(db)
+    return output
+
+def deletePost(postID):
+
+    '''This function deletes a post when given the postID.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("DELETE FROM posts WHERE postID = ?", (postID,))
+    closeDB(db)
+
+def deleteClass(classID):
+
+    '''This function deletes a class when given the classID.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("DELETE FROM classes WHERE classID = ?", (classID,))
+    closeDB(db)
+
+def editPost(postID, postBody):
+
+    '''This function edits an existing post.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("UPDATE posts SET postBody = ? WHERE postID = ?", (postBody, postID,))
+    closeDB(db)
+
+def editClass(classID, className, desc):
+
+    '''This function edits an existing class.
+    '''
+
+    db,c = getDBCursor()
+    c.execute("UPDATE classes SET className = ?, desc = ? WHERE classID = ?", (className, desc, classID,))
+    closeDB(db)
+
+def isTeacher(userID, classID):
+
+    '''This function returns a boolean based on if the given user is teacher of
+       the given class.
+    '''
+
+    db,c = getDBCursor()
+    output = False
+    for i in c.execute('SELECT * FROM classes WHERE classID = ? AND userID = ?', (classID, userID,)):
+        output = True
     closeDB(db)
     return output
 

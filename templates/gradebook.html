@@ -1,21 +1,58 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
+
 {% block content %}
-    <h1>{{className}}</h1>
-    Assignment: {{assignment}}
-    <form action = "/submitGrades" method = "POST">
-      <input type="hidden" name="assignment" value="{{assignment}}">
-      <input type="hidden" name="classID" value="{{classID}}">
-      Max Grade: <input type = "text" name = "maxGrade" value = "{{maxGrade}}"><br>
-      {% for i in roster %}
-        {{getName(i)}}:
-        <input type="hidden" name="studentID" value="{{i}}">
-        {% if i in gradeDict %}
-          <input type = "text" name = "grade" value = "{{gradeDict[i]}}">
+<div class="container">
+    <div class="row">
+        {% if maxGrade == "" %}
+        <div class="col mt-5 text-center">
+            <form action = "/submitGrades" class="mt-5" method = "POST">
+                <input type="text" name="assignment" value="{{assignment}}">
+                <input type="text" name="classID" value="{{classID}}">
+                Max Grade: <input type = "text" name = "maxGrade" value = "{{maxGrade}}"><br>
+                <select name="weight">
+                  {% for i in weights %}
+                    <option value={{i[0]}}>{{i[0]}}</option>
+                  {% endfor %}
+                </select>
+                {% for i in roster %}
+                {{getName(i)}}:
+                <input type="hidden" name="studentID" value="{{i}}">
+                {% if i in gradeDict %}
+                <input type = "text" name = "grade" value = "{{gradeDict[i]}}">
+                {% else %}
+                <input type = "text" name = "grade">
+                {% endif %}
+                <br>
+                {% endfor %}
+                <input type = "submit">
+            </form>
+        </div>
         {% else %}
-          <input type = "text" name = "grade">
+        <div class="col text-center mt-5">
+            <form action = "/submitGrades" class="mt-5" method = "POST">
+                <input type="text" name="assignment" value="{{assignment}}">
+                <input type="text" name="classID" value="{{classID}}">
+                Max Grade: <input type = "text" name = "maxGrade" value = "{{maxGrade}}"><br>
+                {% for i in roster %}
+                {{getName(i)}}:
+                <input type="hidden" name="studentID" value="{{i}}">
+                {% if i in gradeDict %}
+                <input type = "text" name = "grade" value = "{{gradeDict[i]}}">
+                {% else %}
+                <input type = "text" name = "grade">
+                {% endif %}
+                <br>
+                {% endfor %}
+                <input type = "submit">
+            </form>
+
+        </div>
         {% endif %}
-        <br>
-      {% endfor %}
-      <input type = "submit">
-    </form>
+        <h1>{{className}}</h1>
+        Assignment: {{assignment}}
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

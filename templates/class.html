@@ -104,6 +104,48 @@
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
+=======
+                <div class="card-body">
+                    <p class="card-text">
+                      {{i[4]}}<br>
+                      Due: {{i[3]}} <br>
+                      {% if isTeacher %}
+                      {% set url = "/deletepost/" + i[0]|string %}
+                      <a href={{url}}> Delete Post </a>
+                      {% endif %}
+                      {% if i[5] == 1 and not isTeacher %}
+                      <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
+                          <input type="hidden" name="postID" value="{{i[0]}}">
+                          <input type="file" name="file">
+                          <input type="submit" value="Upload">
+                      </form>
+                      {% elif i[5] == 1 %}<br>
+                      <button onclick="show{{i[0]}}()">View Submissions</button>
+                      <div id="{{i[0]}}" style="display:none;">
+                          {% set uploads = getPostFiles(i[0]) %}
+                          {% if uploads|length == 0 %}
+                          No submissions yet.
+                          {% else %}
+                          {% for i in uploads %}
+                          {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
+                          {% endfor %}
+                          {% endif %}
+                      </div>
+                      <script>
+                          function show{{i[0]}}() {
+                              var x = document.getElementById("{{i[0]}}");
+                              if (x.style.display === "none") {
+                                  x.style.display = "block";
+                              } else {
+                                  x.style.display = "none";
+                              }
+                          }
+                      </script>
+                      {% endif %}
+                    </p>
+                </div>
+>>>>>>> 258b4c26cfdb8a4160f6ab832fa19a84adb15d87
             </div>
             {% endfor %}
             {% endif%}
@@ -146,7 +188,9 @@ Roster:<br>
 </ul>
 {% if isTeacher %}
 {% set url = "/makepost/" + classID|string %}
-<a href={{url}}> Make a Post </a>
+<a href={{url}}> Make a Post </a> <br>
+{% set url = "/deleteclass/" + classID|string %}
+<a href={{url}}> Delete this Class </a> <br>
 {% endif %}
 Posts:<br>
 <ul>

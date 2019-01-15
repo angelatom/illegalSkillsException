@@ -37,44 +37,43 @@ auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
 token_url = "https://www.googleapis.com/oauth2/v4/token"
 refresh_url = token_url
 scope = [
-    'https://www.googleapis.com/auth/calendar'
+    'https://www.googleapis.com/auth/calendar.events'
 ]
+
+# save token in session
+def token_saver(token):
+	flask.session["credentials"] = token
 
 # for student uploads
 UPLOAD_FOLDER = './data/studentUploads/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# login page 
+# login page
 @app.route('/')
 def index():
-    return flask.render_template("login.html")
-    #return ('<a href="/login"> Login with Google</a>')
+	return flask.render_template("login.html")
 
 # logged in page
 @app.route('/login')
 def login():
     if "credentials" not in flask.session:
-        return flask.redirect("authorize") # redirect if acess token is not there
-    '''
-    token = flask.session["credentials"]
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    print(token)
-    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-    print(token)
-	'''
-	# try, except block for refresh tokens in case of expired token error
+        return flask.redirect("authorize") # redirect if acess token is not ther
     try:
-        calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-        #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-        entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    #print(entry)
+    	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+    	entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+	# for refresh token
     except TokenExpiredError as e:
-		# refresh token
-        token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-        flask.session["credentials"] = token # store new token
+    	token = flask.session["credentials"]
+    	extra = {
+			'client_id': client_id,
+			'client_secret': client_secret,
+		}
+    	calendar = OAuth2Session(client_id, token=token)
+    	flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
+    entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    #print(entry)
     userID = db.getUserID(entry["id"])
     email = entry["id"]
     if userID == None: #User is not registered
@@ -96,7 +95,7 @@ def login():
 # authorize (send user to auth url with necessary params)
 @app.route("/authorize")
 def auth():
-    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri) 
+    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
     authorization_url, state = google.authorization_url(auth_base_url,
     access_type="offline", include_granted_scopes="true") #offline for refresh token, granted scopes to show the user what we have access to
     flask.session["state"] = state # state validates response to ensure that request/response originated in same browser
@@ -105,17 +104,20 @@ def auth():
 # callback url (exchange auth code for access token)
 @app.route("/oauth2callback", methods=["GET"])
 def callback():
-    google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
-    token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
-    # fetch token
-    flask.session["credentials"] = token # store token
-    return flask.redirect("/login")
+	try:
+		google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
+		token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
+		# fetch token
+		flask.session["credentials"] = token # store token
+		return flask.redirect("/login")
+	except:
+		return flask.redirect("/")
 
 # logout
 @app.route('/clear')
 def clear_credentials():
     if 'credentials' in flask.session:
-        del flask.session['credentials'] # remove token 
+        del flask.session['credentials'] # remove token
         del flask.session['userid'] # remove userid
     flask.flash("Logout successful!")
     return (flask.redirect("/"))
@@ -127,7 +129,7 @@ def regname():
     db.updateName(flask.session['userid'], name)
     return flask.redirect('/login')
 
-# make a class 
+# make a class
 @app.route('/makeclass')
 def makeClass():
     return flask.render_template("makeclass.html")
@@ -179,23 +181,26 @@ def gradebook(classid, assignment):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	classInfo = db.getClassInfo(classid)
-	if flask.session['userid'] != classInfo[1]:
+	if not db.isTeacher(flask.session['userid'], classid):
 		return "User is not the teacher of this class."
 	classRoster = db.getRoster(classid)
 	maxGrade,gradeDict = db.getAssignmentGrades(classid, assignment)
 	return flask.render_template("gradebook.html", className = classInfo[0],
 		assignment = assignment, roster = classRoster, gradeDict = gradeDict,
-		getName = db.getUserName, classID = classid, maxGrade = maxGrade)
+		getName = db.getUserName, classID = classid, maxGrade = maxGrade,
+		weights = classInfo[3])
 
+# 
 @app.route('/submitGrades', methods = ["POST"])
 def submitGrades():
-	inputs = [None, None, None, None]
+	inputs = [None, None, None, None, None]
 	for i in flask.request.form:
 		print(i)
 	try:
 		inputs[0] = flask.request.form['classID']
 		studentIDs = flask.request.form.getlist('studentID')
 		studentGrades = flask.request.form.getlist('grade')
+		inputs[4] = flask.request.form['weight']
 		gradesList = []
 		for i in range(len(studentIDs)):
 			toAppend = [None, None] #[userID, grade]
@@ -212,12 +217,13 @@ def submitGrades():
 		return "Invalid input(s)."
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
-	classInfo = db.getClassInfo(inputs[0])
-	if flask.session['userid'] != classInfo[1]:
+	if not db.isTeacher(flask.session['userid'],inputs[0]):
 		return "User is not the teacher of this class."
-	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3])
+	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
 	return "Grade update successful."
 
+
+# fix the return to an html page
 @app.route('/submitFile', methods = ["POST"])
 def submitFile():
 	if 'userid' not in flask.session:
@@ -241,11 +247,17 @@ def submitFile():
 def makePost(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID): # block students accessing teacher pages
+		return "User is not the teacher of this class."
 	date = str(datetime.date.today())
 	return flask.render_template("makepost.html", date=date, classID=classID)
 
 @app.route('/processmakepost/<classID>', methods=['POST'])
 def processMakePost(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
 	postbody = flask.request.form['postbody']
 	duedate = flask.request.form['duedate']
 	duetime = flask.request.form['duetime']
@@ -258,6 +270,7 @@ def processMakePost(classID):
 	db.makePost(classID, due, postbody, submittable)
 	return flask.redirect('/class/' + classID)
 
+# This file must be a txt file
 @app.route('/viewFile/<filename>', methods=['GET'])
 def viewFile(filename):
 	fileExists = db.fileExists(filename)
@@ -268,6 +281,25 @@ def viewFile(filename):
 		return flask.render_template('viewfile.html', fileContent = output)
 	else:
 		return "File does not exist."
+
+@app.route('/deleteclass/<classID>')
+def deleteClass(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
+	db.deleteClass(classID)
+	return flask.redirect('/class/' + str(classID))
+
+@app.route('/deletepost/<postID>')
+def deletePost(postID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	classID = db.getClassID(postID)
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
+	db.deletePost(postID)
+	return flask.redirect('/class/' + str(classID))
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls

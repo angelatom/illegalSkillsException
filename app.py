@@ -21,6 +21,7 @@ from urllib import request, parse
 import sqlite3
 
 from util import dbtools as db
+from util import quotes as q
 
 app = flask.Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -54,11 +55,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # login page
 @app.route('/')
 def index():
+	#print(quotes.get_random_quote())
 	return flask.render_template("login.html")
 
 # logged in page
 @app.route('/login')
 def login():
+    #print(quotes.get_random_quote())
     if "credentials" not in flask.session:
         return flask.redirect("authorize") # redirect if acess token is not ther
     try:
@@ -313,6 +316,10 @@ def userGrades(classID, userID):
 	avg,weightavgs = db.calculateAverage(userID, classID)
 	name  = db.getUserName(userID)
 	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name)
+
+@app.route('/quotes')
+def quote():
+	return q.get_random_quote()
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls

@@ -101,7 +101,7 @@ P#02 -- Final Project
             <div class="row mt-3 ml-3 mr-3">
                 {% for j in teachings[i * 4: i * 4 + 4] %}
                 <div class="col-md-3">
-                    <div class="card mr-2 ml-2" style="width: 20rem;">
+                    <div class="card mr-2 ml-2" style="width: 100%;">
                         <a href="/class/{{ j[0] }}">
                             <div class="card-img-caption">
                                 <p id="caption-text2" class="card-text">{{ j[1] }}</p>
@@ -124,23 +124,27 @@ P#02 -- Final Project
 
         <!-- make tab -->
         <div class="tab-pane fade" id="make" role="tabpanel" aria-labelledby="make-tab">
-            <form action="/processmakeclass" method="POST">
-                Enter class name:
-                <input type="text" name="classname">
-                Enter Weights:
-                <ul id="weightlist">
-                    <li>
-                        Weight Name:
-                        <input type="text" name="weightnames">
-                        Weight Percent:
-                        <input type="text" name="weightnums">
-                    </li>
-                </ul>
-                <textarea rows="4" cols="50" name="desc">Description</textarea>
-                <input type="submit">
-            </form>
-            <button id="addweight">Add Weight</button>
-            <button id="removeweight">Remove Weight</button>
+            <div class="row mt-5 mr-4 ml-4">
+                <div class="col text-center">
+                    <form action="/processMakeclass" method="POST">
+                        <input type="text" name="classname" placeholder="Class Name" required>
+                        <h2 id="navHeader4" class="mt-3 mb-4">Enter class weights</h2>
+                        <button id="addweight" class="btn btn-primary loginBtn">Add weight</button><br>
+                        <button id="removeweight" class="btn btn-primary mt-1 mb-2 loginBtn">Delete weight</button>
+                        <ul id="weightlist">
+                            <li>
+                                <input type="text" name="weightnames" placeholder="weight name">
+                                <input type="text" name="weightnums" placeholder="weight percent">
+                            </li>
+                        </ul>
+
+                        <textarea class="mr-2 ml-2" name="desc" cols="40" rows="4" placeholder="class description" required></textarea>
+                        <br>
+                        <input type="submit" class="btn btn-primary mt-3">
+                    </form>
+                </div>
+            </div>
+
         </div>
 
         <!-- join tab -->

@@ -1,72 +1,126 @@
 {% extends "base.html"%}
+{% block navbar %}
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top mb-5" id="containerNav">
+    <div class="container-fluid" id="mainNav">
+        <div class="navbar-header">
+            <a id="navHome" class="navbar-brand" href="/login">
+                <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Home
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link pl-4 pr-4 other" href="/login">Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pl-4 pr-4 other" href="/fact">Homework</a>
+                </li>
+                <li class="nav-item mr-1 ml-1">
+                    <div class="btn-group">
+                        <img src="https://api.adorable.io/avatars/53/{{ session['userid'] }}" alt="" class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown-menu dropdown-menu-right noDeco pb-0">
+                            <a href="/clear" class="noDeco text-left" style="text-decoration: none;">
+                                <button class="dropdown-item logBtn" type="button">Logout</button>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+{% endblock %}
 
 {%block content%}
 <div class="container">
     <div class="row mt-5">
         <div class="col mt-4 class-head">
-            <h2 id="navHeader3" class="mt-4 ml-5"><b>{{ className }}</b></h2>
-        </div>
-    </div>
-    {% if isTeacher %}
-    {% for i in posts %}
-    <div class="row mt-4">
-        <div class="col pl-0 pr-0">
-            <div class="card cardOut">
-                <div class="card-header pt-1 pb-1 pl-2">
-                    <div class="row">
-                        <div class="col-sm-1 pr-0 text-center">
-                            <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['userid'] }}" alt="">
-                        </div>
-                        <div class="col-sm-9 pl-0">
-                            <p class="mb-0 fam">You</p>
-                            <p class="mb-0 text-secondary">{{ i[2] }}</p>
-                        </div>
-                        <div class="col-sm-2 pr-0">
-                            <button class="btn btn-primary classBtns">Grades</button>
-                        </div>
+            <div class="row align-items-start">
+                <div class="col">
+                    <h2 id="navHeader3" class="mt-4 ml-5"><b>{{ className }}</b></h2>
+                </div>
+            </div>
+            <div class="row align-items-center sizes"></div>
+            <div class="row align-items-end">
 
-                    </div>
+                {% if isTeacher %}
+                <div class="col text-right">
+                    <h3 id="navHeader5" class="mb-2 mr-5">Instructor: {{ teacherName }} <b>(You)</b></h3>
                 </div>
-                <div class="card-body">
-                    <p class="card-text">
-                      {{i[4]}}<br>
-                      Due: {{i[3]}}
-                      {% if i[5] == 1 and not isTeacher %}
-                      <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
-                          <input type="hidden" name="postID" value="{{i[0]}}">
-                          <input type="file" name="file">
-                          <input type="submit" value="Upload">
-                      </form>
-                      {% elif i[5] == 1 %}<br>
-                      <button onclick="show{{i[0]}}()">View Submissions</button>
-                      <div id="{{i[0]}}" style="display:none;">
-                          {% set uploads = getPostFiles(i[0]) %}
-                          {% if uploads|length == 0 %}
-                          No submissions yet.
-                          {% else %}
-                          {% for i in uploads %}
-                          {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
-                          {% endfor %}
-                          {% endif %}
-                      </div>
-                      <script>
-                          function show{{i[0]}}() {
-                              var x = document.getElementById("{{i[0]}}");
-                              if (x.style.display === "none") {
-                                  x.style.display = "block";
-                              } else {
-                                  x.style.display = "none";
-                              }
-                          }
-                      </script>
-                      {% endif %}
-                    </p>
+                {% else %}
+                <div class="col text-right">
+                    <h3 id="navHeader5" class="mb-2 mr-5">Instructor: {{ teacherName }}</h3>
                 </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
-    {% endfor %}
-    {% endif%}
+    <ul class="nav nav-tabs justify-content-center mt-2" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="home" aria-selected="true">Posts</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#roster" role="tab" aria-controls="profile" aria-selected="false">People</a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+        </li> -->
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="post-tab">
+            {% if isTeacher %}
+            {% if posts|length == 0 %}
+            <div class="row mt-4">
+                <div class="col mt-3 mr-4 ml-4">
+                    <p style="color: red;">You have no posts, go make one!</p>
+                </div>
+            </div>
+            {% endif %}
+            {% for i in posts %}
+            <div class="row mt-4">
+                <div class="col pl-0 pr-0">
+                    <div class="card cardOut">
+                        <div class="card-header pt-1 pb-1 pl-2">
+                            <div class="row">
+                                <div class="col-sm-1 pr-0 text-center">
+                                    <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['userid'] }}" alt="">
+                                </div>
+                                <div class="col-sm-9 pl-0">
+                                    <p class="mb-0 fam">You</p>
+                                    <p class="mb-0 text-secondary">{{ i[2] }}</p>
+                                </div>
+                                <div class="col-sm-2 pr-0">
+                                    <button class="btn btn-primary classBtns">Grades</button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Description</h5>
+                            <p class="card-text"> tempora iusto. Sed itaque accusantium nulla repudiandae voluptas et.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif%}
+        </div>
+        <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
+            <div class="row mr-5 ml-5 btmBorder">
+                
+            </div>
+            {% for i in classRoster %}
+            <li>
+                {{getName(i)}}
+            </li>
+            {% endfor %}
+        </div>
+        <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
+    </div>
+
 </div>
 <br>
 <br>

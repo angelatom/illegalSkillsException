@@ -17,7 +17,7 @@
                 </li>
                 <li class="nav-item mr-1 ml-1">
                     <div class="btn-group">
-                        <img src="https://api.adorable.io/avatars/53/{{ session['userid'] }}" alt="" class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="https://api.adorable.io/avatars/53/{{ session['email'] }}" alt="" class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="dropdown-menu dropdown-menu-right noDeco pb-0">
                             <a href="/clear" class="noDeco text-left" style="text-decoration: none;">
                                 <button class="dropdown-item logBtn" type="button">Logout</button>
@@ -86,7 +86,7 @@
                         <div class="card-header pt-1 pb-1 pl-2">
                             <div class="row">
                                 <div class="col-sm-1 pr-0 text-center">
-                                    <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['userid'] }}" alt="">
+                                    <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['email'] }}" alt="">
                                 </div>
                                 <div class="col-sm-9 pl-0">
                                     <p class="mb-0 fam">You</p>
@@ -151,7 +151,7 @@
                     <div class="col ml-4 mr-4">
                         <div class="row">
                             <div class="col-sm-1 fit">
-                                <img src="https://api.adorable.io/avatars/31/{{ session['userid'] }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
+                                <img src="https://api.adorable.io/avatars/31/{{ session['email'] }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
                             </div>
                             <div class="col special-margins">
                                 <p class="mt-3">{{ teacherName }}</p>
@@ -263,7 +263,7 @@
         </li>
         {% endfor %}
     </ul>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="../static/clipboard.js-master/dist/clipboard.min.js"></script>
     <script src="../static/class.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>

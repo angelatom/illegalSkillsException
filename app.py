@@ -37,7 +37,7 @@ auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
 token_url = "https://www.googleapis.com/oauth2/v4/token"
 refresh_url = token_url
 scope = [
-    'https://www.googleapis.com/auth/calendar'
+    'https://www.googleapis.com/auth/calendar.events'
 ]
 
 # save token in session
@@ -52,64 +52,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # login page
 @app.route('/')
 def index():
-	'''
-	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    #print(entry)
-	token=flask.session["credentials"]
-	print(token)
-	token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-    #flask.session["credentials"] = token # store new token
-	print(token)
-	'''
 	return flask.render_template("login.html")
-	'''
-	# TESTING STUFF
-	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    #print(entry)
-	token = flask.session["credentials"]
-	print(token)
-	token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-    #flask.session["credentials"] = token # store new token
-	print(token)
-    #return ('<a href="/login"> Login with Google</a>')
-	'''
 
 # logged in page
 @app.route('/login')
 def login():
     if "credentials" not in flask.session:
-        return flask.redirect("authorize") # redirect if acess token is not there
-    '''
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    #print(entry)
-    token=flask.session["credentials"]
-    print(token)
-    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-    #flask.session["credentials"] = token # store new token
-    print(token)
-
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
-    #entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-    #print(entry)
-    token = flask.session["credentials"]
-    print(token)
-    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-    #flask.session["credentials"] = token # store new token
-    print(token)
-
-    token = flask.session["credentials"]
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    print(token)
-    token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-    print(token)
-	'''
+        return flask.redirect("authorize") # redirect if acess token is not ther
     try:
     	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     	entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
@@ -122,24 +71,9 @@ def login():
 		}
     	calendar = OAuth2Session(client_id, token=token)
     	flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
-
-	# try, except block for refresh tokens in case of expired token error
-    #calendar = OAuth2Session(client_id, token=flask.session["credentials"], auto_refresh_url=refresh_url,
-    #    auto_refresh_kwargs=extra, token_updater=token_saver)
-    #entry = calendar.get("https://www.googleapis.com/calendar/v3/calendars/primary")
     calendar = OAuth2Session(client_id, token=flask.session["credentials"])
     entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
     #print(entry)
-    '''
-    except TokenExpiredError as e:
-		# refresh token
-		calendar = OAuth2Session(client_id, token=flask.session["credentials"], auto_refresh_url=refresh_url,
-     auto_refresh_kwargs=extra, token_updater=token_saver)
-        #token = calendar.refresh_token(refresh_url, {"client id": client_id, "client_secret": client_secret})
-        flask.session["credentials"] = token # store new token
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    entry = calendar.get("https://www.googleapis.com/calendar/v3/users/me/calendarList/primary").json()
-    '''
     userID = db.getUserID(entry["id"])
     email = entry["id"]
     if userID == None: #User is not registered
@@ -170,11 +104,14 @@ def auth():
 # callback url (exchange auth code for access token)
 @app.route("/oauth2callback", methods=["GET"])
 def callback():
-    google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
-    token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
-    # fetch token
-    flask.session["credentials"] = token # store token
-    return flask.redirect("/login")
+	try:
+		google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
+		token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
+		# fetch token
+		flask.session["credentials"] = token # store token
+		return flask.redirect("/login")
+	except:
+		return flask.redirect("/")
 
 # logout
 @app.route('/clear')
@@ -253,7 +190,7 @@ def gradebook(classid, assignment):
 		getName = db.getUserName, classID = classid, maxGrade = maxGrade,
 		weights = classInfo[3])
 
-# =( how do these grades work?
+# 
 @app.route('/submitGrades', methods = ["POST"])
 def submitGrades():
 	inputs = [None, None, None, None, None]
@@ -310,7 +247,7 @@ def submitFile():
 def makePost(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
-	if not db.isTeacher(flask.session['userid'], classID):
+	if not db.isTeacher(flask.session['userid'], classID): # block students accessing teacher pages
 		return "User is not the teacher of this class."
 	date = str(datetime.date.today())
 	return flask.render_template("makepost.html", date=date, classID=classID)
@@ -334,7 +271,6 @@ def processMakePost(classID):
 	return flask.redirect('/class/' + classID)
 
 # This file must be a txt file
-# we need to fix this.. png causes many many errors
 @app.route('/viewFile/<filename>', methods=['GET'])
 def viewFile(filename):
 	fileExists = db.fileExists(filename)

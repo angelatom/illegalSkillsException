@@ -29,11 +29,17 @@ $ python3 -m venv virtual_env_name
 
 ## Dependencies:
 * Flask==1.0.2
+```$ pip install Flask```
 * Jinja2==2.10
+```$ pip install Jinja2```
 * requests-oauthlib==1.1.0
+```$ pip install requests-oauthlib```
 
 ## API:
 * Google calendar - Used to create events on the calendar based on teacher assignments
-https://console.developers.google.com/
+1. Head to https://console.developers.google.com/ to get a json file with client data
+2. Put client_secret.json in keys directory
+
 * favQ - Used for random quotes on the site
-https://favqs.com/api
+1. Head to https://favqs.com/api to get an API key
+2. Put quotes_key.txt in keys directory

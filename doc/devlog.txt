@@ -219,4 +219,9 @@ angelaT -- 2019-01-15 12:05
 --------------------------------------------------------------
 - Minor fixes
 - Huge file cleanup
+
+aaronL -- 2019-01-15 3:30
+--------------------------------------------------------------
+- finished rosters and added invite Code
+- added clipboard.js to copy paste invite code
 ==============================================================

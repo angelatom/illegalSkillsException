@@ -190,7 +190,7 @@ def gradebook(classid, assignment):
 		getName = db.getUserName, classID = classid, maxGrade = maxGrade,
 		weights = classInfo[3])
 
-# 
+#
 @app.route('/submitGrades', methods = ["POST"])
 def submitGrades():
 	inputs = [None, None, None, None, None]
@@ -289,7 +289,7 @@ def deleteClass(classID):
 	if not db.isTeacher(flask.session['userid'], classID):
 		return "User is not the teacher of this class."
 	db.deleteClass(classID)
-	return flask.redirect('/class/' + str(classID))
+	return flask.redirect('/login')
 
 @app.route('/deletepost/<postID>')
 def deletePost(postID):

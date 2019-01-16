@@ -358,6 +358,7 @@ def deleteClass(classID):
     db,c = getDBCursor()
     c.execute("DELETE FROM classes WHERE classID = ?", (classID,))
     c.execute("DELETE FROM roster WHERE classID=?", (classID,))
+    c.execute("DELETE FROM weights where classID=?", (classID,))
     closeDB(db)
 
 def editPost(postID, postBody):
@@ -407,6 +408,17 @@ def get_end_time(postID):
     db, c = getDBCursor()
     output = '2019-01-28T09:00:00-07:00'
     output = c.execute('SELECT duedate FROM posts WHERE postID = ?', (postID))
+    return output
+
+def getUserGrades(classID, userID):
+
+    '''This function returns a list of all grades for a student
+    '''
+
+    db,c = getDBCursor()
+    c.execute("SELECT * FROM grades WHERE classID = ? AND userID = ?", (classID, userID,))
+    output = c.fetchall()
+    closeDB(db)
     return output
 
 def getDBCursor():

@@ -1,10 +1,9 @@
-var box, hiddenInput;
-var keysDown = {};
+var box, hiddenInput, boxText, submitButton;
 
 var init = function() {
   box = document.getElementById("textEditor");
   hiddenInput = document.getElementById("hiddenInput");
-  boxText = box.innerHTML;
+  submitButton = document.getElementById("submitButton");
   document.execCommand("defaultParagraphSeparator", false, "div");
 }
 
@@ -17,23 +16,38 @@ init();
 
 box.addEventListener("keydown", function(event) {
   var ctrlDown = event.ctrlKey;
-  var keyPressed = event.which;
+  var keyPressed = event.key.toLowerCase();
   cmd = null;
   if (ctrlDown) {
     switch(keyPressed) {
-      case 66: //Check for b pressed
+      case "b": //Check for b pressed
         cmd = "bold";
-      case 73: //Check for i pressed
+        break;
+      case "i": //Check for i pressed
         cmd = "italic";
-      case 85: //Check for u pressed
+        break;
+      case "u": //Check for u pressed
         cmd = "underline";
+        break;
     }
   }
   format(cmd);
+  if (cmd != null) {
+    event.preventDefault();
+  }
+
+  if (box.innerHTML == null) {
+    hiddenInput.value = "No course description.";
+  } else {
+    hiddenInput.value = box.innerHTML;
+  }
 });
 
-box.addEventListener("focusout", function() {
-  var inputText = document.getElementById("textEditorInput");
-  inputText = inputText.innerHTML;
-  hiddenInput.value = inputText;
-});
+submitButton.onclick = function() {
+  if (box.innerHTML == null) {
+    hiddenInput.value = "No course description.";
+  } else {
+    var input = box.innerHTML.trim().slice(0,-4);
+    hiddenInput.value = input;
+  }
+};

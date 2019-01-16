@@ -268,4 +268,8 @@ angelaT -- 2019-01-16 16:06
 --------------------------------------------------------------
 - Finished reverting to google libraries
 - Started working on calendar stuff
+
+linK -- 2019-01-16 4:32
+--------------------------------------------------------------
+- Updated text editor to override browser hotkeys
 ==============================================================

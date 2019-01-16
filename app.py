@@ -174,28 +174,15 @@ def processMakeclass():
 	db.createClass(classname, flask.session["userid"], weightList, desc)
 	classname = classname + ""
 	cal = {
-    'summary': 'calendarSummary',
-    'timeZone': 'America/Los_Angeles'
+    'summary': classname,
+    'timeZone': 'America/New_York'
 	}
-	'''
-	try:
-		calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-		entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars', cal)
-	# for refresh token
-	except TokenExpiredError as e:
-		token = flask.session["credentials"]
-		extra = {
-			'client_id': client_id,
-			'client_secret': client_secret,
-		}
-		calendar = OAuth2Session(client_id, token=token)
-		flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
-	'''
-	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-	entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars', cal).json()
-	print(entry)
-	#print (entry.request.headers)
-	return(flask.jsonify(entry))
+	credentials = google.oauth2.credentials.Credentials(
+      **flask.session['credentials'])
+	service = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+	created_calendar = service.calendars().insert(body=cal).execute()
+	WE_NEED_TO_SAVE_THIS = created_calendar['id']
 	return flask.redirect("/login")
 
 @app.route('/class/<classid>')

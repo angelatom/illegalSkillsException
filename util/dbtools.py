@@ -18,6 +18,7 @@ def createClass(className, userID, weights, desc):
     for i in weights: #Adds weights
         c.execute("INSERT INTO weights VALUES(?,?,?)", (classID, i[0], i[1]))
     closeDB(db)
+    return classID
 
 def getClassInfo(classID):
 

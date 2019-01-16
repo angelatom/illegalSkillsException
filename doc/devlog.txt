@@ -259,4 +259,13 @@ aaronL -- 2019-01-16 00:09
 - basically done with class.html. Everything displays correctly
   for students and teachers, with appropriate buttons popping up
   as should be
+
+angelaT -- 2019-01-16 4:50
+--------------------------------------------------------------
+- Started changing libraries again =(
+
+angelaT -- 2019-01-16 16:06
+--------------------------------------------------------------
+- Finished reverting to google libraries
+- Started working on calendar stuff
 ==============================================================

@@ -38,7 +38,7 @@ auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
 token_url = "https://www.googleapis.com/oauth2/v4/token"
 refresh_url = token_url
 scope = [
-    'https://www.googleapis.com/auth/calendar.events'
+    'https://www.googleapis.com/auth/calendar'
 ]
 
 # save token in session
@@ -141,19 +141,45 @@ def makeClass():
 
 @app.route('/processmakeclass', methods=['POST'])
 def processMakeclass():
-    classname = flask.request.form['classname']
-    weightnames = flask.request.form.getlist('weightnames')
-    weightnums = flask.request.form.getlist('weightnums')
-    desc = flask.request.form['desc']
-    weightList = []
-    for i in range(len(weightnames)):
-        toAppend = [weightnames[i],weightnums[i]]
-        weightList.append(toAppend)
-    db.createClass(classname, flask.session["userid"], weightList, desc)
-    return flask.redirect("/login")
+	classname = flask.request.form['classname']
+	weightnames = flask.request.form.getlist('weightnames')
+	weightnums = flask.request.form.getlist('weightnums')
+	desc = flask.request.form['desc']
+	weightList = []
+	for i in range(len(weightnames)):
+		toAppend = [weightnames[i],weightnums[i]]
+		weightList.append(toAppend)
+	db.createClass(classname, flask.session["userid"], weightList, desc)
+	classname = classname + ""
+	cal = {
+    'summary': 'calendarSummary',
+    'timeZone': 'America/Los_Angeles'
+	}
+	'''
+	try:
+		calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+		entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars', cal)
+	# for refresh token
+	except TokenExpiredError as e:
+		token = flask.session["credentials"]
+		extra = {
+			'client_id': client_id,
+			'client_secret': client_secret,
+		}
+		calendar = OAuth2Session(client_id, token=token)
+		flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
+	'''
+	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+	entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars', cal).json()
+	print(entry)
+	#print (entry.request.headers)
+	#return(flask.jsonify(entry))
+	return flask.redirect("/login")
 
 @app.route('/class/<classid>')
 def classpage(classid):
+    if 'userid' not in flask.session:
+    	return flask.redirect('/')
     classInfo = db.getClassInfo(classid)
     classRoster = db.getRoster(classid)
     isTeacher = (db.getTeacher(classid) == flask.session["userid"])
@@ -320,7 +346,37 @@ def userGrades(classID, userID):
 @app.route('/quotes')
 def quote():
 	return q.get_random_quote()
-
+'''
+def google_calendar():
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	start_time = db.
+	event = {
+		'start': {
+			'dateTime': '2015-05-28T09:00:00-07:00',
+			'timeZone': 'America/Los_Angeles',
+		},
+		'end': {
+			'dateTime': '2015-05-28T17:00:00-07:00',
+			'timeZone': 'America/Los_Angeles',
+		},
+	}
+	try:
+		calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+		entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars/primary/events', event)
+	# for refresh token
+	except TokenExpiredError as e:
+		token = flask.session["credentials"]
+		extra = {
+			'client_id': client_id,
+			'client_secret': client_secret,
+		}
+		calendar = OAuth2Session(client_id, token=token)
+		flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
+	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
+	entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars/primary/events', event)
+	return entry
+'''
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls
     app.run(debug = True)

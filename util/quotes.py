@@ -2,7 +2,7 @@ import json
 import requests
 from random import randint
 
-#key = open("../keys/quotes_key.txt", "r").read()
+key = open("keys/quotes_key.txt", "r").read()
 
 # get random quote
 def get_random_quote():
@@ -10,7 +10,7 @@ def get_random_quote():
     rand_num = str(randint(4,20))
     URL = URL_STUB + rand_num
     print(URL)
-    r = requests.get(URL, headers={"Authorization": "Token token=941d1bc3cd831d275881fc9c87f04382","Content-Type": "application/json"})
+    r = requests.get(URL, headers={"Authorization": "Token token=" + key,"Content-Type": "application/json"})
     #print(response)
     #print(response.content)
     #return response

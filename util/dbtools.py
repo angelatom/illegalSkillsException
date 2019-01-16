@@ -391,6 +391,24 @@ def isTeacher(userID, classID):
     closeDB(db)
     return output
 
+def get_start_time(postID):
+    '''
+    This function returns the start time of the assignment
+    '''
+    db, c = getDBCursor()
+    output = '2019-01-28T09:00:00-07:00'
+    output = c.execute('SELECT submission FROM posts WHERE postID = ?', (postID))
+    return output
+
+def get_end_time(postID):
+    '''
+    This function returns the end time of the assignment
+    '''
+    db, c = getDBCursor()
+    output = '2019-01-28T09:00:00-07:00'
+    output = c.execute('SELECT duedate FROM posts WHERE postID = ?', (postID))
+    return output
+
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")
     cursor = db.cursor()

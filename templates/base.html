@@ -33,6 +33,7 @@
                         <div class="btn-group">
                             <img src="https://api.adorable.io/avatars/53/{{ session['email'] }}" alt="" class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <div class="dropdown-menu dropdown-menu-right noDeco pb-0">
+                                <a class="dropdown-item disabled">{{ session['userid'] }}</a>
                                 <a href="/clear" class="noDeco text-left" style="text-decoration: none;">
                                     <button class="dropdown-item logBtn" type="button">Logout</button>
                                 </a>

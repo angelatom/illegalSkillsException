@@ -253,4 +253,10 @@ aaronL -- 2019-01-15 21:34
 - learned and used flexbox to make elements in class.html
   responsive. Added dropdown to view submissions, and made
   appropriate posts depending if you're a student or a teacher
+
+aaronL -- 2019-01-16 00:09
+--------------------------------------------------------------
+- basically done with class.html. Everything displays correctly
+  for students and teachers, with appropriate buttons popping up
+  as should be
 ==============================================================

@@ -87,148 +87,232 @@
             <div class="row mt-4 mr-2 ml-2">
                 <div class="col pl-0 pr-0">
                     <div class="card cardOut">
-                        <div class="card-header pt-1 pb-1 pl-2">
-                            <div class="row">
-                                <div class="col-sm-1 pr-0 text-center">
+                        <div class="card-header pt-1 pb-1 pl-2 pr-2">
+                            <!-- use flex -->
+                            <div class="d-flex flex-wrap-reverse">
+                                <div class="p-1 mr-1 order-1">
                                     <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['email'] }}" alt="">
                                 </div>
-                                <div class="col-sm-9 pl-0">
-                                    <p class="mb-0 fam">You</p>
-                                    <p class="mb-0 text-secondary">{{ i[2] }}</p>
+                                <div class="d-flex flex-column justify-content-between order-2">
+                                    <div class="fam mt-auto">You</div>
+                                    <div class="text-secondary mb-auto">{{ i[2] }}</div>
                                 </div>
-                                <div class="col-sm-2 pr-0">
+                                <div class="p-1 ml-auto order-3">
                                     <button class="btn btn-primary classBtns">Grades</button>
                                 </div>
-
                             </div>
+                        </div>
+                        <!-- post content -->
+                        <div class="card-body">
+                            <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
+                            <h5 class="card-title">Description</h5>
+                            <p class="card-text">{{ i[4] }}</p>
+                        </div>
+                        <div class="card-footer text-muted p-1">
+                            <div class="d-flex flex-wrap justify-content-between align-content-top">
+
+                                <!-- 1st flex item -->
+                                {% if i[5] == 1 and not isTeacher %} <!-- if student -->
+                                <div class="p-1">
+                                    <form action="/submitFile" method="POST" enctype="multipart/form-data" class="form-group m-0">
+                                        <input type="hidden" name="postID" value="{{i[0]}}">
+                                        <input type="file" name="file">
+
+                                        <!-- </div> -->
+                                        {% elif i[5] == 1 %} <!-- if teacher -->
+                                        <div class="p-1">
+                                            <div class="dropdown">
+                                                <button onclick="show({{ i[0] }})" class="btn btn-primary dropdown-toggle" type="submit" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="Upload">
+                                                    View Submissions
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    {% set uploads = getPostFiles(i[0]) %}
+                                                    {% if uploads|length == 0 %}
+                                                    <a class="dropdown-item disabled">No submissions yet</a>
+                                                    {% else %}
+                                                    {% for i in uploads %}
+                                                    <a class="dropdown-item" href="/viewFile/{{ i[0] }}" target="_blank"><b>{{ getName(i[1]) }}</b>: {{ i[2] }}</a>
+
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                    <!-- <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+                                        <!-- 2nd flex item -->
+                                        {% if isTeacher %}
+                                        {% set url = "/deletepost/" + i[0]|string %}
+                                        <div class="p-1">
+                                            <a href="{{ url }}">
+                                                <button class="btn btn-danger">Delete Post</button>
+                                            </a>
+                                        </div>
+                                        {% else %}
+
+                                    </form>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+            {% else %} <!-- if student -->
+
+            <!-- if no posts -->
+            {% if posts|length == 0 %}
+            <div class="row mt-4">
+                <div class="col mt-3 mr-4 ml-4">
+                    <p style="color: red;">Your teacher hasn't posted anything yet.</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- else show posts -->
+            {% for i in posts %}
+            <div class="row mt-4 mr-2 ml-2">
+                <div class="col pl-0 pr-0">
+                    <div class="card cardOut">
+                        <div class="card-header pt-1 pb-1 pl-2 pr-2">
+                            <!-- use flex -->
+                            <div class="d-flex flex-wrap-reverse">
+                                <div class="p-1 mr-1 order-1">
+                                    <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['email'] }}" alt="">
+                                </div>
+                                <div class="d-flex flex-column justify-content-between order-2">
+                                    <div class="fam mt-auto">You</div>
+                                    <div class="text-secondary mb-auto">{{ i[2] }}</div>
+                                </div>
+                                <div class="p-1 ml-auto order-3">
+                                    <button class="btn btn-primary classBtns">Grades</button>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card-body">
                             <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
                             <h5 class="card-title">Description</h5>
-                            <p class="card-text"> tempora iusto. Sed itaque accusantium nulla repudiandae voluptas et.</p>
+                            <p class="card-text">{{ i[4] }}</p>
                         </div>
-                    </div>
-                </div>
-<<<<<<< HEAD
-                <div class="card-body">
-                    <h6 class="card-title text-secondary">Due {{ i[3] }}</h6>
-                    <h5 class="card title">Description</h5>
-=======
-                <!-- remove -->
-                <!-- <div class="card-body">
->>>>>>> e75c4627091ac5db35f863b8843f764198b15650
-                    <p class="card-text">
-                        {{i[4]}}<br>
-                        Due: {{i[3]}} <br>
-                        {% if isTeacher %}
-                        {% set url = "/deletepost/" + i[0]|string %}
-                        <a href={{url}}> Delete Post </a>
-                        {% endif %}
-                        {% if i[5] == 1 and not isTeacher %}
-                        <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
-                            <input type="hidden" name="postID" value="{{i[0]}}">
-                            <input type="file" name="file">
-                            <input type="submit" value="Upload">
-                        </form>
-                        {% elif i[5] == 1 %}<br>
-                        <button onclick="show({{i[0]}})">View Submissions</button>
-                        <div id="{{i[0]}}" style="display:none;">
-                            {% set uploads = getPostFiles(i[0]) %}
-                            {% if uploads|length == 0 %}
-                            No submissions yet.
-                            {% else %}
-                            {% for i in uploads %}
-                            {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        {% endif %} -->
-                        <!-- remove -->
-                    </div>
-                {% endfor %}
-                {% else %}
-                {% if posts|length == 0 %}
-                <div class="row mt-4">
-                    <div class="col mt-3 mr-4 ml-4">
-                        <p style="color: red;">Your teacher hasn't posted anything yet.</p>
-                    </div>
-                </div>
-                {% endif %}
-                {% endif %}
-            </div>
-        <!-- roster panel -->
-        <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
-            <div class="row mr-1 ml-1">
-                <div class="col-md-1"></div>
-                <div class="col">
-                    <h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructors</h2>
-                </div>
-                <div class="col-md-1"></div>
-            </div>
-            <div class="row mr-1 ml-1">
-                <div class="col-md-1"></div>
-                <div class="col ml-4 mr-4">
-                    <div class="row">
-                        <div class="col-sm-1 fit">
-                            <img src="https://api.adorable.io/avatars/31/{{ session['email'] }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
-                        </div>
-                        <div class="col special-margins">
-                            <p class="mt-3">{{ teacherName }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1"></div>
-            </div>
+                        <div class="card-footer text-muted p-1">
+                            <div class="d-flex justify-content-between flex-wrap">
 
-            <!-- students -->
-            <div class="row mr-1 ml-1">
-                <div class="col-md-1"></div>
-                <div class="col">
-                    <h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Classmates</h2>
-                </div>
-                <div class="col-md-1"></div>
-            </div>
-            {% for i in classRoster %}
-            <div class="row mr-1 ml-1">
-                <div class="col-md-1"></div>
-                <div class="col ml-4 mr-4 btmBorder2">
-                    <div class="row">
-                        <div class="col-sm-1 fit">
-                            <img src="https://api.adorable.io/avatars/31/{{ getName(i) }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
+                                <!-- 1st flex item -->
+                                {% if i[5] == 1 and not isTeacher %} <!-- if student -->
+                                <div class="p-1 mt-auto mb-auto">
+                                    <form action="/submitFile" method="POST" enctype="multipart/form-data" class="form-group m-0">
+                                        <input type="hidden" name="postID" value="{{i[0]}}">
+                                        <input type="file" name="file">
+                                    </div>
+                                    <div class="p-1">
+                                        <button class="btn btn-success" type="submit" value="Upload">Upload</button>
+                                    </div>
+                                    {% elif i[5] == 1 %} <!-- if teacher -->
+                                    <div class="p-1">
+                                        <button onclick="show({{ i[0] }})"class="btn btn-primary" type="submit" value="Upload">View Submissions</button>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- 2nd flex item -->
+                                    {% if isTeacher %}
+                                    {% set url = "/deletepost/" + i[0]|string %}
+                                    <div class="p-1">
+                                        <a href="{{ url }}">
+                                            <button class="btn btn-danger">Delete Post</button>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </form>
+                            </div>
                         </div>
-                        <div class="col special-margins">
-                            <p class="mt-3">{{ getName(i) }}</p>
-                        </div>
-                        {% if isTeacher %}
-                        {% set url = "/usergrades/" + classID|string + "/" + i|string %}
-                        <a href={{url}}> Grades </a>
-                        {% endif %}
                     </div>
                 </div>
-                <div class="col-md-1"></div>
             </div>
-            {% endfor %}
         </div>
-
-        <!-- copy tab -->
-        <div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="contract-tab">
-            <div class="row mr-3 ml-3 mt-2">
-                <div class="col mt-2 text-center">
-                    <button id="clipBtn" class="btn btn-secondary" data-clipboard-text="{{ inviteCode }}">
-                        Copy code ({{ inviteCode }})
-                    </button>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <div id="alertTip" class="alert alert-success" style="display: none;">Copied to clipboard</div>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-
-        </div>
+        {% endfor %}
+        {% endif %}
     </div>
+    <!-- end of post panel -->
+
+    <!-- roster panel -->
+    <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
+        <div class="row mr-1 ml-1">
+            <div class="col-md-1"></div>
+            <div class="col">
+                <h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructors</h2>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row mr-1 ml-1">
+            <div class="col-md-1"></div>
+            <div class="col ml-4 mr-4">
+                <div class="row">
+                    <div class="col-sm-1 fit">
+                        <img src="https://api.adorable.io/avatars/31/{{ session['email'] }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
+                    </div>
+                    <div class="col special-margins">
+                        <p class="mt-3">{{ teacherName }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+
+        <!-- students -->
+        <div class="row mr-1 ml-1">
+            <div class="col-md-1"></div>
+            <div class="col">
+                <h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Classmates</h2>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        {% for i in classRoster %}
+        <div class="row mr-1 ml-1">
+            <div class="col-md-1"></div>
+            <div class="col ml-4 mr-4 btmBorder2">
+                <div class="row">
+                    <div class="col-sm-1 fit">
+                        <img src="https://api.adorable.io/avatars/31/{{ getName(i) }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
+                    </div>
+                    <div class="col special-margins">
+                        <p class="mt-3">{{ getName(i) }}</p>
+                    </div>
+                    {% if isTeacher %}
+                    {% set url = "/usergrades/" + classID|string + "/" + i|string %}
+                    <a href={{url}}> Grades </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- copy tab -->
+    <div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="contract-tab">
+        <div class="row mr-3 ml-3 mt-2">
+            <div class="col mt-2 text-center">
+                <button id="clipBtn" class="btn btn-secondary" data-clipboard-text="{{ inviteCode }}">
+                    Copy code ({{ inviteCode }})
+                </button>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div id="alertTip" class="alert alert-success" style="display: none;">Copied to clipboard</div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+    </div>
+</div>
 
 <br>
 <br>

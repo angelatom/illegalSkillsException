@@ -247,4 +247,10 @@ angelaT -- 2019-01-15 18:29
 linK -- 2019-01-15 9:39
 --------------------------------------------------------------
 - Added simple text editor
+
+aaronL -- 2019-01-15 21:34
+--------------------------------------------------------------
+- learned and used flexbox to make elements in class.html
+  responsive. Added dropdown to view submissions, and made
+  appropriate posts depending if you're a student or a teacher
 ==============================================================

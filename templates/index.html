@@ -72,7 +72,7 @@ P#02 -- Final Project
 
                         <div class="card-body">
                             <h5 class="card-title">Course Description</h5>
-                            <p class="card-text">{{j[2]}}</p>
+                            <p class="card-text">{{ j[2] | safe }}</p>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,22 @@ P#02 -- Final Project
                             </li>
                         </ul>
 
-                        <textarea class="mr-2 ml-2" name="desc" cols="40" rows="4" placeholder="class description" required></textarea>
+                        <div class = "container">
+                          <div class="card cardOut">
+                              <div class="card-header pt-1 pb-1 pl-2">
+                                  <div class = "row">
+                                    <div class = "col">
+                                      Class Description
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="card-body" id="textEditor" contenteditable="true">
+                                  <p class="card-text" id="textEditorInput"><br></p>
+                              </div>
+                          </div>
+                        </div>
+                        <input type="hidden" id="hiddenInput" name="desc" value="">
+
                         <br>
                         <input type="submit" class="btn btn-primary mt-3">
                     </form>
@@ -168,6 +183,7 @@ P#02 -- Final Project
     </div>
 </div>
 
+<script src="../static/textEditor.js"></script>
 <script src="../static/index.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>

@@ -358,8 +358,13 @@ def deleteClass(classID):
 
     db,c = getDBCursor()
     c.execute("DELETE FROM classes WHERE classID = ?", (classID,))
-    c.execute("DELETE FROM roster WHERE classID=?", (classID,))
-    c.execute("DELETE FROM weights where classID=?", (classID,))
+    c.execute("DELETE FROM roster WHERE classID = ?", (classID,))
+    c.execute("DELETE FROM weights WHERE classID = ?", (classID,))
+    c.execute("SELECT postID FROM posts WHERE classID = ?" (classID,))
+    postids = c.fetchall()
+    for i in postids:
+        c.execute("DELETE FROM files WHERE postID = ?", (classID,))
+    c.execute("DELETE FROM posts WHERE classID = ?", (classID,))
     closeDB(db)
 
 def editPost(postID, postBody):
@@ -371,13 +376,16 @@ def editPost(postID, postBody):
     c.execute("UPDATE posts SET postBody = ? WHERE postID = ?", (postBody, postID,))
     closeDB(db)
 
-def editClass(classID, className, desc):
+def editClass(classID, className, desc, weights):
 
     '''This function edits an existing class.
     '''
 
     db,c = getDBCursor()
     c.execute("UPDATE classes SET className = ?, desc = ? WHERE classID = ?", (className, desc, classID,))
+    c.execute("DELETE FROM weights WHERE classID = ?", (classID,))
+    for i in weights: #Adds weights
+        c.execute("INSERT INTO weights VALUES(?,?,?)", (classID, i[0], i[1]))
     closeDB(db)
 
 def isTeacher(userID, classID):

@@ -72,6 +72,9 @@
         <li class="nav-item">
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#clip" role="tab" aria-controls="clip" aria-selected="false">Invite Code</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit" aria-selected="false">Edit Class Info</a>
+        </li>
         {% endif %}
     </ul>
 
@@ -192,7 +195,7 @@
                                     <div class="fam mt-auto">You</div>
                                     <div class="text-secondary mb-auto">{{ i[2] }}</div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <!-- post content -->
@@ -315,6 +318,46 @@
             </div>
 
         </div>
+
+        <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="row mr-3 ml-3 mt-2">
+                <div class="col mt-2 text-center">
+                  {% set url = "/editclass/" + classID|string %}
+                    <form action={{url}} method="POST">
+                        <input type="text" name="classname" placeholder="Class Name" value ={{className}} required>
+                        <h2 id="navHeader4" class="mt-3 mb-4">Enter class weights</h2>
+                        <button id="addweight" type="button" class="btn btn-primary loginBtn">Add weight</button><br>
+                        <button id="removeweight" type="button" class="btn btn-primary mt-1 mb-2 loginBtn">Delete weight</button>
+                        <ul id="weightlist">
+                          {% for i in weights %}
+                            <li>
+                                <input type="text" name="weightnames" placeholder="weight name" value={{i[0]}}>
+                                <input type="number" name="weightnums" placeholder="weight percent" value={{i[1]}}>
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class = "container">
+                          <div class="card cardOut">
+                              <div class="card-header pt-1 pb-1 pl-2">
+                                  <div class = "row">
+                                    <div class = "col">
+                                      Class Description
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="card-body" id="textEditor" contenteditable="true">{{desc|safe}}</div>
+                          </div>
+                        </div>
+                        <input type="hidden" id="hiddenInput" name="desc" value="">
+
+                        <br>
+                        <input type="submit" class="btn btn-primary mt-3">
+                    </form>
+                </div>
+            </div>
+
+        </div>
         {% endif %}
     </div>
 
@@ -378,6 +421,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="../static/clipboard.js-master/dist/clipboard.min.js"></script>
     <script src="../static/class.js"></script>
+    <script src="../static/index.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
     {% endblock %}

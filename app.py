@@ -197,7 +197,7 @@ def classpage(classid):
 		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
 		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName,
 		isTeacher = isTeacher, classID = classid, posts = posts[::-1],
-		getPostFiles = db.getPostFiles, desc = classInfo[3])
+		getPostFiles = db.getPostFiles, desc = classInfo[4])
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):
@@ -352,6 +352,23 @@ def userGrades(classID, userID):
 	name = db.getUserName(userID)
 	grades = db.getUserGrades(classID, userID)
 	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name, grades = grades)
+
+@app.route('/editclass/<classID>', methods=["POST"])
+def editClass(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
+	classname = flask.request.form['classname']
+	weightnames = flask.request.form.getlist('weightnames')
+	weightnums = flask.request.form.getlist('weightnums')
+	desc = flask.request.form['desc']
+	weightList = []
+	for i in range(len(weightnames)):
+		toAppend = [weightnames[i],weightnums[i]]
+		weightList.append(toAppend)
+	db.editClass(classID, classname, desc, weightList)
+	return flask.redirect('/class/' + str(classID))
 
 @app.route('/quotes')
 def quote():

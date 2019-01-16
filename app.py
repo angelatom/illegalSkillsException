@@ -12,10 +12,9 @@ import requests
 import json
 import datetime
 
-# for oauth
-from requests_oauthlib import OAuth2Session
-# for using refresh tokens when there is a token expired error
-from oauthlib.oauth2 import TokenExpiredError
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
 
 from urllib import request, parse
 import sqlite3
@@ -30,16 +29,21 @@ app.secret_key = os.urandom(32)
 with open("keys/client_secret.json") as key:
 	api_keys = json.load(key)
 
+client_secret = "keys/client_secret.json"
 # necessary info (given by google api for auth)
 client_id = api_keys["web"]["client_id"]
-client_secret = api_keys["web"]["client_secret"]
+#client_secret = api_keys["web"]["client_secret"]
 redirect_uri = "http://localhost:5000/oauth2callback"
 auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
 token_url = "https://www.googleapis.com/oauth2/v4/token"
 refresh_url = token_url
 scope = [
-    'https://www.googleapis.com/auth/calendar'
+    'https://www.googleapis.com/auth/calendar',
+	'https://www.googleapis.com/auth/calendar.events'
 ]
+
+API_SERVICE_NAME = 'calendar'
+API_VERSION = 'v3'
 
 # save token in session
 def token_saver(token):
@@ -61,24 +65,18 @@ def index():
 # logged in page
 @app.route('/login')
 def login():
-    #print(quotes.get_random_quote())
-    if "credentials" not in flask.session:
-        return flask.redirect("authorize") # redirect if acess token is not ther
-    try:
-    	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    	entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
-	# for refresh token
-    except TokenExpiredError as e:
-    	token = flask.session["credentials"]
-    	extra = {
-			'client_id': client_id,
-			'client_secret': client_secret,
-		}
-    	calendar = OAuth2Session(client_id, token=token)
-    	flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
-    calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-    entry = calendar.get('https://www.googleapis.com/calendar/v3/users/me/calendarList/primary').json()
+    if 'credentials' not in flask.session:
+        return flask.redirect('authorize')
+
+  # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+      **flask.session['credentials'])
+    calendar = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+    entry = calendar.calendars().get(calendarId='primary').execute()
     #print(entry)
+	# DONT TOUCH
     userID = db.getUserID(entry["id"])
     flask.session["email"] = entry["id"] # add email
     if userID == None: #User is not registered
@@ -100,23 +98,47 @@ def login():
 # authorize (send user to auth url with necessary params)
 @app.route("/authorize")
 def auth():
-    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
-    authorization_url, state = google.authorization_url(auth_base_url,
-    access_type="offline", include_granted_scopes="true") #offline for refresh token, granted scopes to show the user what we have access to
-    flask.session["state"] = state # state validates response to ensure that request/response originated in same browser
-    return flask.redirect(authorization_url) #OAuth provider authorizes user and sends back user to callback URL with auth code and state
+   # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+        client_secret, scopes=scope)
+
+    flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
+
+    authorization_url, state = flow.authorization_url(
+    access_type='offline', include_granted_scopes='true')
+
+    # Store the state so the callback can verify the auth server response.
+    flask.session['state'] = state
+
+    return flask.redirect(authorization_url)
+
+def credentials_to_dict(credentials):
+    return {'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes}
+
 
 # callback url (exchange auth code for access token)
 @app.route("/oauth2callback", methods=["GET"])
-def callback():
-	try:
-		google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=flask.session['state'])
-		token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=flask.request.url)
-		# fetch token
-		flask.session["credentials"] = token # store token
-		return flask.redirect("/login")
-	except:
-		return flask.redirect("/")
+def oauth2callback():
+	state = flask.session['state']
+
+	flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+		client_secret, scopes=scope, state=state)
+	flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
+
+	# Use the authorization server's response to fetch the OAuth 2.0 tokens.
+	authorization_response = flask.request.url
+	flow.fetch_token(authorization_response=authorization_response)
+
+	credentials = flow.credentials
+	flask.session['credentials'] = credentials_to_dict(credentials)
+
+	return flask.redirect("/login")
+
 
 # logout
 @app.route('/clear')
@@ -173,7 +195,7 @@ def processMakeclass():
 	entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars', cal).json()
 	print(entry)
 	#print (entry.request.headers)
-	#return(flask.jsonify(entry))
+	return(flask.jsonify(entry))
 	return flask.redirect("/login")
 
 @app.route('/class/<classid>')

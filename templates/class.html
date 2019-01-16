@@ -58,6 +58,8 @@
             </div>
         </div>
     </div>
+
+    <!-- tab links -->
     <ul class="nav nav-tabs justify-content-center mt-2" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="home" aria-selected="true">Posts</a>
@@ -69,6 +71,8 @@
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#clip" role="tab" aria-controls="clip" aria-selected="false">Invite Code</a>
         </li>
     </ul>
+
+    <!-- tab content -->
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="post-tab">
             {% if isTeacher %}
@@ -80,7 +84,7 @@
             </div>
             {% endif %}
             {% for i in posts %}
-            <div class="row mt-4">
+            <div class="row mt-4 mr-2 ml-2">
                 <div class="col pl-0 pr-0">
                     <div class="card cardOut">
                         <div class="card-header pt-1 pb-1 pl-2">
@@ -104,7 +108,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <!-- remove -->
+                <!-- <div class="card-body">
                     <p class="card-text">
                         {{i[4]}}<br>
                         Due: {{i[3]}} <br>
@@ -130,10 +135,9 @@
                             {% endfor %}
                             {% endif %}
                         </div>
-                        {% endif %}
-
+                        {% endif %} -->
+                        <!-- remove -->
                     </div>
-                </div>
                 {% endfor %}
                 {% else %}
                 {% if posts|length == 0 %}
@@ -145,139 +149,140 @@
                 {% endif %}
                 {% endif %}
             </div>
-            <!-- roster panel -->
-            <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
-                <div class="row mr-1 ml-1">
-                    <div class="col-md-1"></div>
-                    <div class="col">
-                        <h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructors</h2>
-                    </div>
-                    <div class="col-md-1"></div>
+        <!-- roster panel -->
+        <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
+            <div class="row mr-1 ml-1">
+                <div class="col-md-1"></div>
+                <div class="col">
+                    <h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructors</h2>
                 </div>
-                <div class="row mr-1 ml-1">
-                    <div class="col-md-1"></div>
-                    <div class="col ml-4 mr-4">
-                        <div class="row">
-                            <div class="col-sm-1 fit">
-                                <img src="https://api.adorable.io/avatars/31/{{ session['email'] }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
-                            </div>
-                            <div class="col special-margins">
-                                <p class="mt-3">{{ teacherName }}</p>
-                            </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row mr-1 ml-1">
+                <div class="col-md-1"></div>
+                <div class="col ml-4 mr-4">
+                    <div class="row">
+                        <div class="col-sm-1 fit">
+                            <img src="https://api.adorable.io/avatars/31/{{ session['email'] }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
+                        </div>
+                        <div class="col special-margins">
+                            <p class="mt-3">{{ teacherName }}</p>
                         </div>
                     </div>
-                    <div class="col-md-1"></div>
                 </div>
+                <div class="col-md-1"></div>
+            </div>
 
-                <!-- students -->
-                <div class="row mr-1 ml-1">
-                    <div class="col-md-1"></div>
-                    <div class="col">
-                        <h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Classmates</h2>
-                    </div>
-                    <div class="col-md-1"></div>
+            <!-- students -->
+            <div class="row mr-1 ml-1">
+                <div class="col-md-1"></div>
+                <div class="col">
+                    <h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Classmates</h2>
                 </div>
-                {% for i in classRoster %}
-                <div class="row mr-1 ml-1">
-                    <div class="col-md-1"></div>
-                    <div class="col ml-4 mr-4 btmBorder2">
-                        <div class="row">
-                            <div class="col-sm-1 fit">
-                                <img src="https://api.adorable.io/avatars/31/{{ getName(i) }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
-                            </div>
-                            <div class="col special-margins">
-                                <p class="mt-3">{{ getName(i) }}</p>
-                            </div>
-                            {% if isTeacher %}
-                              {% set url = "/usergrades/" + classID|string + "/" + i|string %}
-                              <a href={{url}}> Grades </a>
-                            {% endif %}
+                <div class="col-md-1"></div>
+            </div>
+            {% for i in classRoster %}
+            <div class="row mr-1 ml-1">
+                <div class="col-md-1"></div>
+                <div class="col ml-4 mr-4 btmBorder2">
+                    <div class="row">
+                        <div class="col-sm-1 fit">
+                            <img src="https://api.adorable.io/avatars/31/{{ getName(i) }}" class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
                         </div>
+                        <div class="col special-margins">
+                            <p class="mt-3">{{ getName(i) }}</p>
+                        </div>
+                        {% if isTeacher %}
+                        {% set url = "/usergrades/" + classID|string + "/" + i|string %}
+                        <a href={{url}}> Grades </a>
+                        {% endif %}
                     </div>
-                    <div class="col-md-1"></div>
                 </div>
-                {% endfor %}
+                <div class="col-md-1"></div>
             </div>
-            <div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="contract-tab">
-                <div class="row mr-3 ml-3 mt-2">
-                    <div class="col mt-2 text-center">
-                        <button id="clipBtn" class="btn btn-secondary" data-clipboard-text="{{ inviteCode }}">
-                            Copy code ({{ inviteCode }})
-                        </button>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        <div id="alertTip" class="alert alert-success" style="display: none;">Copied to clipboard</div>
-                    </div>
-                    <div class="col-md-4"></div>
-                </div>
-
-            </div>
+            {% endfor %}
         </div>
 
-    </div>
-    <br>
-    <br>
-    <br>
-    <h1>{{className}}</h1>
-    Taught by {{teacherName}}<br>
-    Invite Code: {{inviteCode}}<br>
-    Weights:<br>
-    <ul>
-        {% for i in weights %}
-        <li>
-            {{i[0]}} : {{i[1]}}
-        </li>
-        {% endfor %}
-    </ul>
-    Roster:<br>
-    <ul>
-        {% for i in classRoster %}
-        <li>
-            {{getName(i)}}
-        </li>
-        {% endfor %}
-    </ul>
-    {% if isTeacher %}
-    {% set url = "/makepost/" + classID|string %}
-    <a href={{url}}> Make a Post </a> <br>
-    {% set url = "/deleteclass/" + classID|string %}
-    <a href={{url}}> Delete this Class </a> <br>
-    {% endif %}
-    Posts:<br>
-    <ul>
-        {% for i in posts %}
-        <li>
-            {{i[4]}} <br>
-            Posted: {{i[2]}} <br>
-            Due: {{i[3]}} <br>
-            {% if i[5] == 1 and not isTeacher %}
-            <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
-                <input type="hidden" name="postID" value="{{i[0]}}">
-                <input type="file" name="file">
-                <input type="submit" value="Upload">
-            </form>
-            {% elif i[5] == 1 %}
-            <button onclick="show{{i[0]}}()">View Submissions</button>
-            <div id="{{i[0]}}">
-                {% set uploads = getPostFiles(i[0]) %}
-                {% if uploads|length == 0 %}
-                No submissions yet.
-                {% else %}
-                {% for i in uploads %}
-                {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
-                {% endfor %}
-                {% endif %}
+        <!-- copy tab -->
+        <div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="contract-tab">
+            <div class="row mr-3 ml-3 mt-2">
+                <div class="col mt-2 text-center">
+                    <button id="clipBtn" class="btn btn-secondary" data-clipboard-text="{{ inviteCode }}">
+                        Copy code ({{ inviteCode }})
+                    </button>
+                </div>
             </div>
+            <div class="row mt-3">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div id="alertTip" class="alert alert-success" style="display: none;">Copied to clipboard</div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+
+        </div>
+    </div>
+
+<br>
+<br>
+<br>
+<h1>{{className}}</h1>
+Taught by {{teacherName}}<br>
+Invite Code: {{inviteCode}}<br>
+Weights:<br>
+<ul>
+    {% for i in weights %}
+    <li>
+        {{i[0]}} : {{i[1]}}
+    </li>
+    {% endfor %}
+</ul>
+Roster:<br>
+<ul>
+    {% for i in classRoster %}
+    <li>
+        {{getName(i)}}
+    </li>
+    {% endfor %}
+</ul>
+{% if isTeacher %}
+{% set url = "/makepost/" + classID|string %}
+<a href={{url}}> Make a Post </a> <br>
+{% set url = "/deleteclass/" + classID|string %}
+<a href={{url}}> Delete this Class </a> <br>
+{% endif %}
+Posts:<br>
+<ul>
+    {% for i in posts %}
+    <li>
+        {{i[4]}} <br>
+        Posted: {{i[2]}} <br>
+        Due: {{i[3]}} <br>
+        {% if i[5] == 1 and not isTeacher %}
+        <form action = "/submitFile" method = "POST" enctype="multipart/form-data">
+            <input type="hidden" name="postID" value="{{i[0]}}">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+        {% elif i[5] == 1 %}
+        <button onclick="show{{i[0]}}()">View Submissions</button>
+        <div id="{{i[0]}}">
+            {% set uploads = getPostFiles(i[0]) %}
+            {% if uploads|length == 0 %}
+            No submissions yet.
+            {% else %}
+            {% for i in uploads %}
+            {{getName(i[1])}} Submitted: {{i[2]}} <a href="/viewFile/{{i[0]}}">View File</a>
+            {% endfor %}
             {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <script src="../static/clipboard.js-master/dist/clipboard.min.js"></script>
-    <script src="../static/class.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
-    {% endblock %}
+        </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="../static/clipboard.js-master/dist/clipboard.min.js"></script>
+<script src="../static/class.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

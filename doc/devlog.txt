@@ -277,9 +277,13 @@ angelaT -- 2019-01-16 16:53
 --------------------------------------------------------------
 - Creates class calendars upon creating class
 
-millarM -- 2019-01-14 22:54
+millarM -- 2019-01-16 18:06
 --------------------------------------------------------------
 - updated dbtools for deleting classes
 - added class edit functionality
 - fixed some misc bugs
+
+millarM -- 2019-01-16 18:12
+--------------------------------------------------------------
+- delete class bug fix
 ==============================================================

@@ -360,7 +360,7 @@ def deleteClass(classID):
     c.execute("DELETE FROM classes WHERE classID = ?", (classID,))
     c.execute("DELETE FROM roster WHERE classID = ?", (classID,))
     c.execute("DELETE FROM weights WHERE classID = ?", (classID,))
-    c.execute("SELECT postID FROM posts WHERE classID = ?" (classID,))
+    c.execute("SELECT postID FROM posts WHERE classID = ?", (classID,))
     postids = c.fetchall()
     for i in postids:
         c.execute("DELETE FROM files WHERE postID = ?", (classID,))

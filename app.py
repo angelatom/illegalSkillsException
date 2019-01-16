@@ -340,8 +340,9 @@ def userGrades(classID, userID):
 		if not db.isTeacher(flask.session['userid'], classID):
 			return flask.redirect('/class/' + str(classID))
 	avg,weightavgs = db.calculateAverage(userID, classID)
-	name  = db.getUserName(userID)
-	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name)
+	name = db.getUserName(userID)
+	grades = db.getUserGrades(classID, userID)
+	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name, grades = grades)
 
 @app.route('/quotes')
 def quote():

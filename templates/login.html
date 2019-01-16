@@ -1,48 +1,48 @@
 {% extends "base.html" %}
 
 
-    {% block title %}
-    Classify | Landing
-    {% endblock %}
+{% block title %}
+Classify | Landing
+{% endblock %}
 
-    {% block navbar %}
-    <nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="containerNav">
-        <div class="container-fluid" id="mainNav">
-            <a id="navHome" class="navbar-brand js-scroll-trigger" href="#page-top">
-                <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
-            </a>
-            <button id="navButton" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-        </button>
-            <!-- <div class="navbar-header">
-                <a id="navHome" class="navbar-brand" href="/">
-                    <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
-                </a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars"></i>
-            </button>
-        </div> -->
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav text-uppercase ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link pl-4 pr-4 other" href="#gbsection">Grades</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link pl-4 pr-4 other js-scroll-trigger" href="#homework">Homework</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link pl-4 pr-4 other" href="#about">About</a>
-                </li>
-                <li class="nav-item">
-                    <a id="create" class="nav-link" href="/login">Login</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+{% block navbar %}
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="containerNav">
+    <div class="container-fluid" id="mainNav">
+        <a id="navHome" class="navbar-brand js-scroll-trigger" href="#page-top">
+            <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
+        </a>
+        <button id="navButton" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+    </button>
+    <!-- <div class="navbar-header">
+    <a id="navHome" class="navbar-brand" href="/">
+    <img id="navImg" src="../static/navLogo.jpeg" alt="" class="img-circle">&nbsp;Classify
+</a>
+<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+Menu
+<i class="fas fa-bars"></i>
+</button>
+</div> -->
+<div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav text-uppercase ml-auto">
+        <li class="nav-item">
+            <a class="nav-link pl-4 pr-4 other anchor-scroll" data-class-to="#gbsection" data-scroll-end="bounce" href="#gbsection">Grades</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link pl-4 pr-4 other js-scroll-trigger" href="#homework">Homework</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link pl-4 pr-4 other" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+            <a id="create" class="nav-link" href="/login">Login</a>
+        </li>
+    </ul>
+</div>
+</div>
 </nav>
 {% endblock %}
 
@@ -113,44 +113,44 @@
     <div class="row mt-2">
         <div class="col-md-4 mt-10 mb-5">
             <p class="mt-2">&#9; Whether you need to email a teacher, create a class, or join a class, Classify's got you covered.
-            By integrating Google's secure authentication service, your information is only used to log in to our systems.</p>
+                By integrating Google's secure authentication service, your information is only used to log in to our systems.</p>
+            </div>
+            <div class="col-md-4 mb-5 text-center">
+                <img src="../static/books.png" alt="stack of books" class="mr-2 ml-2 book">
+            </div>
+            <div class="col-md-4 mt-10 mb-5">
+                <p class="mt-2">With an intuitive and simple to use dashboard, you can see all your current classes as well as classes you're teaching.
+                    Easy file upload and text submission means you'll be able to do your homework the way you want to.</p>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4 mb-5 text-center">
-            <img src="../static/books.png" alt="stack of books" class="mr-2 ml-2 book">
-        </div>
-        <div class="col-md-4 mt-10 mb-5">
-            <p class="mt-2">With an intuitive and simple to use dashboard, you can see all your current classes as well as classes you're teaching.
-            Easy file upload and text submission means you'll be able to do your homework the way you want to.</p>
-        </div>
-    </div>
-</div>
 
-{% endblock %}
-{% block footer%}
-<!-- Footer -->
-<footer class="bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mt-3">
-                <ul class="list-inline quicklinks">
-                    <li class="list-inline-item">
-                        <p class="text-muted">
-                            made with <i class="fa fa-heart"></i> by illegalSkillsException team
-                        </p>
-                    </li>
-                </ul>
+        {% endblock %}
+        {% block footer%}
+        <!-- Footer -->
+        <footer class="bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mt-3">
+                        <ul class="list-inline quicklinks">
+                            <li class="list-inline-item">
+                                <p class="text-muted">
+                                    made with <i class="fa fa-heart"></i> by illegalSkillsException team
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 mt-3">
+                        <ul class="list-inline quicklinks">
+                            <li class="list-inline-item">
+                                <p class="text-muted">
+                                    Copyright &copy; illegalSkillsException
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-4 mt-3">
-                <ul class="list-inline quicklinks">
-                    <li class="list-inline-item">
-                        <p class="text-muted">
-                            Copyright &copy; illegalSkillsException
-                        </p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</footer>
-{% endblock %}
+        </footer>
+        {% endblock %}

@@ -297,4 +297,5 @@ linK -- 2019-01-16 9:36 PM
 - Max file size
 - Bug fixes
 - Added text editor to post creation
+- Added buttons to create a post and delete a class
 ==============================================================

@@ -108,7 +108,7 @@
                         <!-- post content -->
                         <div class="card-body">
                             <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
-                            <p class="card-text">{{ i[4] }}</p>
+                            <p class="card-text">{{ i[4] | safe }}</p>
                         </div>
                         <div class="card-footer text-muted p-1">
                             <div class="d-flex flex-wrap justify-content-between align-content-top">
@@ -165,6 +165,13 @@
 
             </div>
             {% endfor %}
+            <br>
+            <div style='text-align:center'>
+                {% set url = "/makepost/" + classID|string %}
+                <a href="{{ url }}">
+                    <button class="btn btn-primary">Create Post</button>
+                </a>
+            </div>
             {% else %} <!-- if student -->
 
             <!-- if no posts -->
@@ -348,8 +355,25 @@
                         <input type="hidden" id="hiddenInput" name="desc" value="">
 
                         <br>
-                        <input type="submit" class="btn btn-primary mt-3">
+                        <input type="submit" class="btn btn-primary mt-3" value="Update Class">
                     </form>
+                    <br>
+                    <br>
+                    <button class="btn btn-danger" id="deleteClass" onclick="switchButtons()">Delete Class</button>
+                    {% set url = "/deleteclass/" + classID|string %}
+                    <a href={{url}} id="confirmDelete">
+                        <button class="btn btn-danger" id="confirmDelete">Confirm</button>
+                    </a>
+                    <script>
+                        var deleteClass = document.getElementById("deleteClass");
+                        var confirmDelete = document.getElementById("confirmDelete");
+                        confirmDelete.style.display = "none";
+
+                        var switchButtons = function() {
+                            deleteClass.style.display = "none";
+                            confirmDelete.style.display = "block";
+                        }
+                    </script>
                 </div>
             </div>
 

@@ -124,6 +124,14 @@ color: black;
     text-shadow: 2px 2px 8px #2f2f2f;
 }
 
+#navHeader6 {
+    color: #d5d5d5;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: 1000px;
+    font-size: 1.6em;
+    text-shadow: 2px 2px 8px #2f2f2f;
+}
+
 .loginBtn {
     padding-left: 3em;
     padding-right: 3em;
@@ -250,6 +258,15 @@ color: black;
 
 .class-head {
     background-image: url(../static/image.jpg);
+    min-width: 100%;
+    min-height: 200px;
+    height: 270px;
+    background-position: cover;
+    border-radius: 8px;
+}
+
+.grade-head {
+	background-image: url(../static/grades_background.png);
     min-width: 100%;
     min-height: 200px;
     height: 270px;

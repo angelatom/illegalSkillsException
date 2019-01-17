@@ -4,10 +4,11 @@
 <div class="container">
 	<div class="row">
 		<div class="col mt-5 text-center">
-			<h1 class="mt-3">{{ assignment }}</h1>
+			<h1 class="mt-3">Assignment Title: {{ assignment }}</h1>
 		</div>
 	</div>
 	<div class="row">
+		<div class="col-md-2"></div>
 		{% if maxGrade == "" %}
 		<div class="col text-center">
 			<form class="mt-5" action="/submitGrades" method="POST">
@@ -33,6 +34,7 @@
 					{% endfor %}
 				</div>
 				<div class="text-center">
+					Select a weight
 					<select name="weight">
 						{% for i in weights %}
 						<option value={{i[0]}}>{{i[0]}}</option>
@@ -43,7 +45,9 @@
 			</form>
 
 		</div>
+		<div class="col-md-2"></div>
 		{% else %}
+		<div class="col-md-2"></div>
 		<div class="col text-center mt-5">
 			<form class="mt-5" action="/submitGrades" method="POST">
 				<input type="text" name="assignment" value="{{assignment}}" hidden>
@@ -76,9 +80,8 @@
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
 			</form>
-
-
 		</div>
+		<div class="col-md-2"></div>
 		{% endif %}
 
 	</div>

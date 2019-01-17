@@ -195,24 +195,25 @@ def processMakeclass():
 def classpage(classid):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
-	try:
-		if flask.session["new"] == True:
-			flask.session["new"] = False
-			rule = {
-			'scope': {
-				'type': 'user',
-				'value': flask.session["email"],
-			},
-			'role': 'reader'
-			}
-			calID = db.getCalendarID(classid)
-			credentials = google.oauth2.credentials.Credentials(
-			**flask.session['credentials'])
-			service = googleapiclient.discovery.build(
-			API_SERVICE_NAME, API_VERSION, credentials=credentials)
-			created_rule = service.acl().insert(calendarId='primary', body=rule).execute()
-	except:
-		print("is a teacher")
+	if db.isTeacher(flask.session['userid'], classid):
+		emails = db.getUnAdded(classid)
+		if emails != None:
+			for i in emails:
+				rule = {
+				'scope': {
+					'type': 'user',
+					'value': i[0],
+				},
+				'role': 'reader'
+				}
+				calID = db.getCalendarID(classid)
+				credentials = google.oauth2.credentials.Credentials(
+				**flask.session['credentials'])
+				service = googleapiclient.discovery.build(
+				API_SERVICE_NAME, API_VERSION, credentials=credentials)
+				created_rule = service.acl().insert(calendarId='primary', body=rule).execute()
+	else:
+		print("not a teacher")
 	classInfo = db.getClassInfo(classid)
 	classRoster = db.getRoster(classid)
 	isTeacher = (db.getTeacher(classid) == flask.session["userid"])

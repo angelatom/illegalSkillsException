@@ -162,7 +162,7 @@ def acceptInvite(userID, inviteCode):
     c.execute("INSERT INTO roster VALUES (?,?)", (classID, userID,)) #Add user to the class roster
     c.execute("SELECT email FROM users WHERE userID = ?", (userID,))
     email = c.fetchall()
-    c.exceute("INSERT INTO notAdded VALUES (?,?)", (classID, email))
+    c.execute("INSERT INTO notAdded VALUES (?,?)", (classID, email[0][0],))
     closeDB(db)
     return "User enrolled."
 
@@ -486,7 +486,7 @@ def getUnAdded(classID):
         have not been added to a class' calendar
     '''
     db,c = getDBCursor()
-    c.execute("SELECT email FROM unAdded WHERE classID = ?", (classID,))
+    c.execute("SELECT email FROM notAdded WHERE classID = ?", (classID,))
     output = c.fetchall()
     closeDB(db)
     return output

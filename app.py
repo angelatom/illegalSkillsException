@@ -295,7 +295,8 @@ def submitGrades():
 	if not db.isTeacher(flask.session['userid'],inputs[0]):
 		return "User is not the teacher of this class."
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
-	return "Grade update successful."
+	flask.flash("Grades Updated.")
+	return flask.redirect('/class/' + str(inputs[0]))
 
 
 # fix the return to an html page

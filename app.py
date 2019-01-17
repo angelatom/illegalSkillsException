@@ -448,6 +448,16 @@ def editClass(classID):
 def quote():
 	return q.get_random_quote()
 
+@app.route('/assignments/<classID>')
+def assignments(classID):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	if not db.isTeacher(flask.session['userid'], classID):
+		return "User is not the teacher of this class."
+	assignmentList = db.getAssignments(classID)
+	print(assignmentList)
+	return flask.render_template('assignments.html', assignmentList = assignmentList)
+
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls
     app.run(debug = True)

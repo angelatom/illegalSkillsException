@@ -91,6 +91,7 @@
 		{% endif %}
 	</ul>
 
+<<<<<<< HEAD
 	<!-- tab content -->
 	<div class="tab-content" id="myTabContent">
 		<div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="post-tab">
@@ -125,6 +126,43 @@
 						</div>
 						<div class="card-footer text-muted p-1">
 							<div class="d-flex flex-wrap justify-content-between align-content-top">
+=======
+    <!-- tab content -->
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="post-tab">
+            {% if isTeacher %}
+            {% if posts|length == 0 %}
+            <div class="row mt-4">
+                <div class="col mt-3 mr-4 ml-4">
+                    <p style="color: red;">You have no posts, go make one!</p>
+                </div>
+            </div>
+            {% endif %}
+            {% for i in posts %}
+            <div class="row mt-4 mr-2 ml-2">
+                <div class="col pl-0 pr-0">
+                    <div class="card cardOut">
+                        <div class="card-header pt-1 pb-1 pl-2 pr-2">
+                            <!-- use flex -->
+                            <div class="d-flex flex-wrap-reverse">
+                                <div class="p-1 mr-1 order-1">
+                                    <img id="dropMenu2" src="https://api.adorable.io/avatars/48/{{ session['email'] }}" alt="">
+                                </div>
+                                <div class="d-flex flex-column justify-content-between order-2">
+                                    <div class="fam mt-auto">You</div>
+                                    <div class="text-secondary mb-auto">{{ i[2] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- post content -->
+                        <div class="card-body">
+                            <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
+                            <h5 class="card-title">{{i[7]}}</h5>
+                            <p class="card-text">{{ i[4] | safe }}</p>
+                        </div>
+                        <div class="card-footer text-muted p-1">
+                            <div class="d-flex flex-wrap justify-content-between align-content-top">
+>>>>>>> 93b03534635e1cb5cf2228a54464104b51512da1
 
 								<!-- 1st flex item -->
 								{% if i[5] == 1 and not isTeacher %} <!-- if student -->
@@ -203,6 +241,7 @@
 									<div class="text-secondary mb-auto">{{ i[2] }}</div>
 								</div>
 
+<<<<<<< HEAD
 							</div>
 						</div>
 						<!-- post content -->
@@ -213,6 +252,18 @@
 						</div>
 						<div class="card-footer text-muted p-1">
 							<div class="d-flex justify-content-between flex-wrap">
+=======
+                            </div>
+                        </div>
+                        <!-- post content -->
+                        <div class="card-body">
+                            <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
+                            <h5 class="card-title">{{i[7]}}</h5>
+                            <p class="card-text">{{ i[4] | safe }}</p>
+                        </div>
+                        <div class="card-footer text-muted p-1">
+                            <div class="d-flex justify-content-between flex-wrap">
+>>>>>>> 93b03534635e1cb5cf2228a54464104b51512da1
 
 								<!-- 1st flex item -->
 								{% if i[5] == 1 and not isTeacher %} <!-- if student -->

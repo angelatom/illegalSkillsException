@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <br><br><br>
+  Assignments:
+  {% for i in assignmentList %}
+    <br>
+    {{i}} <!--Do whatever you need to in here-->
+  {% endfor %}
+{% endblock %}

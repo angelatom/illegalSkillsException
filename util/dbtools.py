@@ -193,6 +193,18 @@ def changeGrades(classID, gradeList, assignment, maxGrade, weight):
             c.execute("INSERT INTO grades VALUES (?,?,?,?,?,?)", (classID, i[0], assignment, i[1], maxGrade, weight,))
     closeDB(db)
 
+def getAssignments(classID):
+
+    '''This function returns a list of assignments created in a class.
+    '''
+
+    db,c = getDBCursor()
+    output = []
+    for i in c.execute("SELECT DISTINCT assignment FROM grades WHERE classID = ?", (classID,)):
+        output.append(i[0])
+    closeDB(db)
+    return output
+
 def getAssignmentGrades(classID, assignment):
 
     '''This function returns the max grade and current grades of students for

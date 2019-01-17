@@ -175,9 +175,10 @@ def processMakeclass():
 	for i in range(len(weightnames)):
 		toAppend = [weightnames[i],weightnums[i]]
 		weightList.append(toAppend)
-	db.createClass(classname, flask.session["userid"], weightList, desc)
+	classID = db.createClass(classname, flask.session["userid"], weightList, desc)
 	classname = classname + ""
 	cal = {
+	#'id': classname + str(classID) +"@group.calendar.google.com",
     'summary': classname,
     'timeZone': 'America/New_York'
 	}
@@ -186,18 +187,37 @@ def processMakeclass():
 	service = googleapiclient.discovery.build(
       API_SERVICE_NAME, API_VERSION, credentials=credentials)
 	created_calendar = service.calendars().insert(body=cal).execute()
-	WE_NEED_TO_SAVE_THIS = created_calendar['id']
+	calendarID = created_calendar['id']
+	db.addCalendar(calendarID, classID)
 	return flask.redirect("/login")
 
 @app.route('/class/<classid>')
 def classpage(classid):
-    if 'userid' not in flask.session:
-    	return flask.redirect('/')
-    classInfo = db.getClassInfo(classid)
-    classRoster = db.getRoster(classid)
-    isTeacher = (db.getTeacher(classid) == flask.session["userid"])
-    posts = db.getPosts(classid)
-    return flask.render_template("class.html", className = classInfo[0],
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	try:
+		if flask.session["new"] == True:
+			flask.session["new"] = False
+			rule = {
+			'scope': {
+				'type': 'user',
+				'value': flask.session["email"],
+			},
+			'role': 'reader'
+			}
+			calID = db.getCalendarID(classid)
+			credentials = google.oauth2.credentials.Credentials(
+			**flask.session['credentials'])
+			service = googleapiclient.discovery.build(
+			API_SERVICE_NAME, API_VERSION, credentials=credentials)
+			created_rule = service.acl().insert(calendarId='primary', body=rule).execute()
+	except:
+		print("is a teacher")
+	classInfo = db.getClassInfo(classid)
+	classRoster = db.getRoster(classid)
+	isTeacher = (db.getTeacher(classid) == flask.session["userid"])
+	posts = db.getPosts(classid)
+	return flask.render_template("class.html", className = classInfo[0],
 		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
 		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName,
 		isTeacher = isTeacher, classID = classid, posts = posts[::-1],
@@ -209,6 +229,7 @@ def acceptInvite(inviteCode):
 		return flask.redirect('/')
 	result = db.acceptInvite(flask.session['userid'], inviteCode)
 	flask.flash(result)
+	flask.session["new"] = True
 	return flask.redirect('/login')
 
 @app.route('/invite', methods=["POST"])
@@ -314,7 +335,34 @@ def processMakePost(classID):
 	else:
 		submittable = 1
 	due = duedate + " " + duetime
-	db.makePost(classID, due, postbody, submittable)
+	postID = db.makePost(classID, due, postbody, submittable)
+	#starttime = str(db.get_start_time(postID))
+	
+	event = {
+		'summary': "Class Post",
+		'description': flask.request.form['postbody'],
+		'start': {
+			'date': str(datetime.date.today()),
+			#'dateTime': '2019-01-10T09:00:00-07:00',
+			'timeZone': 'America/New_York',
+		},
+		'end': {
+			'date': duedate,
+			#'dateTime': '2019-01-19T17:00:00-07:00',
+			'timeZone': 'America/New_York',
+		}
+		#'start.date': str(datetime.date.today()),
+  		#'end.date': str(duedate),
+	}
+	#json_event = json.loads(event)
+	calID = db.getCalendarID(classID)
+	credentials = google.oauth2.credentials.Credentials(
+      **flask.session['credentials'])
+	service = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+	created_event = service.events().insert(calendarId=calID, body=event).execute()
+	eventID = created_event['id']
+	db.addEvent(eventID, postID)
 	return flask.redirect('/class/' + classID)
 
 # This file must be a txt file
@@ -335,6 +383,12 @@ def deleteClass(classID):
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID):
 		return "User is not the teacher of this class."
+	calID = db.getCalendarID(classID)
+	credentials = google.oauth2.credentials.Credentials(
+      **flask.session['credentials'])
+	service = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+	service.calendars().delete(calendarId=calID).execute()  
 	db.deleteClass(classID)
 	return flask.redirect('/login')
 
@@ -345,6 +399,13 @@ def deletePost(postID):
 	classID = db.getClassID(postID)
 	if not db.isTeacher(flask.session['userid'], classID):
 		return "User is not the teacher of this class."
+	calID = db.getCalendarID(classID)
+	eventID = db.getEventID(postID)
+	credentials = google.oauth2.credentials.Credentials(
+      **flask.session['credentials'])
+	service = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+	service.events().delete(calendarId=calID, eventId=eventID).execute()
 	db.deletePost(postID)
 	return flask.redirect('/class/' + str(classID))
 
@@ -380,37 +441,7 @@ def editClass(classID):
 @app.route('/quotes')
 def quote():
 	return q.get_random_quote()
-'''
-def google_calendar():
-	if 'userid' not in flask.session:
-		return flask.redirect('/')
-	start_time = db.
-	event = {
-		'start': {
-			'dateTime': '2015-05-28T09:00:00-07:00',
-			'timeZone': 'America/Los_Angeles',
-		},
-		'end': {
-			'dateTime': '2015-05-28T17:00:00-07:00',
-			'timeZone': 'America/Los_Angeles',
-		},
-	}
-	try:
-		calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-		entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars/primary/events', event)
-	# for refresh token
-	except TokenExpiredError as e:
-		token = flask.session["credentials"]
-		extra = {
-			'client_id': client_id,
-			'client_secret': client_secret,
-		}
-		calendar = OAuth2Session(client_id, token=token)
-		flask.session['credentials'] = calendar.refresh_token(refresh_url, **extra)
-	calendar = OAuth2Session(client_id, token=flask.session["credentials"])
-	entry = calendar.post('https://www.googleapis.com/calendar/v3/calendars/primary/events', event)
-	return entry
-'''
+
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # can use http urls
     app.run(debug = True)

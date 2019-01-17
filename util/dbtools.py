@@ -8,7 +8,7 @@ def createClass(className, userID, weights, desc):
     '''
 
     db,c = getDBCursor()
-    c.execute("INSERT INTO classes (className, userID, invite, desc) VALUES(?,?,?,?)", (className, userID, 'TEMP', desc,)) #Inserts row into classes table
+    c.execute("INSERT INTO classes (className, userID, invite, desc, calendar) VALUES(?,?,?,?,?)", (className, userID, 'TEMP', desc, 'TEMP')) #Inserts row into classes table
     classID = -1
     for i in c.execute("SELECT classID FROM classes WHERE invite = ? LIMIT 1", ('TEMP',)): #Takes current classID
         classID = i[0]
@@ -259,16 +259,18 @@ def addFile(postID, userID):
 def makePost(classID, dueDate, postBody, submittable):
 
     '''This function creates a post based on teacher input. It creates the
-       postID and submissionDate.
+       postID and submissionDate. 
+       Returns postID
     '''
 
     db,c = getDBCursor()
-    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable) VALUES(?,?,?,?)", (-1, dueDate, postBody, submittable)) #Inserts row into posts table
+    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable, event) VALUES(?,?,?,?,?)", (-1, dueDate, postBody, submittable, 'TEMP')) #Inserts row into posts table
     postID = -1
     for i in c.execute("SELECT ROWID FROM posts WHERE classID = ? LIMIT 1", (-1,)): #Takes current postID
         postID = i[0]
     c.execute("UPDATE posts SET submission = CURRENT_TIMESTAMP, classID = ? WHERE postID = ?", (classID, postID,)) #Adds the submission to the row
     closeDB(db)
+    return postID
 
 def getPosts(classID):
 
@@ -406,8 +408,8 @@ def get_start_time(postID):
     This function returns the start time of the assignment
     '''
     db, c = getDBCursor()
-    output = '2019-01-28T09:00:00-07:00'
-    output = c.execute('SELECT submission FROM posts WHERE postID = ?', (postID))
+    output = c.execute('SELECT submission FROM posts WHERE postID = ?', (postID,))
+    output = output.fetchone()[0]
     return output
 
 def get_end_time(postID):
@@ -415,8 +417,8 @@ def get_end_time(postID):
     This function returns the end time of the assignment
     '''
     db, c = getDBCursor()
-    output = '2019-01-28T09:00:00-07:00'
-    output = c.execute('SELECT duedate FROM posts WHERE postID = ?', (postID))
+    output = c.execute('SELECT duedate FROM posts WHERE postID = ?', (postID,))
+    output = output.fetchone()[0]
     return output
 
 def getUserGrades(classID, userID):
@@ -428,6 +430,36 @@ def getUserGrades(classID, userID):
     c.execute("SELECT * FROM grades WHERE classID = ? AND userID = ?", (classID, userID,))
     output = c.fetchall()
     closeDB(db)
+    return output
+
+def addCalendar(calendarID, classID):
+    '''This function adds the calendar id into the classes table using classID
+    '''
+    db,c = getDBCursor()
+    c.execute('UPDATE classes SET calendar = ? WHERE classID = ?', (calendarID, classID,))
+    closeDB(db)
+
+def getCalendarID(classID):
+    '''This function returns the calendar ID based on the class ID
+    '''
+    db,c = getDBCursor()
+    output = c.execute('SELECT calendar FROM classes WHERE classID = ?', (classID,))
+    output = output.fetchone()[0]
+    return output
+
+def addEvent(eventID, postID):
+    '''This function adds the event id into the posts table using postID
+    '''
+    db,c = getDBCursor()
+    c.execute('UPDATE posts SET event = ? WHERE postID = ?', (eventID, postID,))
+    closeDB(db)
+
+def getEventID(postID):
+    '''This function returns the event ID based on the post ID
+    '''
+    db,c = getDBCursor()
+    output = c.execute('SELECT event FROM posts WHERE postID = ?', (postID,))
+    output = output.fetchone()[0]
     return output
 
 def getDBCursor():

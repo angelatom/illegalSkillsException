@@ -303,4 +303,10 @@ aaronL -- 2019-01-17 00:15
 --------------------------------------------------------------
 - updated class page with flexbox in the header
 - created assignment tab, altered weights/tab
+
+angelaT -- 2019-01-17 2:18
+--------------------------------------------------------------
+- Create and delete class calendars
+- Create and delete events on class calendars based on posts
+- Sharing calendar code does not work 
 ==============================================================

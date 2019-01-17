@@ -45,7 +45,7 @@ box.addEventListener("keydown", function(event) {
 
 submitButton.onclick = function() {
   if (box.innerHTML == null) {
-    hiddenInput.value = "No course description.";
+    hiddenInput.value = "";
   } else {
     var input = box.innerHTML.trim();
     hiddenInput.value = input;

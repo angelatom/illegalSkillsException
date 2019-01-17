@@ -5,12 +5,27 @@
     <br>
     {% set url = "/processmakepost/" + classID|string %}
     <form action={{url}} method="POST">
-        Enter Post:
-        <textarea rows="4" cols="50" name="postbody"></textarea><br>
-        Enter Due Date:
-        <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
-        <input type="time" name="duetime">
-        <input type="checkbox" name="submittable"> File Submission <br>
-          <input type="submit">
+        <div class = "container">
+            <div class="card cardOut">
+                <div class="card-header pt-1 pb-1 pl-2">
+                    <div class = "row">
+                      <div class = "col" style="text-align:center;">
+                        Post
+                      </div>
+                    </div>
+                </div>
+                <div class="card-body" id="textEditor" contenteditable="true"><br></div>
+            </div>
+            <input type="hidden" id="hiddenInput" name="postbody" value="">
+            <div style="text-align:center;">
+                Enter Due Date:<br>
+                <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
+                <input type="time" name="duetime"><br>
+                <input type="checkbox" name="submittable"> File Submission <br>
+                <input type="submit" id="submitButton" class="btn btn-primary mt-3">
+            </div>
+        </div>
       </form>
+      
+      <script src="../static/textEditor.js"></script>
  {% endblock %}

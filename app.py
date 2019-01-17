@@ -303,6 +303,9 @@ def processMakePost(classID):
 	if not db.isTeacher(flask.session['userid'], classID):
 		return "User is not the teacher of this class."
 	postbody = flask.request.form['postbody']
+	postbody = postbody.replace('<br>', ' ') #Replace new lines with a space
+	postbody = postbody.replace('<div>', ' ') #Same as above, used for compatability among browsers
+	postbody = postbody.replace('</div>', '')
 	duedate = flask.request.form['duedate']
 	duetime = flask.request.form['duetime']
 	submittable = flask.request.form.get('submittable')

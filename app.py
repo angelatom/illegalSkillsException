@@ -51,6 +51,7 @@ def token_saver(token):
 
 # for student uploads
 UPLOAD_FOLDER = './data/studentUploads/'
+MAX_CONTENT_LENGTH = 128 * 1028 #Maximum of 128 KB/file
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -167,6 +168,9 @@ def processMakeclass():
 	weightnames = flask.request.form.getlist('weightnames')
 	weightnums = flask.request.form.getlist('weightnums')
 	desc = flask.request.form['desc']
+	desc = desc.replace('<br>', ' ') #Replace new lines with a space
+	desc = desc.replace('<div>', ' ') #Same as above, used for compatability among browsers
+	desc = desc.replace('</div>', '')
 	weightList = []
 	for i in range(len(weightnames)):
 		toAppend = [weightnames[i],weightnums[i]]

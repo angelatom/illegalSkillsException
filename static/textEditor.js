@@ -47,7 +47,7 @@ submitButton.onclick = function() {
   if (box.innerHTML == null) {
     hiddenInput.value = "No course description.";
   } else {
-    var input = box.innerHTML.trim().slice(0,-4);
+    var input = box.innerHTML.trim();
     hiddenInput.value = input;
   }
 };

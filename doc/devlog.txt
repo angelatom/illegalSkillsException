@@ -269,7 +269,7 @@ angelaT -- 2019-01-16 16:06
 - Finished reverting to google libraries
 - Started working on calendar stuff
 
-linK -- 2019-01-16 4:32
+linK -- 2019-01-16 4:32 PM
 --------------------------------------------------------------
 - Updated text editor to override browser hotkeys
 
@@ -290,4 +290,10 @@ millarM -- 2019-01-16 18:12
 aaronL -- 2019-01-16 18:16
 --------------------------------------------------------------
 - updated some class.html
+
+linK -- 2019-01-16 8:16 PM
+--------------------------------------------------------------
+- New line cleanup
+- Max file size
+- Bug fixes
 ==============================================================

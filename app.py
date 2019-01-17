@@ -242,6 +242,12 @@ def invite():
 	flask.flash(result)
 	return flask.redirect(flask.request.referrer)
 
+@app.route('/gradebook/<classid>', methods=["POST"])
+def postgradebook(classid):
+	if 'userid' not in flask.session:
+		return flask.redirect('/')
+	result = flask.request.form['assignment']
+	return flask.redirect('/gradebook/' + classid + "/" + str(result))
 
 @app.route('/gradebook/<classid>/<assignment>')
 def gradebook(classid, assignment):

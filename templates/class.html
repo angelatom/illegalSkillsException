@@ -385,22 +385,13 @@
 		<div class="tab-pane fade" id="creation" role="tabpanel" aria-labelledby="edit-tab">
 			<div class="row mt-5">
 				<div class="col mt-1 text-center">
-					{% set url = "/gradebook/" + classID|string + "/" %}
-					<input id="anch" type="text" class="mt-2" placeholder="Enter Assignment Name">
-					<a id="anchor" href="{{ url }}">
+					{% set url = "/gradebook/" + classID|string %}
+          <form action={{url}} method="POST">
+					<input name="assignment" type="text" class="mt-2" placeholder="Enter Assignment Name">
 						<button id="btnClick" class="btn btn-primary">
 							Create
 						</button>
-					</a>
-					<script>
-						var anchor = document.getElementById("anch").value;
-						console.log(anchor);
-						btnClick.addEventListener("click", function() {
-							console.log(anch);
-							anchor.href = anchor.href + anchor;
-							console.log(anchor.href);
-						});
-					</script>
+					</form>
 				</div>
 			</div>
 		</div>

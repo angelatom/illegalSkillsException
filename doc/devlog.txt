@@ -298,4 +298,9 @@ linK -- 2019-01-16 9:36 PM
 - Bug fixes
 - Added text editor to post creation
 - Added buttons to create a post and delete a class
+
+aaronL -- 2019-01-17 00:15
+--------------------------------------------------------------
+- updated class page with flexbox in the header
+- created assignment tab, altered weights/tab
 ==============================================================

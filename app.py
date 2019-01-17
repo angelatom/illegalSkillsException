@@ -317,9 +317,9 @@ def submitFile():
 			filename = db.addFile(flask.request.form['postID'], flask.session['userid'])
 			filename += '.txt' #Makes all files have a .txt extension
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return "File submission successful."
+			return flask.redirect('/class/' + str(inputs[0]))
 	else:
-		return "User is not enrolled in this class."
+		return flask.redirect('/login')
 
 @app.route('/makepost/<classID>')
 def makePost(classID):

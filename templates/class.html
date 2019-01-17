@@ -329,18 +329,6 @@
 					{% set url = "/editclass/" + classID|string %}
 					<form action={{url}} method="POST">
 						<input type="text" name="classname" placeholder="Class Name" value ={{className}} required>
-						<h2 id="navHeader4" class="mt-3 mb-4">Enter class weights</h2>
-						<button id="addweight" type="button" class="btn btn-primary loginBtn">Add weight</button><br>
-						<button id="removeweight" type="button" class="btn btn-primary mt-1 mb-2 loginBtn">Delete weight</button>
-						<ul id="weightlist">
-							{% for i in weights %}
-							<li style="list-style-type: none;">
-								<input type="text" name="weightnames" placeholder="weight name: {{ i[0] }}">
-								<input type="number" class="mt-1" name="weightnums" placeholder="weight percent: {{ i[1] }}">
-							</li>
-							{% endfor %}
-						</ul>
-
 						<div class ="container mt-2">
 							<div class="card cardOut mt-5">
 								<div class="card-header pt-1 pb-1 pl-2">

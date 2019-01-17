@@ -452,14 +452,8 @@ def editClass(classID):
 		flask.flash("User is not the teacher of this class.")
 		return flask.redirect(flask.request.referrer)
 	classname = flask.request.form['classname']
-	weightnames = flask.request.form.getlist('weightnames')
-	weightnums = flask.request.form.getlist('weightnums')
 	desc = flask.request.form['desc']
-	weightList = []
-	for i in range(len(weightnames)):
-		toAppend = [weightnames[i],weightnums[i]]
-		weightList.append(toAppend)
-	db.editClass(classID, classname, desc, weightList)
+	db.editClass(classID, classname, desc)
 	return flask.redirect('/class/' + str(classID))
 
 @app.route('/quotes')

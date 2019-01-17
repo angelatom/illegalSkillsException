@@ -199,6 +199,7 @@ def classpage(classid):
 		emails = db.getUnAdded(classid)
 		if emails != None:
 			for i in emails:
+				print(i[0])
 				rule = {
 				'scope': {
 					'type': 'user',
@@ -211,7 +212,7 @@ def classpage(classid):
 				**flask.session['credentials'])
 				service = googleapiclient.discovery.build(
 				API_SERVICE_NAME, API_VERSION, credentials=credentials)
-				created_rule = service.acl().insert(calendarId='primary', body=rule).execute()
+				created_rule = service.acl().insert(calendarId=calID, body=rule).execute()
 	else:
 		print("not a teacher")
 	classInfo = db.getClassInfo(classid)

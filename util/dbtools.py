@@ -160,6 +160,9 @@ def acceptInvite(userID, inviteCode):
         closeDB(db)
         return "User already enrolled."
     c.execute("INSERT INTO roster VALUES (?,?)", (classID, userID,)) #Add user to the class roster
+    c.execute("SELECT email FROM users WHERE userID = ?", (userID,))
+    email = c.fetchall()
+    c.exceute("INSERT INTO notAdded VALUES (?,?)", (classID, email))
     closeDB(db)
     return "User enrolled."
 

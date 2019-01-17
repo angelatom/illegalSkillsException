@@ -248,7 +248,8 @@ def gradebook(classid, assignment):
 		return flask.redirect('/')
 	classInfo = db.getClassInfo(classid)
 	if not db.isTeacher(flask.session['userid'], classid):
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	classRoster = db.getRoster(classid)
 	maxGrade,gradeDict = db.getAssignmentGrades(classid, assignment)
 	return flask.render_template("gradebook.html", className = classInfo[0],
@@ -280,7 +281,8 @@ def submitGrades():
 		inputs[2] = flask.request.form['assignment']
 		inputs[3] = int(flask.request.form['maxGrade'])
 	except:
-		return "Invalid input(s)."
+		flask.flash("Invalid input(s).")
+		return flask.redirect(flask.request.referrer)
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'],inputs[0]):
@@ -297,10 +299,12 @@ def submitFile():
 	classID = db.getClassID(flask.request.form['postID']) #Will cause a 413 error if the file is too large, in which case flask will cut off the client from the server
 	if db.isEnrolled(flask.session['userid'], classID):
 		if 'file' not in flask.request.files:
-			return "No file submitted."
+			flask.flash("No file submitted.")
+			return flask.redirect(flask.request.referrer)
 		file = flask.request.files['file']
 		if file.filename == '':
-			return "No file submitted."
+			flask.flash("No file submitted.")
+			return flask.redirect(flask.request.referrer)
 		if file:
 			filename = db.addFile(flask.request.form['postID'], flask.session['userid'])
 			filename += '.txt' #Makes all files have a .txt extension
@@ -314,7 +318,8 @@ def makePost(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID): # block students accessing teacher pages
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	date = str(datetime.date.today())
 	return flask.render_template("makepost.html", date=date, classID=classID)
 
@@ -323,7 +328,8 @@ def processMakePost(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID):
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	postTitle = flask.request.form['postTitle']
 	postbody = flask.request.form['postbody']
 	postbody = postbody.replace('<br>', ' ') #Replace new lines with a space
@@ -389,7 +395,8 @@ def deleteClass(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID):
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	calID = db.getCalendarID(classID)
 	credentials = google.oauth2.credentials.Credentials(
       **flask.session['credentials'])
@@ -405,7 +412,8 @@ def deletePost(postID):
 		return flask.redirect('/')
 	classID = db.getClassID(postID)
 	if not db.isTeacher(flask.session['userid'], classID):
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	calID = db.getCalendarID(classID)
 	eventID = db.getEventID(postID)
 	credentials = google.oauth2.credentials.Credentials(
@@ -433,7 +441,8 @@ def editClass(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID):
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	classname = flask.request.form['classname']
 	weightnames = flask.request.form.getlist('weightnames')
 	weightnums = flask.request.form.getlist('weightnums')
@@ -454,7 +463,8 @@ def assignments(classID):
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID):
-		return "User is not the teacher of this class."
+		flask.flash("User is not the teacher of this class.")
+		return flask.redirect(flask.request.referrer)
 	assignmentList = db.getAssignments(classID)
 	print(assignmentList)
 	return flask.render_template('assignments.html', assignmentList = assignmentList)

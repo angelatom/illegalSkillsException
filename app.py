@@ -54,7 +54,7 @@ UPLOAD_FOLDER = './data/studentUploads/'
 MAX_CONTENT_LENGTH = 128 * 1028 #Maximum of 128 KB/file
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 
 
 # login page
@@ -272,7 +272,7 @@ def submitGrades():
 def submitFile():
 	if 'userid' not in flask.session:
 		return flask.redirect('/')
-	classID = db.getClassID(flask.request.form['postID'])
+	classID = db.getClassID(flask.request.form['postID']) #Will cause a 413 error if the file is too large, in which case flask will cut off the client from the server
 	if db.isEnrolled(flask.session['userid'], classID):
 		if 'file' not in flask.request.files:
 			return "No file submitted."

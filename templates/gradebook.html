@@ -3,8 +3,13 @@
 {% block content %}
 <div class="container">
 	<div class="row">
-		{% if maxGrade == "" %}
 		<div class="col mt-5 text-center">
+			<h1 class="mt-3">{{ assignment }}</h1>
+		</div>
+	</div>
+	<div class="row">
+		{% if maxGrade == "" %}
+		<div class="col text-center">
 			<form class="mt-5" action="/submitGrades" method="POST">
 				<input type="text" name="assignment" value="{{assignment}}" hidden>
 				<input type="text" name="classID" value="{{classID}}" hidden>
@@ -75,8 +80,7 @@
 
 		</div>
 		{% endif %}
-		<h1>{{className}}</h1>
-		Assignment: {{assignment}}
+
 	</div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>

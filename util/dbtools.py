@@ -422,6 +422,7 @@ def get_start_time(postID):
     db, c = getDBCursor()
     output = c.execute('SELECT submission FROM posts WHERE postID = ?', (postID,))
     output = output.fetchone()[0]
+    closeDB(db)
     return output
 
 def get_end_time(postID):
@@ -431,6 +432,7 @@ def get_end_time(postID):
     db, c = getDBCursor()
     output = c.execute('SELECT duedate FROM posts WHERE postID = ?', (postID,))
     output = output.fetchone()[0]
+    closeDB(db)
     return output
 
 def getUserGrades(classID, userID):
@@ -457,6 +459,7 @@ def getCalendarID(classID):
     db,c = getDBCursor()
     output = c.execute('SELECT calendar FROM classes WHERE classID = ?', (classID,))
     output = output.fetchone()[0]
+    closeDB(db)
     return output
 
 def addEvent(eventID, postID):
@@ -472,6 +475,17 @@ def getEventID(postID):
     db,c = getDBCursor()
     output = c.execute('SELECT event FROM posts WHERE postID = ?', (postID,))
     output = output.fetchone()[0]
+    closeDB(db)
+    return output
+
+def getUnAdded(classID):
+    '''This function returns the emails of the students which
+        have not been added to a class' calendar
+    '''
+    db,c = getDBCursor()
+    c.execute("SELECT email FROM unAdded WHERE classID = ?", (classID,))
+    output = c.fetchall()
+    closeDB(db)
     return output
 
 def getDBCursor():

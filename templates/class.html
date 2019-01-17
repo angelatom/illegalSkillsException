@@ -86,7 +86,7 @@
             <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit" aria-selected="false">Class Info</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="create-tab" data-toggle="tab" href="#create" role="tab" aria-controls="create" aria-selected="false">Create Assignment</a>
+            <a class="nav-link" id="create-tab" data-toggle="tab" href="#creation" role="tab" aria-controls="create" aria-selected="false">Create Assignment</a>
         </li>
         {% endif %}
     </ul>
@@ -319,7 +319,7 @@
 
         {% if isTeacher %}
         <!-- copy tab -->
-        <div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="contract-tab">
+        <div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="copy-tab">
             <div class="row mr-3 ml-3 mt-2">
                 <div class="col mt-2 text-center">
                     <button id="clipBtn" class="btn btn-secondary" data-clipboard-text="{{ inviteCode }}">
@@ -397,11 +397,14 @@
         <!-- end edit class info tab -->
 
         <!-- create assignment tab -->
-        <div class="tab-content" id="myTabContent">
-            <div class="row mt-3">
-                
-            </div>
-        </div>
+		<div class="tab-pane fade" id="creation" role="tabpanel" aria-labelledby="edit-tab">
+			<div class="row mt-5">
+				<div class="col mt-1 text-center">
+					{% set url = "/gradebook/" + classID|string + "/" + i|string %}
+					<form action="/"></form>
+				</div>
+			</div>
+		</div>
         <!-- end of assignment tab -->
     </div>
     </div>

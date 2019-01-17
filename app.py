@@ -334,7 +334,7 @@ def processMakePost(classID):
 	submittable = flask.request.form.get('submittable')
 	if 'setDueDate' in flask.request.form:
 		dueCheck = True
-	if duecheck: #Will insert a due date if the checkbox is checked
+	if dueCheck: #Will insert a due date if the checkbox is checked
 		duedate = flask.request.form['duedate']
 	if submittable == None:
 		submittable = 0

@@ -393,16 +393,13 @@ def editPost(postID, postBody):
     c.execute("UPDATE posts SET postBody = ? WHERE postID = ?", (postBody, postID,))
     closeDB(db)
 
-def editClass(classID, className, desc, weights):
+def editClass(classID, className, desc):
 
     '''This function edits an existing class.
     '''
 
     db,c = getDBCursor()
     c.execute("UPDATE classes SET className = ?, desc = ? WHERE classID = ?", (className, desc, classID,))
-    c.execute("DELETE FROM weights WHERE classID = ?", (classID,))
-    for i in weights: #Adds weights
-        c.execute("INSERT INTO weights VALUES(?,?,?)", (classID, i[0], i[1]))
     closeDB(db)
 
 def isTeacher(userID, classID):

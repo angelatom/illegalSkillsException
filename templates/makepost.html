@@ -6,26 +6,46 @@
     {% set url = "/processmakepost/" + classID|string %}
     <form action={{url}} method="POST">
         <div class = "container">
+            <input type="text" class="form-control" name="postTitle" placeholder="Post Title">
+            <br>
             <div class="card cardOut">
                 <div class="card-header pt-1 pb-1 pl-2">
                     <div class = "row">
-                      <div class = "col" style="text-align:center;">
-                        Post
-                      </div>
+                        <div class = "col" style="text-align:center;">
+                            Post
+                        </div>
                     </div>
                 </div>
                 <div class="card-body" id="textEditor" contenteditable="true"><br></div>
             </div>
             <input type="hidden" id="hiddenInput" name="postbody" value="">
             <div style="text-align:center;">
-                Enter Due Date:<br>
-                <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
-                <input type="time" name="duetime"><br>
+                Due Date <input id="duecheck" type="checkbox" name="setDueDate">
+                <div id="due">
+                    Enter Due Date:<br>
+                    <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
+                    <input type="time" name="duetime"><br>
+                </div>
+                <script>
+                    var check = document.getElementById("duecheck");
+                    var dueInput = document.getElementById("due");
+                    dueInput.style.display = "none";
+
+                    var toggleDue =  function() {
+                      if (dueInput.style.display == "none") {
+                        dueInput.style.display = "block";
+                      } else {
+                        dueInput.style.display = "none";
+                      }
+                    }
+
+                    check.addEventListener('change', toggleDue);
+                </script><br>
                 <input type="checkbox" name="submittable"> File Submission <br>
                 <input type="submit" id="submitButton" class="btn btn-primary mt-3">
             </div>
         </div>
       </form>
-      
+
       <script src="../static/textEditor.js"></script>
  {% endblock %}

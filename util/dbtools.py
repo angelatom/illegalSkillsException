@@ -256,15 +256,15 @@ def addFile(postID, userID):
     closeDB(db)
     return filename
 
-def makePost(classID, dueDate, postBody, submittable):
+def makePost(classID, dueDate, postBody, submittable, postTitle):
 
     '''This function creates a post based on teacher input. It creates the
-       postID and submissionDate. 
+       postID and submissionDate.
        Returns postID
     '''
 
     db,c = getDBCursor()
-    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable, event) VALUES(?,?,?,?,?)", (-1, dueDate, postBody, submittable, 'TEMP')) #Inserts row into posts table
+    c.execute("INSERT INTO posts (classID, duedate, postBody, submittable, event, postTitle) VALUES(?,?,?,?,?,?)", (-1, dueDate, postBody, submittable, 'TEMP', postTitle)) #Inserts row into posts table
     postID = -1
     for i in c.execute("SELECT ROWID FROM posts WHERE classID = ? LIMIT 1", (-1,)): #Takes current postID
         postID = i[0]

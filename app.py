@@ -323,21 +323,27 @@ def processMakePost(classID):
 		return flask.redirect('/')
 	if not db.isTeacher(flask.session['userid'], classID):
 		return "User is not the teacher of this class."
+	postTitle = flask.request.form['postTitle']
 	postbody = flask.request.form['postbody']
 	postbody = postbody.replace('<br>', ' ') #Replace new lines with a space
 	postbody = postbody.replace('<div>', ' ') #Same as above, used for compatability among browsers
 	postbody = postbody.replace('</div>', '')
-	duedate = flask.request.form['duedate']
+	duedate = None
+	dueCheck = False
 	duetime = flask.request.form['duetime']
 	submittable = flask.request.form.get('submittable')
+	if 'setDueDate' in flask.request.form:
+		dueCheck = True
+	if duecheck: #Will insert a due date if the checkbox is checked
+		duedate = flask.request.form['duedate']
 	if submittable == None:
 		submittable = 0
 	else:
 		submittable = 1
 	due = duedate + " " + duetime
-	postID = db.makePost(classID, due, postbody, submittable)
+	postID = db.makePost(classID, due, postbody, submittable, postTitle)
 	#starttime = str(db.get_start_time(postID))
-	
+
 	event = {
 		'summary': "Class Post",
 		'description': flask.request.form['postbody'],
@@ -388,7 +394,7 @@ def deleteClass(classID):
       **flask.session['credentials'])
 	service = googleapiclient.discovery.build(
       API_SERVICE_NAME, API_VERSION, credentials=credentials)
-	service.calendars().delete(calendarId=calID).execute()  
+	service.calendars().delete(calendarId=calID).execute()
 	db.deleteClass(classID)
 	return flask.redirect('/login')
 

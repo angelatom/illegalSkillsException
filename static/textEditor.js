@@ -1,3 +1,8 @@
+//This file is used for text editor functionality
+//Ctrl + B: Bold text
+//Ctrl + U: Underline text
+//Ctrl + I: Italicize text
+
 var box, hiddenInput, boxText, submitButton;
 
 var init = function() {

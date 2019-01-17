@@ -491,6 +491,16 @@ def getUnAdded(classID):
     closeDB(db)
     return output
 
+def removeAdded(classID):
+    '''This function removes the users after they have been
+        added to the calendar
+    '''
+
+    db,c = getDBCursor()
+    c.execute("DELETE FROM notAdded WHERE classID = ?", (classID,))
+    closeDB(db)
+
+
 def getDBCursor():
     db = sqlite3.connect("data/classify.db")
     cursor = db.cursor()

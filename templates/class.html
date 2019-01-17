@@ -121,6 +121,7 @@
                         <!-- post content -->
                         <div class="card-body">
                             <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
+                            <h5 class="card-title">{{i[7]}}</h5>
                             <p class="card-text">{{ i[4] | safe }}</p>
                         </div>
                         <div class="card-footer text-muted p-1">
@@ -214,8 +215,8 @@
                         <!-- post content -->
                         <div class="card-body">
                             <p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i[3] }}</p>
-                            <h5 class="card-title">Description</h5>
-                            <p class="card-text">{{ i[4] }}</p>
+                            <h5 class="card-title">{{i[7]}}</h5>
+                            <p class="card-text">{{ i[4] | safe }}</p>
                         </div>
                         <div class="card-footer text-muted p-1">
                             <div class="d-flex justify-content-between flex-wrap">

@@ -35,19 +35,9 @@
 {% endblock %}
 
 {%block content%}
-
-<!-- temp -->
-{% if isTeacher %}
-{% set url = "/makepost/" + classID|string %}
-<a href={{url}}> Make a Post </a> <br>
-{% set url = "/deleteclass/" + classID|string %}
-<a href={{url}}> Delete this Class </a> <br>
-{% endif %}
-<!-- remove -->
-
 <div class="container">
 	<!-- heading image -->
-	<div class="d-flex flex-wrap class-head mt-4 justify-content-between">
+	<div class="d-flex flex-wrap class-head mt-4 justify-content-between mt-5">
 		<div class="p-1 mr-auto">
 			<h2 id="navHeader3" class="ml-3 mt-2"><b>{{ className }}</b></h2>
 		</div>

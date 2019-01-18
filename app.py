@@ -367,7 +367,7 @@ def processMakePost(classID):
 	#starttime = str(db.get_start_time(postID))
 	if dueCheck:
 		event = {
-			'summary': "Class Post",
+			'summary': postTitle,
 			'description': flask.request.form['postbody'],
 			'start': {
 				'date': str(datetime.date.today()),

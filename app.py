@@ -93,6 +93,7 @@ def login():
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
     #name = calendar.get("")
     #return flask.redirect("index.html")
+    #quote = q.get_random_quote()
     return flask.render_template("index.html", name = name, classnames = classNamesT,
 		classids = classIDsT, enrolleds = userInfo[1], teachings = userInfo[2])
 
@@ -466,9 +467,6 @@ def editClass(classID):
 	flask.flash("Class updated")
 	return flask.redirect('/class/' + str(classID))
 
-@app.route('/quotes')
-def quote():
-	return q.get_random_quote()
 
 @app.route('/assignments/<classID>')
 def assignments(classID):

@@ -320,7 +320,9 @@ def submitFile():
 			filename = db.addFile(flask.request.form['postID'], flask.session['userid'])
 			filename += '.txt' #Makes all files have a .txt extension
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return flask.redirect('/class/' + classID)
+			flask.session.pop('_flashes', None)
+			flask.flash("File uploaded.")
+			return flask.redirect('/class/' + str(classID))
 	else:
 		return flask.redirect('/login')
 

@@ -93,6 +93,7 @@ def login():
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
     #name = calendar.get("")
     #return flask.redirect("index.html")
+    #quote = q.get_random_quote()
     return flask.render_template("index.html", name = name, classnames = classNamesT,
 		classids = classIDsT, enrolleds = userInfo[1], teachings = userInfo[2])
 
@@ -289,7 +290,7 @@ def submitGrades():
 		inputs[2] = flask.request.form['assignment']
 		inputs[3] = int(flask.request.form['maxGrade'])
 	except:
-		session.pop('_flashes', None)
+		flask.session.pop('_flashes', None)
 		flask.flash("Invalid input(s).")
 		return flask.redirect(flask.request.referrer)
 	if 'userid' not in flask.session:
@@ -297,7 +298,7 @@ def submitGrades():
 	if not db.isTeacher(flask.session['userid'],inputs[0]):
 		return "User is not the teacher of this class."
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
-	session.pop('_flashes', None)
+	flask.session.pop('_flashes', None)
 	flask.flash("Grades Updated.")
 	return flask.redirect('/class/' + str(inputs[0]))
 
@@ -367,7 +368,7 @@ def processMakePost(classID):
 	#starttime = str(db.get_start_time(postID))
 	if dueCheck:
 		event = {
-			'summary': "Class Post",
+			'summary': postTitle,
 			'description': flask.request.form['postbody'],
 			'start': {
 				'date': str(datetime.date.today()),
@@ -465,11 +466,10 @@ def editClass(classID):
 	classname = flask.request.form['classname']
 	desc = flask.request.form['desc']
 	db.editClass(classID, classname, desc)
+	flask.session.pop('_flashes', None)
+	flask.flash("Class updated")
 	return flask.redirect('/class/' + str(classID))
 
-@app.route('/quotes')
-def quote():
-	return q.get_random_quote()
 
 @app.route('/assignments/<classID>')
 def assignments(classID):

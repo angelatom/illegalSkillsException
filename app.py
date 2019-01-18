@@ -215,6 +215,7 @@ def classpage(classid):
 				created_rule = service.acl().insert(calendarId=calID, body=rule).execute()
 	else:
 		print("not a teacher")
+	calID = db.getCalendarID(classid)
 	classInfo = db.getClassInfo(classid)
 	classRoster = db.getRoster(classid)
 	isTeacher = (db.getTeacher(classid) == flask.session["userid"])
@@ -223,7 +224,7 @@ def classpage(classid):
 		teacherName = db.getUserName(classInfo[1]), inviteCode = classInfo[2],
 		weights = classInfo[3], classRoster = classRoster, getName = db.getUserName,
 		isTeacher = isTeacher, classID = classid, posts = posts[::-1],
-		getPostFiles = db.getPostFiles, desc = classInfo[4])
+		getPostFiles = db.getPostFiles, desc = classInfo[4], calendarID = calID)
 
 @app.route('/invite/<inviteCode>')
 def acceptInvite(inviteCode):

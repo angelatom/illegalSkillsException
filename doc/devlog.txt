@@ -338,4 +338,10 @@ angelaT -- 2019-01-17 19:19
 --------------------------------------------------------------
 - Finished google calendar
 - post title for events
+
+aaronL -- 2019-01-17 19:13
+--------------------------------------------------------------
+- added and fixed calendar tab for everyone
+- alot of fixes such as navbar/margin/paddings
+- added quotes
 ==============================================================

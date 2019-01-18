@@ -261,6 +261,7 @@ def gradebook(classid, assignment):
 		return flask.redirect(flask.request.referrer)
 	classRoster = db.getRoster(classid)
 	maxGrade,gradeDict = db.getAssignmentGrades(classid, assignment)
+	print(gradeDict)
 	return flask.render_template("gradebook.html", className = classInfo[0],
 		assignment = assignment, roster = classRoster, gradeDict = gradeDict,
 		getName = db.getUserName, classID = classid, maxGrade = maxGrade,
@@ -276,6 +277,8 @@ def submitGrades():
 		inputs[0] = flask.request.form['classID']
 		studentIDs = flask.request.form.getlist('studentID')
 		studentGrades = flask.request.form.getlist('grade')
+		print(studentIDs)
+		print(studentGrades)
 		inputs[4] = flask.request.form['weight']
 		gradesList = []
 		for i in range(len(studentIDs)):
@@ -284,7 +287,7 @@ def submitGrades():
 				toAppend[1] = int(studentGrades[i])
 			except:
 				continue
-			toAppend[0] = studentIDs[0]
+			toAppend[0] = studentIDs[i]
 			gradesList.append(toAppend)
 		inputs[1] = gradesList
 		inputs[2] = flask.request.form['assignment']

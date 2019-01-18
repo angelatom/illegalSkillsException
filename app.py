@@ -442,7 +442,8 @@ def userGrades(classID, userID):
 	avg,weightavgs = db.calculateAverage(userID, classID)
 	name = db.getUserName(userID)
 	grades = db.getUserGrades(classID, userID)
-	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name, grades = grades)
+	isTeacher = (db.getTeacher(classID) == flask.session["userid"])
+	return flask.render_template('usergrades.html', avg = avg, weightavgs = weightavgs, name = name, grades = grades, classID = classID, isTeacher = isTeacher)
 
 @app.route('/editclass/<classID>', methods=["POST"])
 def editClass(classID):

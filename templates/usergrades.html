@@ -43,10 +43,7 @@
 		</div>
 		<div class="d-flex flex-column mt-2 justify-content-between">
 			<div class="ml-auto mr-3 p-1">
-				{% if isTeacher %}
-				{% set url = "/makepost/" + classID|string %}
-				<a href="{{ url }}"><button class="btn btn-success">New Post</button></a>
-				{% endif %}
+				
 			</div>
 			<div class="p-1 mr-2">
 				<h4 id="navHeader6">Overall Average: <b style="color: #e32c2c;">{{ avg }}</b></h4>
@@ -99,7 +96,10 @@
 					{{i[2]}} : {{i[3]}} / {{i[4]}}
 				</div>
 				<div class="p-1">
-					<a href="sdf">sdf</a>
+					{% if isTeacher %}
+					{% set url = "/gradebook/" + classID|string + "/" + i[2] %}
+					<a href="{{ url }}">Edit</a>
+					{% endif %}
 				</div>
 			</div>
 		</div>

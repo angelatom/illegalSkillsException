@@ -348,45 +348,47 @@ def processMakePost(classID):
 	postbody = postbody.replace('</div>', '')
 	duedate = None
 	dueCheck = False
-	duetime = flask.request.form['duetime']
+	duetime = None
 	submittable = flask.request.form.get('submittable')
+	due = None
 	if 'setDueDate' in flask.request.form:
 		dueCheck = True
 	if dueCheck: #Will insert a due date if the checkbox is checked
 		duedate = flask.request.form['duedate']
+		duetime = flask.request.form['duetime']
+		due = duedate + " " + duetime
 	if submittable == None:
 		submittable = 0
 	else:
 		submittable = 1
-	due = duedate + " " + duetime
 	postID = db.makePost(classID, due, postbody, submittable, postTitle)
 	#starttime = str(db.get_start_time(postID))
-
-	event = {
-		'summary': "Class Post",
-		'description': flask.request.form['postbody'],
-		'start': {
-			'date': str(datetime.date.today()),
-			#'dateTime': '2019-01-10T09:00:00-07:00',
-			'timeZone': 'America/New_York',
-		},
-		'end': {
-			'date': duedate,
-			#'dateTime': '2019-01-19T17:00:00-07:00',
-			'timeZone': 'America/New_York',
+	if dueCheck:
+		event = {
+			'summary': "Class Post",
+			'description': flask.request.form['postbody'],
+			'start': {
+				'date': str(datetime.date.today()),
+				#'dateTime': '2019-01-10T09:00:00-07:00',
+				'timeZone': 'America/New_York',
+			},
+			'end': {
+				'date': duedate,
+				#'dateTime': '2019-01-19T17:00:00-07:00',
+				'timeZone': 'America/New_York',
+			}
+			#'start.date': str(datetime.date.today()),
+	  		#'end.date': str(duedate),
 		}
-		#'start.date': str(datetime.date.today()),
-  		#'end.date': str(duedate),
-	}
-	#json_event = json.loads(event)
-	calID = db.getCalendarID(classID)
-	credentials = google.oauth2.credentials.Credentials(
-      **flask.session['credentials'])
-	service = googleapiclient.discovery.build(
-      API_SERVICE_NAME, API_VERSION, credentials=credentials)
-	created_event = service.events().insert(calendarId=calID, body=event).execute()
-	eventID = created_event['id']
-	db.addEvent(eventID, postID)
+		#json_event = json.loads(event)
+		calID = db.getCalendarID(classID)
+		credentials = google.oauth2.credentials.Credentials(
+	      **flask.session['credentials'])
+		service = googleapiclient.discovery.build(
+	      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+		created_event = service.events().insert(calendarId=calID, body=event).execute()
+		eventID = created_event['id']
+		db.addEvent(eventID, postID)
 	return flask.redirect('/class/' + classID)
 
 # This file must be a txt file

@@ -5,6 +5,8 @@
 ## Overview:
 Our website is a combination of Google Classroom elements and JupiterEd. This is basically a student management site/homework assignment site for teachers, and a grade site/homework submission site for students. Teachers will be able to create classes which students can join, and assign homework that students have to hand in either through a typed plain-text response or a file upload. Teachers can view, change, and add grades and notes for every student, and students can see them. Students and teachers can also send/receive messages.    
 
+[Our Video Demo Here](https://www.youtube.com/watch?v=zB6fIYOsqio&feature=youtu.be&fbclid=IwAR2Qth5ai-eYrYSTvHqLf_jPIt-rx66yTC2HqbDljGap__cYupXaofct7uM)
+
 ## Instructions to Run:
 1. Go to root repository and click "Clone or Download"
 2. Copy the ssh/https link and run ```$ git clone <link>```

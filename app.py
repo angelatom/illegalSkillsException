@@ -398,10 +398,13 @@ def processMakePost(classID):
 def viewFile(filename):
 	fileExists = db.fileExists(filename)
 	if fileExists:
-		file = open("./data/studentUploads/" + filename + ".txt","r")
-		output = file.read()
-		file.close()
-		return flask.render_template('viewfile.html', fileContent = output)
+		try:
+			file = open("./data/studentUploads/" + filename + ".txt","r")
+			output = file.read()
+			file.close()
+			return flask.render_template('viewfile.html', fileContent = output)
+		except:
+			return "File could not be displayed. (May not be plain text)"
 	else:
 		return "File does not exist."
 

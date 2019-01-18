@@ -189,7 +189,7 @@ def changeGrades(classID, gradeList, assignment, maxGrade, weight):
     for i in gradeList:
         for j in c.execute("SELECT userID FROM grades WHERE classID = ? AND userID = ? AND assignment = ?", (classID, i[0], assignment,)):
             #Grade already exists, so modify
-            c.execute("UPDATE grades SET grade = ?, maxGrade = ? WHERE classID = ? AND userID = ? AND assignment = ?", (grade, maxGrade, classID, i[0], assignment,))
+            c.execute("UPDATE grades SET grade = ?, maxGrade = ? WHERE classID = ? AND userID = ? AND assignment = ?", (i[1], maxGrade, classID, i[0], assignment,))
             break
         else:
             #Otherwise create rows for grades

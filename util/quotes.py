@@ -11,13 +11,13 @@ def get_random_quote():
     URL = URL_STUB + rand_num
     print(URL)
     r = requests.get(URL, headers={"Authorization": "Token token=" + key,"Content-Type": "application/json"})
-    #print(response)
+    print(r)
     #print(response.content)
     #return response
     #data = response
     #return data
     data = r.json()
-   
+
     return data["body"]
 
 #print(get_random_quote())

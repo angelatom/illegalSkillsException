@@ -93,6 +93,7 @@ def login():
         classIDsE = [i[0] for i in userInfo[1]] #List of class IDs for enrolled classes
     #name = calendar.get("")
     #return flask.redirect("index.html")
+    #quote = q.get_random_quote()
     return flask.render_template("index.html", name = name, classnames = classNamesT,
 		classids = classIDsT, enrolleds = userInfo[1], teachings = userInfo[2])
 
@@ -297,7 +298,7 @@ def submitGrades():
 	if not db.isTeacher(flask.session['userid'],inputs[0]):
 		return "User is not the teacher of this class."
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
-	session.pop('_flashes', None)
+	flask.session.pop('_flashes', None)
 	flask.flash("Grades Updated.")
 	return flask.redirect('/class/' + str(inputs[0]))
 
@@ -464,9 +465,6 @@ def editClass(classID):
 	db.editClass(classID, classname, desc)
 	return flask.redirect('/class/' + str(classID))
 
-@app.route('/quotes')
-def quote():
-	return q.get_random_quote()
 
 @app.route('/assignments/<classID>')
 def assignments(classID):

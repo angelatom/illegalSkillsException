@@ -31,8 +31,13 @@ Our website is a combination of Google Classroom elements and JupiterEd. This is
 ```$ pip install Flask```
 * Jinja2==2.10
 ```$ pip install Jinja2```
-* requests-oauthlib==1.1.0
-```$ pip install requests-oauthlib```
+* google-api-python-client==1.7.7
+```$ pip install google-api-python-client```
+* google-auth==1.6.2
+```$ pip install google-auth```
+* google-auth-httplib2==0.0.3
+```$ pip install google-auth-httplib2```
+
 
 ## API:
 * Google calendar - Used to create events on the calendar based on teacher assignments

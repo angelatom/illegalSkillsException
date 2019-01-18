@@ -289,7 +289,7 @@ def submitGrades():
 		inputs[2] = flask.request.form['assignment']
 		inputs[3] = int(flask.request.form['maxGrade'])
 	except:
-		session.pop('_flashes', None)
+		flask.session.pop('_flashes', None)
 		flask.flash("Invalid input(s).")
 		return flask.redirect(flask.request.referrer)
 	if 'userid' not in flask.session:
@@ -297,7 +297,7 @@ def submitGrades():
 	if not db.isTeacher(flask.session['userid'],inputs[0]):
 		return "User is not the teacher of this class."
 	db.changeGrades(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
-	session.pop('_flashes', None)
+	flask.session.pop('_flashes', None)
 	flask.flash("Grades Updated.")
 	return flask.redirect('/class/' + str(inputs[0]))
 
@@ -462,6 +462,8 @@ def editClass(classID):
 	classname = flask.request.form['classname']
 	desc = flask.request.form['desc']
 	db.editClass(classID, classname, desc)
+	flask.session.pop('_flashes', None)
+	flask.flash("Class updated")
 	return flask.redirect('/class/' + str(classID))
 
 @app.route('/quotes')
